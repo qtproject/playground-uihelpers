@@ -1,0 +1,10 @@
+Ui Helpers
+==========
+
+- Short decription:
+
+"The UI Helpers repository contains non-widget based ui classes that are useful for those who intend to develop applications
+using Qt5/QtQuick 2 but do not want to depend on QtWidgets - mainly desktop applications. Examples of classes are QUndoCommand,
+QAction, QFileSystemModel, etc."
+
+Suggestions and contributions are welcome - contact us on the development@qt-project.org
