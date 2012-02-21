@@ -3,3 +3,16 @@
 moc_*
 *.pro.user
 *~
+uihelpersversion.h
+lib/
+.qmake.cache
+include/
+module-paths
+*.Debug
+debug/
+*.Release
+release/
+*.pdb
+tmp/
+Makefile
+*.rc
