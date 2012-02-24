@@ -19,3 +19,4 @@ HEADERS += \
     uihelpersglobal.h
 
 include(undo/undo.pri)
+include(models/models.pri)
