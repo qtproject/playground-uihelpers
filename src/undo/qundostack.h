@@ -45,6 +45,7 @@
 #include "uihelpersglobal.h"
 #include <QtCore/qobject.h>
 #include <QtCore/qstring.h>
+#include <QStringList>
 
 QT_BEGIN_HEADER
 
@@ -60,7 +61,6 @@ class QUndoStackPrivate;
 class UIHELPERS_EXPORT QUndoCommand
 {
     QUndoCommandPrivate *d;
-
 public:
     explicit QUndoCommand(QUndoCommand *parent = 0);
     explicit QUndoCommand(const QString &text, QUndoCommand *parent = 0);
@@ -69,7 +69,7 @@ public:
     virtual void undo();
     virtual void redo();
 
-    QString text() const;
+    Q_INVOKABLE QString text() const;
     QString actionText() const;
     void setText(const QString &text);
 
