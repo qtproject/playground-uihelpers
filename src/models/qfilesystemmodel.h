@@ -56,7 +56,7 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
-class ExtendedInformation;
+//class ExtendedInformation;
 class QFileSystemModelPrivate;
 //class QFileIconProvider;
 
@@ -74,7 +74,7 @@ Q_SIGNALS:
 
 public:
     enum Roles {
-        FileIconRole = Qt::DecorationRole,
+//        FileIconRole = Qt::DecorationRole,
         FilePathRole = Qt::UserRole + 1,
         FileNameRole = Qt::UserRole + 2,
         FilePermissions = Qt::UserRole + 3

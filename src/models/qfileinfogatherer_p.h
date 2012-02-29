@@ -65,6 +65,7 @@
 #include <qelapsedtimer.h>
 
 #include <private/qfilesystemengine_p.h>
+#include <qcoreapplication.h>
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
@@ -180,6 +181,41 @@ protected:
 private:
     void fetch(const QFileInfo &info, QElapsedTimer &base, bool &firstTime, QList<QPair<QString, QFileInfo> > &updatedFiles, const QString &path);
     QString translateDriveName(const QFileInfo &drive) const;
+
+    QString _type(const QFileInfo &info) const
+    {
+        if (info.isRoot())
+            return QCoreApplication::translate("QFileDialog", "Drive");
+        if (info.isFile()) {
+            if (!info.suffix().isEmpty())
+                return info.suffix() + QLatin1Char(' ') + QCoreApplication::translate("QFileDialog", "File");
+            return QCoreApplication::translate("QFileDialog", "File");
+        }
+
+        if (info.isDir())
+    #ifdef Q_OS_WIN
+            return QCoreApplication::translate("QFileDialog", "File Folder", "Match Windows Explorer");
+    #else
+            return QCoreApplication::translate("QFileDialog", "Folder", "All other platforms");
+    #endif
+        // Windows   - "File Folder"
+        // OS X      - "Folder"
+        // Konqueror - "Folder"
+        // Nautilus  - "folder"
+
+        if (info.isSymLink())
+    #ifdef Q_OS_MAC
+            return QCoreApplication::translate("QFileDialog", "Alias", "Mac OS X Finder");
+    #else
+            return QCoreApplication::translate("QFileDialog", "Shortcut", "All other platforms");
+    #endif
+        // OS X      - "Alias"
+        // Windows   - "Shortcut"
+        // Konqueror - "Folder" or "TXT File" i.e. what it is pointing to
+        // Nautilus  - "link to folder" or "link to object file", same as Konqueror
+
+        return QCoreApplication::translate("QFileDialog", "Unknown");
+    }
 
     QMutex mutex;
     QWaitCondition condition;

@@ -231,7 +231,7 @@ QExtendedInformation QFileInfoGatherer::getInfo(const QFileInfo &fileInfo) const
 {
     QExtendedInformation info(fileInfo);
 //    info.icon = m_iconProvider->icon(fileInfo);
-//    info.displayType = m_iconProvider->type(fileInfo);
+    info.displayType = _type(fileInfo);
 #ifndef QT_NO_FILESYSTEMWATCHER
     // ### Not ready to listen all modifications
     #if 0

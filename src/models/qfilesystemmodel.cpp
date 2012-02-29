@@ -670,9 +670,9 @@ QVariant QFileSystemModel::myComputer(int role) const
     switch (role) {
     case Qt::DisplayRole:
         return d->myComputer();
-    case Qt::DecorationRole:
-        QImage pixmap(16, 1, QImage::Format_Mono);
-        return pixmap; //d->fileInfoGatherer.iconProvider()->icon(QFileIconProvider::Computer);
+//    case Qt::DecorationRole:
+//        QImage pixmap(16, 1, QImage::Format_Mono);
+//        return pixmap; //d->fileInfoGatherer.iconProvider()->icon(QFileIconProvider::Computer);
     }
     return QVariant();
 }
@@ -1626,7 +1626,7 @@ bool QFileSystemModel::event(QEvent *event)
 {
     Q_D(QFileSystemModel);
     if (event->type() == QEvent::LanguageChange) {
-        d->root.retranslateStrings(QString());
+//        d->root.retranslateStrings(QString());
         return true;
     }
     return QAbstractItemModel::event(event);
@@ -1836,6 +1836,7 @@ void QFileSystemModelPrivate::_q_fileSystemChanged(const QString &path, const QL
             removeNode(parentNode, fileName);
             continue;
         }
+
         if (*node != info ) {
             node->populate(info);
             bypassFilters.remove(node);
@@ -1928,7 +1929,7 @@ void QFileSystemModelPrivate::init()
     q->connect(&delayedSortTimer, SIGNAL(timeout()), q, SLOT(_q_performDelayedSort()), Qt::QueuedConnection);
 
     QHash<int, QByteArray> roles = q->roleNames();
-    roles.insertMulti(QFileSystemModel::FileIconRole, "fileIcon"); // == Qt::decoration
+//    roles.insertMulti(QFileSystemModel::FileIconRole, "fileIcon"); // == Qt::decoration
     roles.insert(QFileSystemModel::FilePathRole, "filePath");
     roles.insert(QFileSystemModel::FileNameRole, "fileName");
     roles.insert(QFileSystemModel::FilePermissions, "filePermissions");

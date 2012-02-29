@@ -65,7 +65,7 @@
 #include <qfileinfo.h>
 #include <qtimer.h>
 #include <qhash.h>
-#include <qcoreapplication.h>
+
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
@@ -175,56 +175,22 @@ public:
 //        }
 
 
-        QString _type(const QFileInfo &info) const
-        {
-            if (info.isRoot())
-                return QCoreApplication::translate("QFileDialog", "Drive");
-            if (info.isFile()) {
-                if (!info.suffix().isEmpty())
-                    return info.suffix() + QLatin1Char(' ') + QCoreApplication::translate("QFileDialog", "File");
-                return QCoreApplication::translate("QFileDialog", "File");
-            }
 
-            if (info.isDir())
-        #ifdef Q_OS_WIN
-                return QCoreApplication::translate("QFileDialog", "File Folder", "Match Windows Explorer");
-        #else
-                return QCoreApplication::translate("QFileDialog", "Folder", "All other platforms");
-        #endif
-            // Windows   - "File Folder"
-            // OS X      - "Folder"
-            // Konqueror - "Folder"
-            // Nautilus  - "folder"
-
-            if (info.isSymLink())
-        #ifdef Q_OS_MAC
-                return QCoreApplication::translate("QFileDialog", "Alias", "Mac OS X Finder");
-        #else
-                return QCoreApplication::translate("QFileDialog", "Shortcut", "All other platforms");
-        #endif
-            // OS X      - "Alias"
-            // Windows   - "Shortcut"
-            // Konqueror - "Folder" or "TXT File" i.e. what it is pointing to
-            // Nautilus  - "link to folder" or "link to object file", same as Konqueror
-
-            return QCoreApplication::translate("QFileDialog", "Unknown");
-        }
-
-        void retranslateStrings(const QString &path) {
-            if (info)
-                info->displayType = _type(QFileInfo(path));
-            QHash<QString, QFileSystemNode *>::const_iterator iterator;
-            for (iterator = children.constBegin() ; iterator != children.constEnd() ; ++iterator) {
-                //On windows the root (My computer) has no path so we don't want to add a / for nothing (e.g. /C:/)
-                if (!path.isEmpty()) {
-                    if (path.endsWith(QLatin1Char('/')))
-                        iterator.value()->retranslateStrings(path + iterator.value()->fileName);
-                    else
-                        iterator.value()->retranslateStrings(path + QLatin1Char('/') + iterator.value()->fileName);
-                } else
-                    iterator.value()->retranslateStrings(iterator.value()->fileName);
-            }
-        }
+//        void retranslateStrings(const QString &path) {
+//            //if (info)
+//            //    info->displayType = _type(QFileInfo(path));
+//            QHash<QString, QFileSystemNode *>::const_iterator iterator;
+//            for (iterator = children.constBegin() ; iterator != children.constEnd() ; ++iterator) {
+//                //On windows the root (My computer) has no path so we don't want to add a / for nothing (e.g. /C:/)
+//                if (!path.isEmpty()) {
+//                    if (path.endsWith(QLatin1Char('/')))
+//                        iterator.value()->retranslateStrings(path + iterator.value()->fileName);
+//                    else
+//                        iterator.value()->retranslateStrings(path + QLatin1Char('/') + iterator.value()->fileName);
+//                } else
+//                    iterator.value()->retranslateStrings(iterator.value()->fileName);
+//            }
+//        }
 
         bool populatedChildren;
         bool isVisible;
