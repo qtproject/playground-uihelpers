@@ -1,3 +1,4 @@
 TEMPLATE=subdirs
 SUBDIRS=\
-   qfilesystemmodel
+   qfilesystemmodel \
+   qstandarditemmodel
