@@ -189,14 +189,14 @@ void QStandardItemPrivate::setItemData(const QMap<int, QVariant> &roles)
     Q_Q(QStandardItem);
 
     //let's build the vector of new values
-    QVector<QWidgetItemData> newValues;
+    QVector<QStandardItemData> newValues;
     QMap<int, QVariant>::const_iterator it;
     for (it = roles.begin(); it != roles.end(); ++it) {
         QVariant value = it.value();
         if (value.isValid()) {
             int role = it.key();
             role = (role == Qt::EditRole) ? Qt::DisplayRole : role;
-            QWidgetItemData wid(role,it.value());
+            QStandardItemData wid(role,it.value());
             newValues.append(wid);
         }
     }
@@ -214,7 +214,7 @@ void QStandardItemPrivate::setItemData(const QMap<int, QVariant> &roles)
 const QMap<int, QVariant> QStandardItemPrivate::itemData() const
 {
     QMap<int, QVariant> result;
-    QVector<QWidgetItemData>::const_iterator it;
+    QVector<QStandardItemData>::const_iterator it;
     for (it = values.begin(); it != values.end(); ++it)
         result.insert((*it).role, (*it).value);
     return result;
@@ -810,7 +810,7 @@ void QStandardItem::setData(const QVariant &value, int role)
 {
     Q_D(QStandardItem);
     role = (role == Qt::EditRole) ? Qt::DisplayRole : role;
-    QVector<QWidgetItemData>::iterator it;
+    QVector<QStandardItemData>::iterator it;
     for (it = d->values.begin(); it != d->values.end(); ++it) {
         if ((*it).role == role) {
             if (value.isValid()) {
@@ -825,7 +825,7 @@ void QStandardItem::setData(const QVariant &value, int role)
             return;
         }
     }
-    d->values.append(QWidgetItemData(role, value));
+    d->values.append(QStandardItemData(role, value));
     if (d->model)
         d->model->d_func()->itemChanged(this);
 }
@@ -841,7 +841,7 @@ QVariant QStandardItem::data(int role) const
 {
     Q_D(const QStandardItem);
     role = (role == Qt::EditRole) ? Qt::DisplayRole : role;
-    QVector<QWidgetItemData>::const_iterator it;
+    QVector<QStandardItemData>::const_iterator it;
     for (it = d->values.begin(); it != d->values.end(); ++it) {
         if ((*it).role == role)
             return (*it).value;
@@ -894,9 +894,9 @@ void QStandardItem::setFlags(Qt::ItemFlags flags)
 Qt::ItemFlags QStandardItem::flags() const
 {
     QVariant v = data(Qt::UserRole - 1);
-    if (!v.isValid())
-        return (Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsEditable
-                |Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled);
+//    if (!v.isValid())
+//        return (Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsEditable
+//                |Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled);
     return Qt::ItemFlags(v.toInt());
 }
 
@@ -1137,11 +1137,11 @@ Qt::ItemFlags QStandardItem::flags() const
 
   \sa isEnabled(), Qt::ItemIsEnabled, setFlags()
 */
-void QStandardItem::setEnabled(bool enabled)
-{
-    Q_D(QStandardItem);
-    d->changeFlags(enabled, Qt::ItemIsEnabled);
-}
+//void QStandardItem::setEnabled(bool enabled)
+//{
+//    Q_D(QStandardItem);
+//    d->changeFlags(enabled, Qt::ItemIsEnabled);
+//}
 
 /*!
   \fn bool QStandardItem::isEnabled() const
@@ -1166,11 +1166,11 @@ void QStandardItem::setEnabled(bool enabled)
 
   \sa isEditable(), setFlags()
 */
-void QStandardItem::setEditable(bool editable)
-{
-    Q_D(QStandardItem);
-    d->changeFlags(editable, Qt::ItemIsEditable);
-}
+//void QStandardItem::setEditable(bool editable)
+//{
+//    Q_D(QStandardItem);
+//    d->changeFlags(editable, Qt::ItemIsEditable);
+//}
 
 /*!
   \fn bool QStandardItem::isEditable() const
@@ -1196,11 +1196,11 @@ void QStandardItem::setEditable(bool editable)
 
   \sa isSelectable(), setFlags()
 */
-void QStandardItem::setSelectable(bool selectable)
-{
-    Q_D(QStandardItem);
-    d->changeFlags(selectable, Qt::ItemIsSelectable);
-}
+//void QStandardItem::setSelectable(bool selectable)
+//{
+//    Q_D(QStandardItem);
+//    d->changeFlags(selectable, Qt::ItemIsSelectable);
+//}
 
 /*!
   \fn bool QStandardItem::isSelectable() const
@@ -1222,16 +1222,16 @@ void QStandardItem::setSelectable(bool selectable)
 
   \sa isCheckable(), setCheckState(), setTristate()
 */
-void QStandardItem::setCheckable(bool checkable)
-{
-    Q_D(QStandardItem);
-    if (checkable && !isCheckable()) {
-        // make sure there's data for the checkstate role
-        if (!data(Qt::CheckStateRole).isValid())
-            setData(Qt::Unchecked, Qt::CheckStateRole);
-    }
-    d->changeFlags(checkable, Qt::ItemIsUserCheckable);
-}
+//void QStandardItem::setCheckable(bool checkable)
+//{
+//    Q_D(QStandardItem);
+//    if (checkable && !isCheckable()) {
+//        // make sure there's data for the checkstate role
+//        if (!data(Qt::CheckStateRole).isValid())
+//            setData(Qt::Unchecked, Qt::CheckStateRole);
+//    }
+//    d->changeFlags(checkable, Qt::ItemIsUserCheckable);
+//}
 
 /*!
   \fn bool QStandardItem::isCheckable() const
@@ -1251,11 +1251,11 @@ void QStandardItem::setCheckable(bool checkable)
 
   \sa isTristate(), setCheckable(), setCheckState()
 */
-void QStandardItem::setTristate(bool tristate)
-{
-    Q_D(QStandardItem);
-    d->changeFlags(tristate, Qt::ItemIsTristate);
-}
+//void QStandardItem::setTristate(bool tristate)
+//{
+//    Q_D(QStandardItem);
+//    d->changeFlags(tristate, Qt::ItemIsTristate);
+//}
 
 /*!
   \fn bool QStandardItem::isTristate() const
@@ -1279,11 +1279,11 @@ void QStandardItem::setTristate(bool tristate)
 
   \sa isDragEnabled(), setDropEnabled(), setFlags()
 */
-void QStandardItem::setDragEnabled(bool dragEnabled)
-{
-    Q_D(QStandardItem);
-    d->changeFlags(dragEnabled, Qt::ItemIsDragEnabled);
-}
+//void QStandardItem::setDragEnabled(bool dragEnabled)
+//{
+//    Q_D(QStandardItem);
+//    d->changeFlags(dragEnabled, Qt::ItemIsDragEnabled);
+//}
 
 /*!
   \fn bool QStandardItem::isDragEnabled() const
@@ -1309,11 +1309,11 @@ void QStandardItem::setDragEnabled(bool dragEnabled)
 
   \sa isDropEnabled(), setDragEnabled(), setFlags()
 */
-void QStandardItem::setDropEnabled(bool dropEnabled)
-{
-    Q_D(QStandardItem);
-    d->changeFlags(dropEnabled, Qt::ItemIsDropEnabled);
-}
+//void QStandardItem::setDropEnabled(bool dropEnabled)
+//{
+//    Q_D(QStandardItem);
+//    d->changeFlags(dropEnabled, Qt::ItemIsDropEnabled);
+//}
 
 /*!
   \fn bool QStandardItem::isDropEnabled() const
@@ -2258,35 +2258,35 @@ QStandardItem *QStandardItemModel::invisibleRootItem() const
     \sa horizontalHeaderItem(), setHorizontalHeaderLabels(),
     setVerticalHeaderItem()
 */
-void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem *item)
-{
-    Q_D(QStandardItemModel);
-    if (column < 0)
-        return;
-    if (columnCount() <= column)
-        setColumnCount(column + 1);
-
-    QStandardItem *oldItem = d->columnHeaderItems.at(column);
-    if (item == oldItem)
-        return;
-
-    if (item) {
-        if (item->model() == 0) {
-            item->d_func()->setModel(this);
-        } else {
-            qWarning("QStandardItem::setHorizontalHeaderItem: Ignoring duplicate insertion of item %p",
-                     item);
-            return;
-        }
-    }
-
-    if (oldItem)
-        oldItem->d_func()->setModel(0);
-    delete oldItem;
-
-    d->columnHeaderItems.replace(column, item);
-    emit headerDataChanged(Qt::Horizontal, column, column);
-}
+//void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem *item)
+//{
+//    Q_D(QStandardItemModel);
+//    if (column < 0)
+//        return;
+//    if (columnCount() <= column)
+//        setColumnCount(column + 1);
+//
+//    QStandardItem *oldItem = d->columnHeaderItems.at(column);
+//    if (item == oldItem)
+//        return;
+//
+//    if (item) {
+//        if (item->model() == 0) {
+//            item->d_func()->setModel(this);
+//        } else {
+//            qWarning("QStandardItem::setHorizontalHeaderItem: Ignoring duplicate insertion of item %p",
+//                     item);
+//            return;
+//        }
+//    }
+//
+//    if (oldItem)
+//        oldItem->d_func()->setModel(0);
+//    delete oldItem;
+//
+//    d->columnHeaderItems.replace(column, item);
+//    emit headerDataChanged(Qt::Horizontal, column, column);
+//}
 
 /*!
     \since 4.2
@@ -2296,13 +2296,13 @@ void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem *item
 
     \sa setHorizontalHeaderItem(), verticalHeaderItem()
 */
-QStandardItem *QStandardItemModel::horizontalHeaderItem(int column) const
-{
-    Q_D(const QStandardItemModel);
-    if ((column < 0) || (column >= columnCount()))
-        return 0;
-    return d->columnHeaderItems.at(column);
-}
+//QStandardItem *QStandardItemModel::horizontalHeaderItem(int column) const
+//{
+//    Q_D(const QStandardItemModel);
+//    if ((column < 0) || (column >= columnCount()))
+//        return 0;
+//    return d->columnHeaderItems.at(column);
+//}
 
 /*!
     \since 4.2
@@ -2314,35 +2314,35 @@ QStandardItem *QStandardItemModel::horizontalHeaderItem(int column) const
     \sa verticalHeaderItem(), setVerticalHeaderLabels(),
     setHorizontalHeaderItem()
 */
-void QStandardItemModel::setVerticalHeaderItem(int row, QStandardItem *item)
-{
-    Q_D(QStandardItemModel);
-    if (row < 0)
-        return;
-    if (rowCount() <= row)
-        setRowCount(row + 1);
-
-    QStandardItem *oldItem = d->rowHeaderItems.at(row);
-    if (item == oldItem)
-        return;
-
-    if (item) {
-        if (item->model() == 0) {
-            item->d_func()->setModel(this);
-        } else {
-            qWarning("QStandardItem::setVerticalHeaderItem: Ignoring duplicate insertion of item %p",
-                     item);
-            return;
-        }
-    }
-
-    if (oldItem)
-        oldItem->d_func()->setModel(0);
-    delete oldItem;
-
-    d->rowHeaderItems.replace(row, item);
-    emit headerDataChanged(Qt::Vertical, row, row);
-}
+//void QStandardItemModel::setVerticalHeaderItem(int row, QStandardItem *item)
+//{
+//    Q_D(QStandardItemModel);
+//    if (row < 0)
+//        return;
+//    if (rowCount() <= row)
+//        setRowCount(row + 1);
+//
+//    QStandardItem *oldItem = d->rowHeaderItems.at(row);
+//    if (item == oldItem)
+//        return;
+//
+//    if (item) {
+//        if (item->model() == 0) {
+//            item->d_func()->setModel(this);
+//        } else {
+//            qWarning("QStandardItem::setVerticalHeaderItem: Ignoring duplicate insertion of item %p",
+//                     item);
+//            return;
+//        }
+//    }
+//
+//    if (oldItem)
+//        oldItem->d_func()->setModel(0);
+//    delete oldItem;
+//
+//    d->rowHeaderItems.replace(row, item);
+//    emit headerDataChanged(Qt::Vertical, row, row);
+//}
 
 /*!
     \since 4.2
@@ -2352,13 +2352,13 @@ void QStandardItemModel::setVerticalHeaderItem(int row, QStandardItem *item)
 
     \sa setVerticalHeaderItem(), horizontalHeaderItem()
 */
-QStandardItem *QStandardItemModel::verticalHeaderItem(int row) const
-{
-    Q_D(const QStandardItemModel);
-    if ((row < 0) || (row >= rowCount()))
-        return 0;
-    return d->rowHeaderItems.at(row);
-}
+//QStandardItem *QStandardItemModel::verticalHeaderItem(int row) const
+//{
+//    Q_D(const QStandardItemModel);
+//    if ((row < 0) || (row >= rowCount()))
+//        return 0;
+//    return d->rowHeaderItems.at(row);
+//}
 
 /*!
     \since 4.2
@@ -2368,20 +2368,20 @@ QStandardItem *QStandardItemModel::verticalHeaderItem(int row) const
 
     \sa setHorizontalHeaderItem()
 */
-void QStandardItemModel::setHorizontalHeaderLabels(const QStringList &labels)
-{
-    Q_D(QStandardItemModel);
-    if (columnCount() < labels.count())
-        setColumnCount(labels.count());
-    for (int i = 0; i < labels.count(); ++i) {
-        QStandardItem *item = horizontalHeaderItem(i);
-        if (!item) {
-            item = d->createItem();
-            setHorizontalHeaderItem(i, item);
-        }
-        item->setText(labels.at(i));
-    }
-}
+//void QStandardItemModel::setHorizontalHeaderLabels(const QStringList &labels)
+//{
+//    Q_D(QStandardItemModel);
+//    if (columnCount() < labels.count())
+//        setColumnCount(labels.count());
+//    for (int i = 0; i < labels.count(); ++i) {
+//        QStandardItem *item = horizontalHeaderItem(i);
+//        if (!item) {
+//            item = d->createItem();
+//            setHorizontalHeaderItem(i, item);
+//        }
+//        item->setText(labels.at(i));
+//    }
+//}
 
 /*!
     \since 4.2
@@ -2391,20 +2391,20 @@ void QStandardItemModel::setHorizontalHeaderLabels(const QStringList &labels)
 
     \sa setVerticalHeaderItem()
 */
-void QStandardItemModel::setVerticalHeaderLabels(const QStringList &labels)
-{
-    Q_D(QStandardItemModel);
-    if (rowCount() < labels.count())
-        setRowCount(labels.count());
-    for (int i = 0; i < labels.count(); ++i) {
-        QStandardItem *item = verticalHeaderItem(i);
-        if (!item) {
-            item = d->createItem();
-            setVerticalHeaderItem(i, item);
-        }
-        item->setText(labels.at(i));
-    }
-}
+//void QStandardItemModel::setVerticalHeaderLabels(const QStringList &labels)
+//{
+//    Q_D(QStandardItemModel);
+//    if (rowCount() < labels.count())
+//        setRowCount(labels.count());
+//    for (int i = 0; i < labels.count(); ++i) {
+//        QStandardItem *item = verticalHeaderItem(i);
+//        if (!item) {
+//            item = d->createItem();
+//            setVerticalHeaderItem(i, item);
+//        }
+//        item->setText(labels.at(i));
+//    }
+//}
 
 /*!
     \since 4.2
@@ -2590,18 +2590,18 @@ QList<QStandardItem*> QStandardItemModel::takeColumn(int column)
 
     \sa horizontalHeaderItem(), takeVerticalHeaderItem()
 */
-QStandardItem *QStandardItemModel::takeHorizontalHeaderItem(int column)
-{
-    Q_D(QStandardItemModel);
-    if ((column < 0) || (column >= columnCount()))
-        return 0;
-    QStandardItem *headerItem = d->columnHeaderItems.at(column);
-    if (headerItem) {
-        headerItem->d_func()->setParentAndModel(0, 0);
-        d->columnHeaderItems.replace(column, 0);
-    }
-    return headerItem;
-}
+//QStandardItem *QStandardItemModel::takeHorizontalHeaderItem(int column)
+//{
+//    Q_D(QStandardItemModel);
+//    if ((column < 0) || (column >= columnCount()))
+//        return 0;
+//    QStandardItem *headerItem = d->columnHeaderItems.at(column);
+//    if (headerItem) {
+//        headerItem->d_func()->setParentAndModel(0, 0);
+//        d->columnHeaderItems.replace(column, 0);
+//    }
+//    return headerItem;
+//}
 
 /*!
     \since 4.2
@@ -2612,18 +2612,18 @@ QStandardItem *QStandardItemModel::takeHorizontalHeaderItem(int column)
 
     \sa verticalHeaderItem(), takeHorizontalHeaderItem()
 */
-QStandardItem *QStandardItemModel::takeVerticalHeaderItem(int row)
-{
-    Q_D(QStandardItemModel);
-    if ((row < 0) || (row >= rowCount()))
-        return 0;
-    QStandardItem *headerItem = d->rowHeaderItems.at(row);
-    if (headerItem) {
-        headerItem->d_func()->setParentAndModel(0, 0);
-        d->rowHeaderItems.replace(row, 0);
-    }
-    return headerItem;
-}
+//QStandardItem *QStandardItemModel::takeVerticalHeaderItem(int row)
+//{
+//    Q_D(QStandardItemModel);
+//    if ((row < 0) || (row >= rowCount()))
+//        return 0;
+//    QStandardItem *headerItem = d->rowHeaderItems.at(row);
+//    if (headerItem) {
+//        headerItem->d_func()->setParentAndModel(0, 0);
+//        d->rowHeaderItems.replace(row, 0);
+//    }
+//    return headerItem;
+//}
 
 /*!
     \since 4.2
@@ -2697,22 +2697,22 @@ bool QStandardItemModel::hasChildren(const QModelIndex &parent) const
 /*!
   \reimp
 */
-QVariant QStandardItemModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    Q_D(const QStandardItemModel);
-    if ((section < 0)
-        || ((orientation == Qt::Horizontal) && (section >= columnCount()))
-        || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
-        return QVariant();
-    }
-    QStandardItem *headerItem = 0;
-    if (orientation == Qt::Horizontal)
-        headerItem = d->columnHeaderItems.at(section);
-    else if (orientation == Qt::Vertical)
-        headerItem = d->rowHeaderItems.at(section);
-    return headerItem ? headerItem->data(role)
-        : QAbstractItemModel::headerData(section, orientation, role);
-}
+//QVariant QStandardItemModel::headerData(int section, Qt::Orientation orientation, int role) const
+//{
+//    Q_D(const QStandardItemModel);
+//    if ((section < 0)
+//        || ((orientation == Qt::Horizontal) && (section >= columnCount()))
+//        || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
+//        return QVariant();
+//    }
+//    QStandardItem *headerItem = 0;
+//    if (orientation == Qt::Horizontal)
+//        headerItem = d->columnHeaderItems.at(section);
+//    else if (orientation == Qt::Vertical)
+//        headerItem = d->rowHeaderItems.at(section);
+//    return headerItem ? headerItem->data(role)
+//        : QAbstractItemModel::headerData(section, orientation, role);
+//}
 
 /*!
     \reimp
@@ -2840,36 +2840,36 @@ bool QStandardItemModel::setData(const QModelIndex &index, const QVariant &value
 /*!
   \reimp
 */
-bool QStandardItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
-{
-    Q_D(QStandardItemModel);
-    if ((section < 0)
-        || ((orientation == Qt::Horizontal) && (section >= columnCount()))
-        || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
-        return false;
-    }
-    QStandardItem *headerItem = 0;
-    if (orientation == Qt::Horizontal) {
-        headerItem = d->columnHeaderItems.at(section);
-        if (headerItem == 0) {
-            headerItem = d->createItem();
-            headerItem->d_func()->setModel(this);
-            d->columnHeaderItems.replace(section, headerItem);
-        }
-    } else if (orientation == Qt::Vertical) {
-        headerItem = d->rowHeaderItems.at(section);
-        if (headerItem == 0) {
-            headerItem = d->createItem();
-            headerItem->d_func()->setModel(this);
-            d->rowHeaderItems.replace(section, headerItem);
-        }
-    }
-    if (headerItem) {
-        headerItem->setData(value, role);
-        return true;
-    }
-    return false;
-}
+//bool QStandardItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
+//{
+//    Q_D(QStandardItemModel);
+//    if ((section < 0)
+//        || ((orientation == Qt::Horizontal) && (section >= columnCount()))
+//        || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
+//        return false;
+//    }
+//    QStandardItem *headerItem = 0;
+//    if (orientation == Qt::Horizontal) {
+//        headerItem = d->columnHeaderItems.at(section);
+//        if (headerItem == 0) {
+//            headerItem = d->createItem();
+//            headerItem->d_func()->setModel(this);
+//            d->columnHeaderItems.replace(section, headerItem);
+//        }
+//    } else if (orientation == Qt::Vertical) {
+//        headerItem = d->rowHeaderItems.at(section);
+//        if (headerItem == 0) {
+//            headerItem = d->createItem();
+//            headerItem->d_func()->setModel(this);
+//            d->rowHeaderItems.replace(section, headerItem);
+//        }
+//    }
+//    if (headerItem) {
+//        headerItem->setData(value, role);
+//        return true;
+//    }
+//    return false;
+//}
 
 /*!
   \reimp

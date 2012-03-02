@@ -68,26 +68,26 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 // from src/widgets/itemviews/qwidgetitemdata_p.h
 
-class QWidgetItemData
+class QStandardItemData
 {
 public:
-    inline QWidgetItemData() : role(-1) {}
-    inline QWidgetItemData(int r, QVariant v) : role(r), value(v) {}
+    inline QStandardItemData() : role(-1) {}
+    inline QStandardItemData(int r, QVariant v) : role(r), value(v) {}
     int role;
     QVariant value;
-    inline bool operator==(const QWidgetItemData &other) const { return role == other.role && value == other.value; }
+    inline bool operator==(const QStandardItemData &other) const { return role == other.role && value == other.value; }
 };
 
 #ifndef QT_NO_DATASTREAM
 
-inline QDataStream &operator>>(QDataStream &in, QWidgetItemData &data)
+inline QDataStream &operator>>(QDataStream &in, QStandardItemData &data)
 {
     in >> data.role;
     in >> data.value;
     return in;
 }
 
-inline QDataStream &operator<<(QDataStream &out, const QWidgetItemData &data)
+inline QDataStream &operator<<(QDataStream &out, const QStandardItemData &data)
 {
     out << data.role;
     out << data.value;
@@ -158,7 +158,7 @@ public:
 
     QStandardItemModel *model;
     QStandardItem *parent;
-    QVector<QWidgetItemData> values;
+    QVector<QStandardItemData> values;
     QVector<QStandardItem*> children;
     int rows;
     int columns;

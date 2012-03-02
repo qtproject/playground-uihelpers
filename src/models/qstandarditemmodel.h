@@ -44,8 +44,8 @@
 
 #include "uihelpersglobal.h"
 #include <QtCore/qabstractitemmodel.h>
-#include <QtGui/qbrush.h>
-#include <QtGui/qfont.h>
+//#include <QtGui/qbrush.h>
+//#include <QtGui/qfont.h>
 //#include <QtWidgets/qicon.h>
 #ifndef QT_NO_DATASTREAM
 #include <QtCore/qdatastream.h>
@@ -85,106 +85,106 @@ public:
 //    }
 //    inline void setIcon(const QIcon &icon);
 
-#ifndef QT_NO_TOOLTIP
-    inline QString toolTip() const {
-        return qvariant_cast<QString>(data(Qt::ToolTipRole));
-    }
-    inline void setToolTip(const QString &toolTip);
-#endif
+//#ifndef QT_NO_TOOLTIP
+//    inline QString toolTip() const {
+//        return qvariant_cast<QString>(data(Qt::ToolTipRole));
+//    }
+//    inline void setToolTip(const QString &toolTip);
+//#endif
 
-#ifndef QT_NO_STATUSTIP
-    inline QString statusTip() const {
-        return qvariant_cast<QString>(data(Qt::StatusTipRole));
-    }
-    inline void setStatusTip(const QString &statusTip);
-#endif
-
-#ifndef QT_NO_WHATSTHIS
-    inline QString whatsThis() const {
-        return qvariant_cast<QString>(data(Qt::WhatsThisRole));
-    }
-    inline void setWhatsThis(const QString &whatsThis);
-#endif
-
-    inline QSize sizeHint() const {
-        return qvariant_cast<QSize>(data(Qt::SizeHintRole));
-    }
-    inline void setSizeHint(const QSize &sizeHint);
-
-    inline QFont font() const {
-        return qvariant_cast<QFont>(data(Qt::FontRole));
-    }
-    inline void setFont(const QFont &font);
-
-    inline Qt::Alignment textAlignment() const {
-        return Qt::Alignment(qvariant_cast<int>(data(Qt::TextAlignmentRole)));
-    }
-    inline void setTextAlignment(Qt::Alignment textAlignment);
-
-    inline QBrush background() const {
-        return qvariant_cast<QBrush>(data(Qt::BackgroundRole));
-    }
-    inline void setBackground(const QBrush &brush);
-
-    inline QBrush foreground() const {
-        return qvariant_cast<QBrush>(data(Qt::ForegroundRole));
-    }
-    inline void setForeground(const QBrush &brush);
-
-    inline Qt::CheckState checkState() const {
-        return Qt::CheckState(qvariant_cast<int>(data(Qt::CheckStateRole)));
-    }
-    inline void setCheckState(Qt::CheckState checkState);
-
-    inline QString accessibleText() const {
-        return qvariant_cast<QString>(data(Qt::AccessibleTextRole));
-    }
-    inline void setAccessibleText(const QString &accessibleText);
-
-    inline QString accessibleDescription() const {
-        return qvariant_cast<QString>(data(Qt::AccessibleDescriptionRole));
-    }
-    inline void setAccessibleDescription(const QString &accessibleDescription);
+//#ifndef QT_NO_STATUSTIP
+//    inline QString statusTip() const {
+//        return qvariant_cast<QString>(data(Qt::StatusTipRole));
+//    }
+//    inline void setStatusTip(const QString &statusTip);
+//#endif
+//
+//#ifndef QT_NO_WHATSTHIS
+//    inline QString whatsThis() const {
+//        return qvariant_cast<QString>(data(Qt::WhatsThisRole));
+//    }
+//    inline void setWhatsThis(const QString &whatsThis);
+//#endif
+//
+//    inline QSize sizeHint() const {
+//        return qvariant_cast<QSize>(data(Qt::SizeHintRole));
+//    }
+//    inline void setSizeHint(const QSize &sizeHint);
+//
+//    inline QFont font() const {
+//        return qvariant_cast<QFont>(data(Qt::FontRole));
+//    }
+//    inline void setFont(const QFont &font);
+//
+//    inline Qt::Alignment textAlignment() const {
+//        return Qt::Alignment(qvariant_cast<int>(data(Qt::TextAlignmentRole)));
+//    }
+//    inline void setTextAlignment(Qt::Alignment textAlignment);
+//
+//    inline QBrush background() const {
+//        return qvariant_cast<QBrush>(data(Qt::BackgroundRole));
+//    }
+//    inline void setBackground(const QBrush &brush);
+//
+//    inline QBrush foreground() const {
+//        return qvariant_cast<QBrush>(data(Qt::ForegroundRole));
+//    }
+//    inline void setForeground(const QBrush &brush);
+//
+//    inline Qt::CheckState checkState() const {
+//        return Qt::CheckState(qvariant_cast<int>(data(Qt::CheckStateRole)));
+//    }
+//    inline void setCheckState(Qt::CheckState checkState);
+//
+//    inline QString accessibleText() const {
+//        return qvariant_cast<QString>(data(Qt::AccessibleTextRole));
+//    }
+//    inline void setAccessibleText(const QString &accessibleText);
+//
+//    inline QString accessibleDescription() const {
+//        return qvariant_cast<QString>(data(Qt::AccessibleDescriptionRole));
+//    }
+//    inline void setAccessibleDescription(const QString &accessibleDescription);
 
     Qt::ItemFlags flags() const;
     void setFlags(Qt::ItemFlags flags);
-
-    inline bool isEnabled() const {
-        return (flags() & Qt::ItemIsEnabled) != 0;
-    }
-    void setEnabled(bool enabled);
-
-    inline bool isEditable() const {
-        return (flags() & Qt::ItemIsEditable) != 0;
-    }
-    void setEditable(bool editable);
-
-    inline bool isSelectable() const {
-        return (flags() & Qt::ItemIsSelectable) != 0;
-    }
-    void setSelectable(bool selectable);
-
-    inline bool isCheckable() const {
-        return (flags() & Qt::ItemIsUserCheckable) != 0;
-    }
-    void setCheckable(bool checkable);
-
-    inline bool isTristate() const {
-        return (flags() & Qt::ItemIsTristate) != 0;
-    }
-    void setTristate(bool tristate);
-
-#ifndef QT_NO_DRAGANDDROP
-    inline bool isDragEnabled() const {
-        return (flags() & Qt::ItemIsDragEnabled) != 0;
-    }
-    void setDragEnabled(bool dragEnabled);
-
-    inline bool isDropEnabled() const {
-        return (flags() & Qt::ItemIsDropEnabled) != 0;
-    }
-    void setDropEnabled(bool dropEnabled);
-#endif // QT_NO_DRAGANDDROP
+//
+//    inline bool isEnabled() const {
+//        return (flags() & Qt::ItemIsEnabled) != 0;
+//    }
+//    void setEnabled(bool enabled);
+//
+//    inline bool isEditable() const {
+//        return (flags() & Qt::ItemIsEditable) != 0;
+//    }
+//    void setEditable(bool editable);
+//
+//    inline bool isSelectable() const {
+//        return (flags() & Qt::ItemIsSelectable) != 0;
+//    }
+//    void setSelectable(bool selectable);
+//
+//    inline bool isCheckable() const {
+//        return (flags() & Qt::ItemIsUserCheckable) != 0;
+//    }
+//    void setCheckable(bool checkable);
+//
+//    inline bool isTristate() const {
+//        return (flags() & Qt::ItemIsTristate) != 0;
+//    }
+//    void setTristate(bool tristate);
+//
+//#ifndef QT_NO_DRAGANDDROP
+//    inline bool isDragEnabled() const {
+//        return (flags() & Qt::ItemIsDragEnabled) != 0;
+//    }
+//    void setDragEnabled(bool dragEnabled);
+//
+//    inline bool isDropEnabled() const {
+//        return (flags() & Qt::ItemIsDropEnabled) != 0;
+//    }
+//    void setDropEnabled(bool dropEnabled);
+//#endif // QT_NO_DRAGANDDROP
 
     QStandardItem *parent() const;
     int row() const;
@@ -255,45 +255,45 @@ inline void QStandardItem::setText(const QString &atext)
 
 //inline void QStandardItem::setIcon(const QIcon &aicon)
 //{ setData(aicon, Qt::DecorationRole); }
-
-#ifndef QT_NO_TOOLTIP
-inline void QStandardItem::setToolTip(const QString &atoolTip)
-{ setData(atoolTip, Qt::ToolTipRole); }
-#endif
-
-#ifndef QT_NO_STATUSTIP
-inline void QStandardItem::setStatusTip(const QString &astatusTip)
-{ setData(astatusTip, Qt::StatusTipRole); }
-#endif
-
-#ifndef QT_NO_WHATSTHIS
-inline void QStandardItem::setWhatsThis(const QString &awhatsThis)
-{ setData(awhatsThis, Qt::WhatsThisRole); }
-#endif
-
-inline void QStandardItem::setSizeHint(const QSize &asizeHint)
-{ setData(asizeHint, Qt::SizeHintRole); }
-
-inline void QStandardItem::setFont(const QFont &afont)
-{ setData(afont, Qt::FontRole); }
-
-inline void QStandardItem::setTextAlignment(Qt::Alignment atextAlignment)
-{ setData(int(atextAlignment), Qt::TextAlignmentRole); }
-
-inline void QStandardItem::setBackground(const QBrush &abrush)
-{ setData(abrush, Qt::BackgroundRole); }
-
-inline void QStandardItem::setForeground(const QBrush &abrush)
-{ setData(abrush, Qt::ForegroundRole); }
-
-inline void QStandardItem::setCheckState(Qt::CheckState acheckState)
-{ setData(acheckState, Qt::CheckStateRole); }
-
-inline void QStandardItem::setAccessibleText(const QString &aaccessibleText)
-{ setData(aaccessibleText, Qt::AccessibleTextRole); }
-
-inline void QStandardItem::setAccessibleDescription(const QString &aaccessibleDescription)
-{ setData(aaccessibleDescription, Qt::AccessibleDescriptionRole); }
+//
+//#ifndef QT_NO_TOOLTIP
+//inline void QStandardItem::setToolTip(const QString &atoolTip)
+//{ setData(atoolTip, Qt::ToolTipRole); }
+//#endif
+//
+//#ifndef QT_NO_STATUSTIP
+//inline void QStandardItem::setStatusTip(const QString &astatusTip)
+//{ setData(astatusTip, Qt::StatusTipRole); }
+//#endif
+//
+//#ifndef QT_NO_WHATSTHIS
+//inline void QStandardItem::setWhatsThis(const QString &awhatsThis)
+//{ setData(awhatsThis, Qt::WhatsThisRole); }
+//#endif
+//
+//inline void QStandardItem::setSizeHint(const QSize &asizeHint)
+//{ setData(asizeHint, Qt::SizeHintRole); }
+//
+//inline void QStandardItem::setFont(const QFont &afont)
+//{ setData(afont, Qt::FontRole); }
+//
+//inline void QStandardItem::setTextAlignment(Qt::Alignment atextAlignment)
+//{ setData(int(atextAlignment), Qt::TextAlignmentRole); }
+//
+//inline void QStandardItem::setBackground(const QBrush &abrush)
+//{ setData(abrush, Qt::BackgroundRole); }
+//
+//inline void QStandardItem::setForeground(const QBrush &abrush)
+//{ setData(abrush, Qt::ForegroundRole); }
+//
+//inline void QStandardItem::setCheckState(Qt::CheckState acheckState)
+//{ setData(acheckState, Qt::CheckStateRole); }
+//
+//inline void QStandardItem::setAccessibleText(const QString &aaccessibleText)
+//{ setData(aaccessibleText, Qt::AccessibleTextRole); }
+//
+//inline void QStandardItem::setAccessibleDescription(const QString &aaccessibleDescription)
+//{ setData(aaccessibleDescription, Qt::AccessibleDescriptionRole); }
 
 inline void QStandardItem::setChild(int arow, QStandardItem *aitem)
 { setChild(arow, 0, aitem); }
@@ -315,7 +315,7 @@ inline void QStandardItem::appendRow(QStandardItem *aitem)
 
 class QStandardItemModelPrivate;
 
-class Q_WIDGETS_EXPORT QStandardItemModel : public QAbstractItemModel
+class UIHELPERS_EXPORT QStandardItemModel : public QAbstractItemModel
 {
     Q_OBJECT
     Q_PROPERTY(int sortRole READ sortRole WRITE setSortRole)
@@ -337,10 +337,10 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const;
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,
-                       int role = Qt::EditRole);
+//    QVariant headerData(int section, Qt::Orientation orientation,
+//                        int role = Qt::DisplayRole) const;
+//    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value,
+//                       int role = Qt::EditRole);
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex());
@@ -371,13 +371,13 @@ public:
     inline void setItem(int row, QStandardItem *item);
     QStandardItem *invisibleRootItem() const;
 
-    QStandardItem *horizontalHeaderItem(int column) const;
-    void setHorizontalHeaderItem(int column, QStandardItem *item);
-    QStandardItem *verticalHeaderItem(int row) const;
-    void setVerticalHeaderItem(int row, QStandardItem *item);
-
-    void setHorizontalHeaderLabels(const QStringList &labels);
-    void setVerticalHeaderLabels(const QStringList &labels);
+//    QStandardItem *horizontalHeaderItem(int column) const;
+//    void setHorizontalHeaderItem(int column, QStandardItem *item);
+//    QStandardItem *verticalHeaderItem(int row) const;
+//    void setVerticalHeaderItem(int row, QStandardItem *item);
+//
+//    void setHorizontalHeaderLabels(const QStringList &labels);
+//    void setVerticalHeaderLabels(const QStringList &labels);
 
     void setRowCount(int rows);
     void setColumnCount(int columns);
@@ -397,8 +397,8 @@ public:
     QList<QStandardItem*> takeRow(int row);
     QList<QStandardItem*> takeColumn(int column);
 
-    QStandardItem *takeHorizontalHeaderItem(int column);
-    QStandardItem *takeVerticalHeaderItem(int row);
+//    QStandardItem *takeHorizontalHeaderItem(int column);
+//    QStandardItem *takeVerticalHeaderItem(int row);
 
     const QStandardItem *itemPrototype() const;
     void setItemPrototype(const QStandardItem *item);
@@ -445,8 +445,8 @@ inline bool QStandardItemModel::insertColumn(int acolumn, const QModelIndex &apa
 { return QAbstractItemModel::insertColumn(acolumn, aparent); }
 
 #ifndef QT_NO_DATASTREAM
-Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &in, QStandardItem &item);
-Q_WIDGETS_EXPORT QDataStream &operator<<(QDataStream &out, const QStandardItem &item);
+UIHELPERS_EXPORT QDataStream &operator>>(QDataStream &in, QStandardItem &item);
+UIHELPERS_EXPORT QDataStream &operator<<(QDataStream &out, const QStandardItem &item);
 #endif
 
 #endif // QT_NO_STANDARDITEMMODEL

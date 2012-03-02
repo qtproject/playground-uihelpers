@@ -106,7 +106,7 @@ private slots:
     void insertColumns();
     void removeRows();
     void removeColumns();
-    void setHeaderData();
+//    void setHeaderData();
     void persistentIndexes();
     void removingPersistentIndexes();
     void updatingPersistentIndexes();
@@ -119,20 +119,20 @@ private slots:
     void sortRole_data();
     void sortRole();
     void findItems();
-    void getSetHeaderItem();
+//    void getSetHeaderItem();
     void indexFromItem();
     void itemFromIndex();
     void getSetItemPrototype();
     void getSetItemData();
-    void setHeaderLabels_data();
-    void setHeaderLabels();
+//    void setHeaderLabels_data();
+//    void setHeaderLabels();
     void itemDataChanged();
-    void takeHeaderItem();
+//    void takeHeaderItem();
     void useCase1();
     void useCase2();
     void useCase3();
 
-    void rootItemFlags();
+//    void rootItemFlags();
     void treeDragAndDrop();
     void removeRowsAndColumns();
 
@@ -292,14 +292,14 @@ void tst_QStandardItemModel::insertRows()
     rowCount = m_model->rowCount();
 
     // check header data has moved
-    QCOMPARE(m_model->headerData(1, Qt::Vertical).toString(), headerLabel);
+    // QCOMPARE(m_model->headerData(1, Qt::Vertical).toString(), headerLabel);
 
     // insert two rows
     m_model->insertRows(0, 2);
     QCOMPARE(m_model->rowCount(), rowCount + 2);
 
     // check header data has moved
-    QCOMPARE(m_model->headerData(3, Qt::Vertical).toString(), headerLabel);
+    // QCOMPARE(m_model->headerData(3, Qt::Vertical).toString(), headerLabel);
 }
 
 void tst_QStandardItemModel::insertRowsItems()
@@ -316,6 +316,7 @@ void tst_QStandardItemModel::insertRowsItems()
     QCOMPARE(m_model->index(rowCount + 0, 0).data().toInt(), 10);
     QCOMPARE(m_model->index(rowCount + 1, 0).data().toInt(), 11);
     QCOMPARE(m_model->index(rowCount + 2, 0).data().toInt(), 12);
+
     for (int i = rowCount; i < rowCount + 3; ++i) {
         QVERIFY(m->item(i));
         QCOMPARE(static_cast<QAbstractItemModel *>(m->item(i)->model()), m_model);
@@ -402,14 +403,14 @@ void tst_QStandardItemModel::insertColumns()
     columnCount = m_model->columnCount();
 
     // check header data has moved
-    QCOMPARE(m_model->headerData(1, Qt::Horizontal).toString(), headerLabel);
+    // QCOMPARE(m_model->headerData(1, Qt::Horizontal).toString(), headerLabel);
 
     // insert two columns
     m_model->insertColumns(0, 2);
     QCOMPARE(m_model->columnCount(), columnCount + 2);
 
     // check header data has moved
-    QCOMPARE(m_model->headerData(3, Qt::Horizontal).toString(), headerLabel);
+    // QCOMPARE(m_model->headerData(3, Qt::Horizontal).toString(), headerLabel);
 }
 
 void tst_QStandardItemModel::removeRows()
@@ -427,7 +428,7 @@ void tst_QStandardItemModel::removeRows()
     rowCount = m_model->rowCount();
 
     // check header data has moved
-    QCOMPARE(m_model->headerData(rowCount - 1, Qt::Vertical).toString(), headerLabel);
+    // QCOMPARE(m_model->headerData(rowCount - 1, Qt::Vertical).toString(), headerLabel);
 
     // remove two rows
     m_model->removeRows(0, 2);
@@ -449,7 +450,7 @@ void tst_QStandardItemModel::removeColumns()
     columnCount = m_model->columnCount();
 
     // check header data has moved
-    QCOMPARE(m_model->headerData(columnCount - 1, Qt::Horizontal).toString(), headerLabel);
+    // QCOMPARE(m_model->headerData(columnCount - 1, Qt::Horizontal).toString(), headerLabel);
 
     // remove two columns
     m_model->removeColumns(0, 2);
@@ -457,48 +458,48 @@ void tst_QStandardItemModel::removeColumns()
 }
 
 
-void tst_QStandardItemModel::setHeaderData()
-{
-    for (int x = 0; x < 2; ++x) {
-        bool vertical = (x == 0);
-        int count = vertical ? m_model->rowCount() : m_model->columnCount();
-        QCOMPARE(count, defaultSize);
-        Qt::Orientation orient = vertical ? Qt::Vertical : Qt::Horizontal;
-
-        // check default values are ok
-        for (int i = 0; i < count; ++i)
-            QCOMPARE(m_model->headerData(i, orient).toString(), QString::number(i + 1));
-
-        QSignalSpy headerDataChangedSpy(
-            m_model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)));
-        QSignalSpy dataChangedSpy(
-            m_model, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
-        // insert custom values and check
-        for (int i = 0; i < count; ++i) {
-            QString customString = QString("custom") + QString::number(i);
-            QCOMPARE(m_model->setHeaderData(i, orient, customString), true);
-            QCOMPARE(headerDataChangedSpy.count(), 1);
-            QCOMPARE(dataChangedSpy.count(), 0);
-            QVariantList args = headerDataChangedSpy.takeFirst();
-            QCOMPARE(qvariant_cast<Qt::Orientation>(args.at(0)), orient);
-            QCOMPARE(args.at(1).toInt(), i);
-            QCOMPARE(args.at(2).toInt(), i);
-            QCOMPARE(m_model->headerData(i, orient).toString(), customString);
-            QCOMPARE(m_model->setHeaderData(i, orient, customString), true);
-            QCOMPARE(headerDataChangedSpy.count(), 0);
-            QCOMPARE(dataChangedSpy.count(), 0);
-        }
-
-        //check read from invalid sections
-        QVERIFY(!m_model->headerData(count, orient).isValid());
-        QVERIFY(!m_model->headerData(-1, orient).isValid());
-        //check write to invalid section
-        QCOMPARE(m_model->setHeaderData(count, orient, "foo"), false);
-        QCOMPARE(m_model->setHeaderData(-1, orient, "foo"), false);
-        QVERIFY(!m_model->headerData(count, orient).isValid());
-        QVERIFY(!m_model->headerData(-1, orient).isValid());
-    }
-}
+//void tst_QStandardItemModel::setHeaderData()
+//{
+//    for (int x = 0; x < 2; ++x) {
+//        bool vertical = (x == 0);
+//        int count = vertical ? m_model->rowCount() : m_model->columnCount();
+//        QCOMPARE(count, defaultSize);
+//        Qt::Orientation orient = vertical ? Qt::Vertical : Qt::Horizontal;
+//
+//        // check default values are ok
+//        for (int i = 0; i < count; ++i)
+//            QCOMPARE(m_model->headerData(i, orient).toString(), QString::number(i + 1));
+//
+//        QSignalSpy headerDataChangedSpy(
+//            m_model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)));
+//        QSignalSpy dataChangedSpy(
+//            m_model, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
+//        // insert custom values and check
+//        for (int i = 0; i < count; ++i) {
+//            QString customString = QString("custom") + QString::number(i);
+//            QCOMPARE(m_model->setHeaderData(i, orient, customString), true);
+//            QCOMPARE(headerDataChangedSpy.count(), 1);
+//            QCOMPARE(dataChangedSpy.count(), 0);
+//            QVariantList args = headerDataChangedSpy.takeFirst();
+//            QCOMPARE(qvariant_cast<Qt::Orientation>(args.at(0)), orient);
+//            QCOMPARE(args.at(1).toInt(), i);
+//            QCOMPARE(args.at(2).toInt(), i);
+//            QCOMPARE(m_model->headerData(i, orient).toString(), customString);
+//            QCOMPARE(m_model->setHeaderData(i, orient, customString), true);
+//            QCOMPARE(headerDataChangedSpy.count(), 0);
+//            QCOMPARE(dataChangedSpy.count(), 0);
+//        }
+//
+//        //check read from invalid sections
+//        QVERIFY(!m_model->headerData(count, orient).isValid());
+//        QVERIFY(!m_model->headerData(-1, orient).isValid());
+//        //check write to invalid section
+//        QCOMPARE(m_model->setHeaderData(count, orient, "foo"), false);
+//        QCOMPARE(m_model->setHeaderData(-1, orient, "foo"), false);
+//        QVERIFY(!m_model->headerData(count, orient).isValid());
+//        QVERIFY(!m_model->headerData(-1, orient).isValid());
+//    }
+//}
 
 void tst_QStandardItemModel::persistentIndexes()
 {
@@ -989,28 +990,28 @@ void tst_QStandardItemModel::findItems()
     QCOMPARE(matches.count(), 0);
 }
 
-void tst_QStandardItemModel::getSetHeaderItem()
-{
-    QStandardItemModel model;
-
-    QCOMPARE(model.horizontalHeaderItem(0), static_cast<QStandardItem*>(0));
-    QStandardItem *hheader = new QStandardItem();
-    model.setHorizontalHeaderItem(0, hheader);
-    QCOMPARE(model.columnCount(), 1);
-    QCOMPARE(model.horizontalHeaderItem(0), hheader);
-    QCOMPARE(hheader->model(), &model);
-    model.setHorizontalHeaderItem(0, 0);
-    QCOMPARE(model.horizontalHeaderItem(0), static_cast<QStandardItem*>(0));
-
-    QCOMPARE(model.verticalHeaderItem(0), static_cast<QStandardItem*>(0));
-    QStandardItem *vheader = new QStandardItem();
-    model.setVerticalHeaderItem(0, vheader);
-    QCOMPARE(model.rowCount(), 1);
-    QCOMPARE(model.verticalHeaderItem(0), vheader);
-    QCOMPARE(vheader->model(), &model);
-    model.setVerticalHeaderItem(0, 0);
-    QCOMPARE(model.verticalHeaderItem(0), static_cast<QStandardItem*>(0));
-}
+//void tst_QStandardItemModel::getSetHeaderItem()
+//{
+//    QStandardItemModel model;
+//
+//    QCOMPARE(model.horizontalHeaderItem(0), static_cast<QStandardItem*>(0));
+//    QStandardItem *hheader = new QStandardItem();
+//    model.setHorizontalHeaderItem(0, hheader);
+//    QCOMPARE(model.columnCount(), 1);
+//    QCOMPARE(model.horizontalHeaderItem(0), hheader);
+//    QCOMPARE(hheader->model(), &model);
+//    model.setHorizontalHeaderItem(0, 0);
+//    QCOMPARE(model.horizontalHeaderItem(0), static_cast<QStandardItem*>(0));
+//
+//    QCOMPARE(model.verticalHeaderItem(0), static_cast<QStandardItem*>(0));
+//    QStandardItem *vheader = new QStandardItem();
+//    model.setVerticalHeaderItem(0, vheader);
+//    QCOMPARE(model.rowCount(), 1);
+//    QCOMPARE(model.verticalHeaderItem(0), vheader);
+//    QCOMPARE(vheader->model(), &model);
+//    model.setVerticalHeaderItem(0, 0);
+//    QCOMPARE(model.verticalHeaderItem(0), static_cast<QStandardItem*>(0));
+//}
 
 void tst_QStandardItemModel::indexFromItem()
 {
@@ -1101,6 +1102,7 @@ void tst_QStandardItemModel::getSetItemPrototype()
     QCOMPARE(model.itemPrototype(), static_cast<const QStandardItem*>(0));
 }
 
+#include <QFont>
 void tst_QStandardItemModel::getSetItemData()
 {
     QMap<int, QVariant> roles;
@@ -1143,75 +1145,75 @@ void tst_QStandardItemModel::getSetItemData()
     QCOMPARE(model.itemData(idx), roles);
 }
 
-void tst_QStandardItemModel::setHeaderLabels_data()
-{
-    QTest::addColumn<int>("rows");
-    QTest::addColumn<int>("columns");
-    QTest::addColumn<int>("orientation");
-    QTest::addColumn<QStringList>("labels");
-    QTest::addColumn<QStringList>("expectedLabels");
+//void tst_QStandardItemModel::setHeaderLabels_data()
+//{
+//    QTest::addColumn<int>("rows");
+//    QTest::addColumn<int>("columns");
+//    QTest::addColumn<int>("orientation");
+//    QTest::addColumn<QStringList>("labels");
+//    QTest::addColumn<QStringList>("expectedLabels");
+//
+//    QTest::newRow("horizontal labels")
+//        << 1
+//        << 4
+//        << int(Qt::Horizontal)
+//        << (QStringList() << "a" << "b" << "c" << "d")
+//        << (QStringList() << "a" << "b" << "c" << "d");
+//    QTest::newRow("vertical labels")
+//        << 4
+//        << 1
+//        << int(Qt::Vertical)
+//        << (QStringList() << "a" << "b" << "c" << "d")
+//        << (QStringList() << "a" << "b" << "c" << "d");
+//    QTest::newRow("too few (horizontal)")
+//        << 1
+//        << 4
+//        << int(Qt::Horizontal)
+//        << (QStringList() << "a" << "b")
+//        << (QStringList() << "a" << "b" << "3" << "4");
+//    QTest::newRow("too few (vertical)")
+//        << 4
+//        << 1
+//        << int(Qt::Vertical)
+//        << (QStringList() << "a" << "b")
+//        << (QStringList() << "a" << "b" << "3" << "4");
+//    QTest::newRow("too many (horizontal)")
+//        << 1
+//        << 2
+//        << int(Qt::Horizontal)
+//        << (QStringList() << "a" << "b" << "c" << "d")
+//        << (QStringList() << "a" << "b" << "c" << "d");
+//    QTest::newRow("too many (vertical)")
+//        << 2
+//        << 1
+//        << int(Qt::Vertical)
+//        << (QStringList() << "a" << "b" << "c" << "d")
+//        << (QStringList() << "a" << "b" << "c" << "d");
+//}
 
-    QTest::newRow("horizontal labels")
-        << 1
-        << 4
-        << int(Qt::Horizontal)
-        << (QStringList() << "a" << "b" << "c" << "d")
-        << (QStringList() << "a" << "b" << "c" << "d");
-    QTest::newRow("vertical labels")
-        << 4
-        << 1
-        << int(Qt::Vertical)
-        << (QStringList() << "a" << "b" << "c" << "d")
-        << (QStringList() << "a" << "b" << "c" << "d");
-    QTest::newRow("too few (horizontal)")
-        << 1
-        << 4
-        << int(Qt::Horizontal)
-        << (QStringList() << "a" << "b")
-        << (QStringList() << "a" << "b" << "3" << "4");
-    QTest::newRow("too few (vertical)")
-        << 4
-        << 1
-        << int(Qt::Vertical)
-        << (QStringList() << "a" << "b")
-        << (QStringList() << "a" << "b" << "3" << "4");
-    QTest::newRow("too many (horizontal)")
-        << 1
-        << 2
-        << int(Qt::Horizontal)
-        << (QStringList() << "a" << "b" << "c" << "d")
-        << (QStringList() << "a" << "b" << "c" << "d");
-    QTest::newRow("too many (vertical)")
-        << 2
-        << 1
-        << int(Qt::Vertical)
-        << (QStringList() << "a" << "b" << "c" << "d")
-        << (QStringList() << "a" << "b" << "c" << "d");
-}
-
-void tst_QStandardItemModel::setHeaderLabels()
-{
-    QFETCH(int, rows);
-    QFETCH(int, columns);
-    QFETCH(int, orientation);
-    QFETCH(QStringList, labels);
-    QFETCH(QStringList, expectedLabels);
-    QStandardItemModel model(rows, columns);
-    QSignalSpy columnsInsertedSpy(
-        &model, SIGNAL(columnsInserted(QModelIndex,int,int)));
-    QSignalSpy rowsInsertedSpy(
-        &model, SIGNAL(rowsInserted(QModelIndex,int,int)));
-    if (orientation == Qt::Horizontal)
-        model.setHorizontalHeaderLabels(labels);
-    else
-        model.setVerticalHeaderLabels(labels);
-    for (int i = 0; i < expectedLabels.count(); ++i)
-        QCOMPARE(model.headerData(i, Qt::Orientation(orientation)).toString(), expectedLabels.at(i));
-    QCOMPARE(columnsInsertedSpy.count(),
-             (orientation == Qt::Vertical) ? 0 : labels.count() > columns);
-    QCOMPARE(rowsInsertedSpy.count(),
-             (orientation == Qt::Horizontal) ? 0 : labels.count() > rows);
-}
+//void tst_QStandardItemModel::setHeaderLabels()
+//{
+//    QFETCH(int, rows);
+//    QFETCH(int, columns);
+//    QFETCH(int, orientation);
+//    QFETCH(QStringList, labels);
+//    QFETCH(QStringList, expectedLabels);
+//    QStandardItemModel model(rows, columns);
+//    QSignalSpy columnsInsertedSpy(
+//        &model, SIGNAL(columnsInserted(QModelIndex,int,int)));
+//    QSignalSpy rowsInsertedSpy(
+//        &model, SIGNAL(rowsInserted(QModelIndex,int,int)));
+//    if (orientation == Qt::Horizontal)
+//        model.setHorizontalHeaderLabels(labels);
+//    else
+//        model.setVerticalHeaderLabels(labels);
+//    for (int i = 0; i < expectedLabels.count(); ++i)
+//        QCOMPARE(model.headerData(i, Qt::Orientation(orientation)).toString(), expectedLabels.at(i));
+//    QCOMPARE(columnsInsertedSpy.count(),
+//             (orientation == Qt::Vertical) ? 0 : labels.count() > columns);
+//    QCOMPARE(rowsInsertedSpy.count(),
+//             (orientation == Qt::Horizontal) ? 0 : labels.count() > rows);
+//}
 
 void tst_QStandardItemModel::itemDataChanged()
 {
@@ -1260,24 +1262,24 @@ void tst_QStandardItemModel::itemDataChanged()
     QCOMPARE(itemChangedSpy.count(), 0);
 }
 
-void tst_QStandardItemModel::takeHeaderItem()
-{
-    QStandardItemModel model;
-    // set header items
-    QStandardItem *hheader = new QStandardItem();
-    model.setHorizontalHeaderItem(0, hheader);
-    QStandardItem *vheader = new QStandardItem();
-    model.setVerticalHeaderItem(0, vheader);
-    // take header items
-    QCOMPARE(model.takeHorizontalHeaderItem(0), hheader);
-    QCOMPARE(model.takeVerticalHeaderItem(0), vheader);
-    QCOMPARE(hheader->model(), static_cast<QStandardItemModel*>(0));
-    QCOMPARE(vheader->model(), static_cast<QStandardItemModel*>(0));
-    QCOMPARE(model.takeHorizontalHeaderItem(0), static_cast<QStandardItem*>(0));
-    QCOMPARE(model.takeVerticalHeaderItem(0), static_cast<QStandardItem*>(0));
-    delete hheader;
-    delete vheader;
-}
+//void tst_QStandardItemModel::takeHeaderItem()
+//{
+//    QStandardItemModel model;
+//    // set header items
+//    QStandardItem *hheader = new QStandardItem();
+//    model.setHorizontalHeaderItem(0, hheader);
+//    QStandardItem *vheader = new QStandardItem();
+//    model.setVerticalHeaderItem(0, vheader);
+//    // take header items
+//    QCOMPARE(model.takeHorizontalHeaderItem(0), hheader);
+//    QCOMPARE(model.takeVerticalHeaderItem(0), vheader);
+//    QCOMPARE(hheader->model(), static_cast<QStandardItemModel*>(0));
+//    QCOMPARE(vheader->model(), static_cast<QStandardItemModel*>(0));
+//    QCOMPARE(model.takeHorizontalHeaderItem(0), static_cast<QStandardItem*>(0));
+//    QCOMPARE(model.takeVerticalHeaderItem(0), static_cast<QStandardItem*>(0));
+//    delete hheader;
+//    delete vheader;
+//}
 
 void tst_QStandardItemModel::useCase1()
 {
@@ -1378,23 +1380,23 @@ void tst_QStandardItemModel::useCase3()
     delete childItem;
 }
 
-void tst_QStandardItemModel::rootItemFlags()
-{
-    QStandardItemModel model(6, 4);
-    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
-    QCOMPARE(model.invisibleRootItem()->flags() , Qt::ItemIsDropEnabled);
-
-    Qt::ItemFlags f = Qt::ItemIsDropEnabled | Qt::ItemIsEnabled;
-    model.invisibleRootItem()->setFlags(f);
-    QCOMPARE(model.invisibleRootItem()->flags() , f);
-    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
-
-#ifndef QT_NO_DRAGANDDROP
-    model.invisibleRootItem()->setDropEnabled(false);
-#endif
-    QCOMPARE(model.invisibleRootItem()->flags() , Qt::ItemIsEnabled);
-    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
-}
+//void tst_QStandardItemModel::rootItemFlags()
+//{
+//    QStandardItemModel model(6, 4);
+//    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
+//    QCOMPARE(model.invisibleRootItem()->flags() , Qt::ItemIsDropEnabled);
+//
+//    Qt::ItemFlags f = Qt::ItemIsDropEnabled | Qt::ItemIsEnabled;
+//    model.invisibleRootItem()->setFlags(f);
+//    QCOMPARE(model.invisibleRootItem()->flags() , f);
+//    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
+//
+//#ifndef QT_NO_DRAGANDDROP
+//    model.invisibleRootItem()->setDropEnabled(false);
+//#endif
+//    QCOMPARE(model.invisibleRootItem()->flags() , Qt::ItemIsEnabled);
+//    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
+//}
 
 bool tst_QStandardItemModel::compareModels(QStandardItemModel *model1, QStandardItemModel *model2)
 {
