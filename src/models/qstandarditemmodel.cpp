@@ -330,8 +330,8 @@ QStandardItemModelPrivate::QStandardItemModelPrivate()
 QStandardItemModelPrivate::~QStandardItemModelPrivate()
 {
     delete itemPrototype;
-    qDeleteAll(columnHeaderItems);
-    qDeleteAll(rowHeaderItems);
+    // qDeleteAll(columnHeaderItems);
+    // qDeleteAll(rowHeaderItems);
 }
 
 /*!
@@ -485,21 +485,23 @@ bool QStandardItemPrivate::insertColumns(int column, int count, const QList<QSta
 void QStandardItemModelPrivate::itemChanged(QStandardItem *item)
 {
     Q_Q(QStandardItemModel);
-    if (item->d_func()->parent == 0) {
-        // Header item
-        int idx = columnHeaderItems.indexOf(item);
-        if (idx != -1) {
-            emit q->headerDataChanged(Qt::Horizontal, idx, idx);
-        } else {
-            idx = rowHeaderItems.indexOf(item);
-            if (idx != -1)
-                emit q->headerDataChanged(Qt::Vertical, idx, idx);
-        }
-    } else {
-        // Normal item
-        QModelIndex index = q->indexFromItem(item);
-        emit q->dataChanged(index, index);
-    }
+    // if (item->d_func()->parent == 0) {
+    //     // Header item
+    //     int idx = columnHeaderItems.indexOf(item);
+    //     if (idx != -1) {
+    //         emit q->headerDataChanged(Qt::Horizontal, idx, idx);
+    //     } else {
+    //         idx = rowHeaderItems.indexOf(item);
+    //         if (idx != -1)
+    //             emit q->headerDataChanged(Qt::Vertical, idx, idx);
+    //     }
+    // } else {
+    //     // Normal item
+    //     QModelIndex index = q->indexFromItem(item);
+    //     emit q->dataChanged(index, index);
+    // }
+    QModelIndex index = q->indexFromItem(item);
+    emit q->dataChanged(index, index);
 }
 
 /*!
@@ -553,8 +555,8 @@ void QStandardItemModelPrivate::rowsInserted(QStandardItem *parent,
                                              int row, int count)
 {
     Q_Q(QStandardItemModel);
-    if (parent == root.data())
-        rowHeaderItems.insert(row, count, 0);
+    // if (parent == root.data())
+    //     rowHeaderItems.insert(row, count, 0);
     q->endInsertRows();
 }
 
@@ -565,8 +567,8 @@ void QStandardItemModelPrivate::columnsInserted(QStandardItem *parent,
                                                 int column, int count)
 {
     Q_Q(QStandardItemModel);
-    if (parent == root.data())
-        columnHeaderItems.insert(column, count, 0);
+    // if (parent == root.data())
+    //     columnHeaderItems.insert(column, count, 0);
     q->endInsertColumns();
 }
 
@@ -577,15 +579,16 @@ void QStandardItemModelPrivate::rowsRemoved(QStandardItem *parent,
                                             int row, int count)
 {
     Q_Q(QStandardItemModel);
-    if (parent == root.data()) {
-        for (int i = row; i < row + count; ++i) {
-            QStandardItem *oldItem = rowHeaderItems.at(i);
-            if (oldItem)
-                oldItem->d_func()->setModel(0);
-            delete oldItem;
-        }
-        rowHeaderItems.remove(row, count);
-    }
+    // XXX
+    // if (parent == root.data()) {
+    //     for (int i = row; i < row + count; ++i) {
+    //         QStandardItem *oldItem = rowHeaderItems.at(i);
+    //         if (oldItem)
+    //             oldItem->d_func()->setModel(0);
+    //         delete oldItem;
+    //     }
+    //     rowHeaderItems.remove(row, count);
+    // }
     q->endRemoveRows();
 }
 
@@ -596,15 +599,16 @@ void QStandardItemModelPrivate::columnsRemoved(QStandardItem *parent,
                                                int column, int count)
 {
     Q_Q(QStandardItemModel);
-    if (parent == root.data()) {
-        for (int i = column; i < column + count; ++i) {
-            QStandardItem *oldItem = columnHeaderItems.at(i);
-            if (oldItem)
-                oldItem->d_func()->setModel(0);
-            delete oldItem;
-        }
-        columnHeaderItems.remove(column, count);
-    }
+    // XXX
+    // if (parent == root.data()) {
+    //     for (int i = column; i < column + count; ++i) {
+    //         QStandardItem *oldItem = columnHeaderItems.at(i);
+    //         if (oldItem)
+    //             oldItem->d_func()->setModel(0);
+    //         delete oldItem;
+    //     }
+    //     columnHeaderItems.remove(column, count);
+    // }
     q->endRemoveColumns();
 }
 
@@ -2056,9 +2060,9 @@ QStandardItemModel::QStandardItemModel(int rows, int columns, QObject *parent)
     Q_D(QStandardItemModel);
     d->init();
     d->root->insertColumns(0, columns);
-    d->columnHeaderItems.insert(0, columns, 0);
+    // d->columnHeaderItems.insert(0, columns, 0);
     d->root->insertRows(0, rows);
-    d->rowHeaderItems.insert(0, rows, 0);
+    // d->rowHeaderItems.insert(0, rows, 0);
     d->root->d_func()->setModel(this);
 }
 
@@ -2100,10 +2104,10 @@ void QStandardItemModel::clear()
     beginResetModel();
     d->root.reset(new QStandardItem);
     d->root->d_func()->setModel(this);
-    qDeleteAll(d->columnHeaderItems);
-    d->columnHeaderItems.clear();
-    qDeleteAll(d->rowHeaderItems);
-    d->rowHeaderItems.clear();
+    // qDeleteAll(d->columnHeaderItems);
+    // d->columnHeaderItems.clear();
+    // qDeleteAll(d->rowHeaderItems);
+    // d->rowHeaderItems.clear();
     endResetModel();
 }
 

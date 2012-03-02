@@ -211,8 +211,8 @@ public:
     // Used only by QStandardItemModel::dropMimeData
     // void decodeDataRecursive(QDataStream &stream, QStandardItem *item);
 
-    QVector<QStandardItem*> columnHeaderItems;
-    QVector<QStandardItem*> rowHeaderItems;
+    // QVector<QStandardItem*> columnHeaderItems;
+    // QVector<QStandardItem*> rowHeaderItems;
     QScopedPointer<QStandardItem> root;
     const QStandardItem *itemPrototype;
     int sortRole;
