@@ -348,7 +348,7 @@ public:
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
-    Qt::DropActions supportedDropActions() const;
+    // Qt::DropActions supportedDropActions() const;
 
     QMap<int, QVariant> itemData(const QModelIndex &index) const;
     bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
@@ -412,7 +412,7 @@ public:
 
     QStringList mimeTypes() const;
     QMimeData *mimeData(const QModelIndexList &indexes) const;
-    bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+    // bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
 Q_SIGNALS:
     void itemChanged(QStandardItem *item);
