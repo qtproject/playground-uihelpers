@@ -46,7 +46,7 @@
 #include <QtCore/qstring.h>
 #include <QtWidgets/qwidget.h>
 #include <QtCore/qvariant.h>
-#include <QtWidgets/qicon.h>
+// #include <QtWidgets/qicon.h>
 
 QT_BEGIN_HEADER
 
@@ -71,9 +71,9 @@ class Q_WIDGETS_EXPORT QAction : public QObject
     Q_PROPERTY(bool checkable READ isCheckable WRITE setCheckable NOTIFY changed)
     Q_PROPERTY(bool checked READ isChecked WRITE setChecked DESIGNABLE isCheckable NOTIFY toggled)
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY changed)
-    Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY changed)
+    // Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY changed)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY changed)
-    Q_PROPERTY(QString iconText READ iconText WRITE setIconText NOTIFY changed)
+    // Q_PROPERTY(QString iconText READ iconText WRITE setIconText NOTIFY changed)
     Q_PROPERTY(QString toolTip READ toolTip WRITE setToolTip NOTIFY changed)
     Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY changed)
     Q_PROPERTY(QString whatsThis READ whatsThis WRITE setWhatsThis NOTIFY changed)
@@ -86,7 +86,7 @@ class Q_WIDGETS_EXPORT QAction : public QObject
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY changed)
     Q_PROPERTY(MenuRole menuRole READ menuRole WRITE setMenuRole NOTIFY changed)
     Q_PROPERTY(SoftKeyRole softKeyRole READ softKeyRole WRITE setSoftKeyRole NOTIFY changed)
-    Q_PROPERTY(bool iconVisibleInMenu READ isIconVisibleInMenu WRITE setIconVisibleInMenu NOTIFY changed)
+    // Q_PROPERTY(bool iconVisibleInMenu READ isIconVisibleInMenu WRITE setIconVisibleInMenu NOTIFY changed)
     Q_PROPERTY(Priority priority READ priority WRITE setPriority)
 
 public:
@@ -99,20 +99,20 @@ public:
                     HighPriority = 256};
     explicit QAction(QObject* parent);
     QAction(const QString &text, QObject* parent);
-    QAction(const QIcon &icon, const QString &text, QObject* parent);
+    // QAction(const QIcon &icon, const QString &text, QObject* parent);
 
     ~QAction();
 
     void setActionGroup(QActionGroup *group);
     QActionGroup *actionGroup() const;
-    void setIcon(const QIcon &icon);
-    QIcon icon() const;
+    // void setIcon(const QIcon &icon);
+    // QIcon icon() const;
 
     void setText(const QString &text);
     QString text() const;
 
-    void setIconText(const QString &text);
-    QString iconText() const;
+    // void setIconText(const QString &text);
+    // QString iconText() const;
 
     void setToolTip(const QString &tip);
     QString toolTip() const;
@@ -174,8 +174,8 @@ public:
     void setSoftKeyRole(SoftKeyRole softKeyRole);
     SoftKeyRole softKeyRole() const;
 
-    void setIconVisibleInMenu(bool visible);
-    bool isIconVisibleInMenu() const;
+    // void setIconVisibleInMenu(bool visible);
+    // bool isIconVisibleInMenu() const;
 
 
     QWidget *parentWidget() const;

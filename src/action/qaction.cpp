@@ -82,7 +82,7 @@ static QString qt_strippedText(QString s)
 QActionPrivate::QActionPrivate() : group(0), enabled(1), forceDisabled(0),
                                    visible(1), forceInvisible(0), checkable(0), checked(0), separator(0), fontSet(false),
                                    forceEnabledInSoftkeys(false), menuActionSoftkeys(false),
-                                   iconVisibleInMenu(-1),
+                                   // iconVisibleInMenu(-1),
                                    menuRole(QAction::TextHeuristicRole), softKeyRole(QAction::NoSoftKey),
                                    priority(QAction::NormalPriority)
 {
@@ -350,16 +350,16 @@ QAction::QAction(const QString &text, QObject* parent)
     tooltips unless you specify a different text using
     setToolTip().
 */
-QAction::QAction(const QIcon &icon, const QString &text, QObject* parent)
-    : QObject(*(new QActionPrivate), parent)
-{
-    Q_D(QAction);
-    d->icon = icon;
-    d->text = text;
-    d->group = qobject_cast<QActionGroup *>(parent);
-    if (d->group)
-        d->group->addAction(this);
-}
+// QAction::QAction(const QIcon &icon, const QString &text, QObject* parent)
+//     : QObject(*(new QActionPrivate), parent)
+// {
+//     Q_D(QAction);
+//     d->icon = icon;
+//     d->text = text;
+//     d->group = qobject_cast<QActionGroup *>(parent);
+//     if (d->group)
+//         d->group->addAction(this);
+// }
 
 /*!
     \internal
@@ -665,18 +665,18 @@ QActionGroup *QAction::actionGroup() const
     If a null icon (QIcon::isNull() is passed into this function,
     the icon of the action is cleared.
 */
-void QAction::setIcon(const QIcon &icon)
-{
-    Q_D(QAction);
-    d->icon = icon;
-    d->sendDataChanged();
-}
+// void QAction::setIcon(const QIcon &icon)
+// {
+//     Q_D(QAction);
+//     d->icon = icon;
+//     d->sendDataChanged();
+// }
 
-QIcon QAction::icon() const
-{
-    Q_D(const QAction);
-    return d->icon;
-}
+// QIcon QAction::icon() const
+// {
+//     Q_D(const QAction);
+//     return d->icon;
+// }
 
 #ifndef QT_NO_MENU
 /*!
@@ -764,10 +764,10 @@ QString QAction::text() const
 {
     Q_D(const QAction);
     QString s = d->text;
-    if (s.isEmpty()) {
-        s = d->iconText;
-        s.replace(QLatin1Char('&'), QLatin1String("&&"));
-    }
+    // if (s.isEmpty()) {
+    //     s = d->iconText;
+    //     s.replace(QLatin1Char('&'), QLatin1String("&&"));
+    // }
     return s;
 }
 
@@ -794,23 +794,23 @@ QString QAction::text() const
 
     \sa setToolTip(), setStatusTip()
 */
-void QAction::setIconText(const QString &text)
-{
-    Q_D(QAction);
-    if (d->iconText == text)
-        return;
+// void QAction::setIconText(const QString &text)
+// {
+//     Q_D(QAction);
+//     if (d->iconText == text)
+//         return;
+//
+//     d->iconText = text;
+//     d->sendDataChanged();
+// }
 
-    d->iconText = text;
-    d->sendDataChanged();
-}
-
-QString QAction::iconText() const
-{
-    Q_D(const QAction);
-    if (d->iconText.isEmpty())
-        return qt_strippedText(d->text);
-    return d->iconText;
-}
+// QString QAction::iconText() const
+// {
+//     Q_D(const QAction);
+//     if (d->iconText.isEmpty())
+//         return qt_strippedText(d->text);
+//     return d->iconText;
+// }
 
 /*!
     \property QAction::toolTip
@@ -839,7 +839,7 @@ QString QAction::toolTip() const
     if (d->tooltip.isEmpty()) {
         if (!d->text.isEmpty())
             return qt_strippedText(d->text);
-        return qt_strippedText(d->iconText);
+        // return qt_strippedText(d->iconText);
     }
     return d->tooltip;
 }
@@ -1332,29 +1332,29 @@ QAction::SoftKeyRole QAction::softKeyRole() const
 
     \sa QAction::icon QApplication::setAttribute()
 */
-void QAction::setIconVisibleInMenu(bool visible)
-{
-    Q_D(QAction);
-    if (d->iconVisibleInMenu == -1 || visible != bool(d->iconVisibleInMenu)) {
-        int oldValue = d->iconVisibleInMenu;
-        d->iconVisibleInMenu = visible;
-        // Only send data changed if we really need to.
-        if (oldValue != -1
-            || (oldValue == -1
-                && visible == !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus))) {
-            d->sendDataChanged();
-        }
-    }
-}
+// void QAction::setIconVisibleInMenu(bool visible)
+// {
+//     Q_D(QAction);
+//     if (d->iconVisibleInMenu == -1 || visible != bool(d->iconVisibleInMenu)) {
+//         int oldValue = d->iconVisibleInMenu;
+//         d->iconVisibleInMenu = visible;
+//         // Only send data changed if we really need to.
+//         if (oldValue != -1
+//             || (oldValue == -1
+//                 && visible == !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus))) {
+//             d->sendDataChanged();
+//         }
+//     }
+// }
 
-bool QAction::isIconVisibleInMenu() const
-{
-    Q_D(const QAction);
-    if (d->iconVisibleInMenu == -1) {
-        return !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus);
-    }
-    return d->iconVisibleInMenu;
-}
+// bool QAction::isIconVisibleInMenu() const
+// {
+//     Q_D(const QAction);
+//     if (d->iconVisibleInMenu == -1) {
+//         return !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus);
+//     }
+//     return d->iconVisibleInMenu;
+// }
 
 QT_END_NAMESPACE
 

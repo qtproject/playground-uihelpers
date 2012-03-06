@@ -81,8 +81,8 @@ public:
 
     QPointer<QActionGroup> group;
     QString text;
-    QString iconText;
-    QIcon icon;
+    // QString iconText;
+    // QIcon icon;
     QString tooltip;
     QString statustip;
     QString whatsthis;
@@ -109,7 +109,7 @@ public:
     //for soft keys management
     uint forceEnabledInSoftkeys : 1;
     uint menuActionSoftkeys : 1;
-    int iconVisibleInMenu : 3;  // Only has values -1, 0, and 1
+    // int iconVisibleInMenu : 3;  // Only has values -1, 0, and 1
 
     QAction::MenuRole menuRole;
     QAction::SoftKeyRole softKeyRole;
