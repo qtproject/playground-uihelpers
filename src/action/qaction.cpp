@@ -50,7 +50,7 @@
 #include "qdebug.h"
 #include <private/qshortcutmap_p.h>
 #include <private/qapplication_p.h>
-#include <private/qmenu_p.h>
+// #include <private/qmenu_p.h>
 
 #define QAPP_CHECK(functionName) \
     if (!qApp) { \
@@ -80,7 +80,8 @@ static QString qt_strippedText(QString s)
 
 
 QActionPrivate::QActionPrivate() : group(0), enabled(1), forceDisabled(0),
-                                   visible(1), forceInvisible(0), checkable(0), checked(0), separator(0), fontSet(false),
+                                   // visible(1), forceInvisible(0), checkable(0), checked(0), separator(0), fontSet(false),
+                                   checkable(0), checked(0),
                                    forceEnabledInSoftkeys(false), menuActionSoftkeys(false),
                                    // iconVisibleInMenu(-1),
                                    menuRole(QAction::TextHeuristicRole), softKeyRole(QAction::NoSoftKey),
@@ -97,35 +98,35 @@ QActionPrivate::~QActionPrivate()
 {
 }
 
-bool QActionPrivate::showStatusText(QWidget *widget, const QString &str)
-{
-#ifdef QT_NO_STATUSTIP
-    Q_UNUSED(widget);
-    Q_UNUSED(str);
-#else
-    if (QObject *object = widget ? widget : parent) {
-        QStatusTipEvent tip(str);
-        QApplication::sendEvent(object, &tip);
-        return true;
-    }
-#endif
-    return false;
-}
+// bool QActionPrivate::showStatusText(QWidget *widget, const QString &str)
+// {
+// #ifdef QT_NO_STATUSTIP
+//     Q_UNUSED(widget);
+//     Q_UNUSED(str);
+// #else
+//     if (QObject *object = widget ? widget : parent) {
+//         QStatusTipEvent tip(str);
+//         QApplication::sendEvent(object, &tip);
+//         return true;
+//     }
+// #endif
+//     return false;
+// }
 
 void QActionPrivate::sendDataChanged()
 {
     Q_Q(QAction);
     QActionEvent e(QEvent::ActionChanged, q);
-    for (int i = 0; i < widgets.size(); ++i) {
-        QWidget *w = widgets.at(i);
-        QApplication::sendEvent(w, &e);
-    }
-#ifndef QT_NO_GRAPHICSVIEW
-    for (int i = 0; i < graphicsWidgets.size(); ++i) {
-        QGraphicsWidget *w = graphicsWidgets.at(i);
-        QApplication::sendEvent(w, &e);
-    }
-#endif
+//     for (int i = 0; i < widgets.size(); ++i) {
+//         QWidget *w = widgets.at(i);
+//         QApplication::sendEvent(w, &e);
+//     }
+// #ifndef QT_NO_GRAPHICSVIEW
+//     for (int i = 0; i < graphicsWidgets.size(); ++i) {
+//         QGraphicsWidget *w = graphicsWidgets.at(i);
+//         QApplication::sendEvent(w, &e);
+//     }
+// #endif
     QApplication::sendEvent(q, &e);
 
     emit q->changed();
@@ -376,13 +377,13 @@ QAction::QAction(QActionPrivate &dd, QObject *parent)
 /*!
     Returns the parent widget.
 */
-QWidget *QAction::parentWidget() const
-{
-    QObject *ret = parent();
-    while (ret && !ret->isWidgetType())
-        ret = ret->parent();
-    return (QWidget*)ret;
-}
+// QWidget *QAction::parentWidget() const
+// {
+//     QObject *ret = parent();
+//     while (ret && !ret->isWidgetType())
+//         ret = ret->parent();
+//     return (QWidget*)ret;
+// }
 
 /*!
   \since 4.2
@@ -390,11 +391,11 @@ QWidget *QAction::parentWidget() const
 
   \sa QWidget::addAction(), associatedGraphicsWidgets()
 */
-QList<QWidget *> QAction::associatedWidgets() const
-{
-    Q_D(const QAction);
-    return d->widgets;
-}
+// QList<QWidget *> QAction::associatedWidgets() const
+// {
+//     Q_D(const QAction);
+//     return d->widgets;
+// }
 
 #ifndef QT_NO_GRAPHICSVIEW
 /*!
@@ -403,11 +404,11 @@ QList<QWidget *> QAction::associatedWidgets() const
 
   \sa QWidget::addAction(), associatedWidgets()
 */
-QList<QGraphicsWidget *> QAction::associatedGraphicsWidgets() const
-{
-    Q_D(const QAction);
-    return d->graphicsWidgets;
-}
+// QList<QGraphicsWidget *> QAction::associatedGraphicsWidgets() const
+// {
+//     Q_D(const QAction);
+//     return d->graphicsWidgets;
+// }
 #endif
 
 #ifndef QT_NO_SHORTCUT
@@ -573,22 +574,22 @@ bool QAction::autoRepeat() const
 
     \sa QAction::setText() QStyle
 */
-void QAction::setFont(const QFont &font)
-{
-    Q_D(QAction);
-    if (d->font == font)
-        return;
+// void QAction::setFont(const QFont &font)
+// {
+//     Q_D(QAction);
+//     if (d->font == font)
+//         return;
+//
+//     d->fontSet = true;
+//     d->font = font;
+//     d->sendDataChanged();
+// }
 
-    d->fontSet = true;
-    d->font = font;
-    d->sendDataChanged();
-}
-
-QFont QAction::font() const
-{
-    Q_D(const QAction);
-    return d->font;
-}
+// QFont QAction::font() const
+// {
+//     Q_D(const QAction);
+//     return d->font;
+// }
 
 
 /*!
@@ -597,16 +598,16 @@ QFont QAction::font() const
 QAction::~QAction()
 {
     Q_D(QAction);
-    for (int i = d->widgets.size()-1; i >= 0; --i) {
-        QWidget *w = d->widgets.at(i);
-        w->removeAction(this);
-    }
-#ifndef QT_NO_GRAPHICSVIEW
-    for (int i = d->graphicsWidgets.size()-1; i >= 0; --i) {
-        QGraphicsWidget *w = d->graphicsWidgets.at(i);
-        w->removeAction(this);
-    }
-#endif
+//     for (int i = d->widgets.size()-1; i >= 0; --i) {
+//         QWidget *w = d->widgets.at(i);
+//         w->removeAction(this);
+//     }
+// #ifndef QT_NO_GRAPHICSVIEW
+//     for (int i = d->graphicsWidgets.size()-1; i >= 0; --i) {
+//         QGraphicsWidget *w = d->graphicsWidgets.at(i);
+//         w->removeAction(this);
+//     }
+// #endif
     if (d->group)
         d->group->removeAction(this);
 #ifndef QT_NO_SHORTCUT
@@ -686,25 +687,25 @@ QActionGroup *QAction::actionGroup() const
 
   \sa QMenu::addAction()
 */
-QMenu *QAction::menu() const
-{
-    Q_D(const QAction);
-    return d->menu;
-}
+// QMenu *QAction::menu() const
+// {
+//     Q_D(const QAction);
+//     return d->menu;
+// }
 
 /*!
     Sets the menu contained by this action to the specified \a menu.
 */
-void QAction::setMenu(QMenu *menu)
-{
-    Q_D(QAction);
-    if (d->menu)
-        d->menu->d_func()->setOverrideMenuAction(0); //we reset the default action of any previous menu
-    d->menu = menu;
-    if (menu)
-        menu->d_func()->setOverrideMenuAction(this);
-    d->sendDataChanged();
-}
+// void QAction::setMenu(QMenu *menu)
+// {
+//     Q_D(QAction);
+//     if (d->menu)
+//         d->menu->d_func()->setOverrideMenuAction(0); //we reset the default action of any previous menu
+//     d->menu = menu;
+//     if (menu)
+//         menu->d_func()->setOverrideMenuAction(this);
+//     d->sendDataChanged();
+// }
 #endif // QT_NO_MENU
 
 /*!
@@ -716,15 +717,15 @@ void QAction::setMenu(QMenu *menu)
 
   \sa QAction::isSeparator()
 */
-void QAction::setSeparator(bool b)
-{
-    Q_D(QAction);
-    if (d->separator == b)
-        return;
-
-    d->separator = b;
-    d->sendDataChanged();
-}
+// void QAction::setSeparator(bool b)
+// {
+//     Q_D(QAction);
+//     if (d->separator == b)
+//         return;
+//
+//     d->separator = b;
+//     d->sendDataChanged();
+// }
 
 /*!
   Returns true if this action is a separator action; otherwise it
@@ -732,11 +733,11 @@ void QAction::setSeparator(bool b)
 
   \sa QAction::setSeparator()
 */
-bool QAction::isSeparator() const
-{
-    Q_D(const QAction);
-    return d->separator;
-}
+// bool QAction::isSeparator() const
+// {
+//     Q_D(const QAction);
+//     return d->separator;
+// }
 
 /*!
     \property QAction::text
@@ -823,26 +824,26 @@ QString QAction::text() const
 
     \sa setStatusTip() setShortcut()
 */
-void QAction::setToolTip(const QString &tooltip)
-{
-    Q_D(QAction);
-    if (d->tooltip == tooltip)
-        return;
+// void QAction::setToolTip(const QString &tooltip)
+// {
+//     Q_D(QAction);
+//     if (d->tooltip == tooltip)
+//         return;
+//
+//     d->tooltip = tooltip;
+//     d->sendDataChanged();
+// }
 
-    d->tooltip = tooltip;
-    d->sendDataChanged();
-}
-
-QString QAction::toolTip() const
-{
-    Q_D(const QAction);
-    if (d->tooltip.isEmpty()) {
-        if (!d->text.isEmpty())
-            return qt_strippedText(d->text);
-        // return qt_strippedText(d->iconText);
-    }
-    return d->tooltip;
-}
+// QString QAction::toolTip() const
+// {
+//     Q_D(const QAction);
+//     if (d->tooltip.isEmpty()) {
+//         if (!d->text.isEmpty())
+//             return qt_strippedText(d->text);
+//         return qt_strippedText(d->iconText);
+//     }
+//     return d->tooltip;
+// }
 
 /*!
     \property QAction::statusTip
@@ -855,21 +856,21 @@ QString QAction::toolTip() const
 
     \sa setToolTip() showStatusText()
 */
-void QAction::setStatusTip(const QString &statustip)
-{
-    Q_D(QAction);
-    if (d->statustip == statustip)
-        return;
+// void QAction::setStatusTip(const QString &statustip)
+// {
+//     Q_D(QAction);
+//     if (d->statustip == statustip)
+//         return;
+//
+//     d->statustip = statustip;
+//     d->sendDataChanged();
+// }
 
-    d->statustip = statustip;
-    d->sendDataChanged();
-}
-
-QString QAction::statusTip() const
-{
-    Q_D(const QAction);
-    return d->statustip;
-}
+// QString QAction::statusTip() const
+// {
+//     Q_D(const QAction);
+//     return d->statustip;
+// }
 
 /*!
     \property QAction::whatsThis
@@ -881,21 +882,21 @@ QString QAction::statusTip() const
 
     \sa QWhatsThis Q3StyleSheet
 */
-void QAction::setWhatsThis(const QString &whatsthis)
-{
-    Q_D(QAction);
-    if (d->whatsthis == whatsthis)
-        return;
+// void QAction::setWhatsThis(const QString &whatsthis)
+// {
+//     Q_D(QAction);
+//     if (d->whatsthis == whatsthis)
+//         return;
+//
+//     d->whatsthis = whatsthis;
+//     d->sendDataChanged();
+// }
 
-    d->whatsthis = whatsthis;
-    d->sendDataChanged();
-}
-
-QString QAction::whatsThis() const
-{
-    Q_D(const QAction);
-    return d->whatsthis;
-}
+// QString QAction::whatsThis() const
+// {
+//     Q_D(const QAction);
+//     return d->whatsthis;
+// }
 
 /*!
     \enum QAction::Priority
@@ -1055,7 +1056,8 @@ void QAction::setEnabled(bool b)
     if (b == d->enabled && b != d->forceDisabled)
         return;
     d->forceDisabled = !b;
-    if (b && (!d->visible || (d->group && !d->group->isEnabled())))
+    // if (b && (!d->visible || (d->group && !d->group->isEnabled())))
+    if (b && (d->group && !d->group->isEnabled()))
         return;
     QAPP_CHECK("setEnabled");
     d->enabled = b;
@@ -1084,27 +1086,27 @@ bool QAction::isEnabled() const
 
     By default, this property is true (actions are visible).
 */
-void QAction::setVisible(bool b)
-{
-    Q_D(QAction);
-    if (b == d->visible && b != d->forceInvisible)
-        return;
-    QAPP_CHECK("setVisible");
-    d->forceInvisible = !b;
-    d->visible = b;
-    d->enabled = b && !d->forceDisabled && (!d->group || d->group->isEnabled()) ;
-#ifndef QT_NO_SHORTCUT
-    d->setShortcutEnabled(d->enabled, qApp->d_func()->shortcutMap);
-#endif
-    d->sendDataChanged();
-}
+// void QAction::setVisible(bool b)
+// {
+//     Q_D(QAction);
+//     if (b == d->visible && b != d->forceInvisible)
+//         return;
+//     QAPP_CHECK("setVisible");
+//     d->forceInvisible = !b;
+//     d->visible = b;
+//     d->enabled = b && !d->forceDisabled && (!d->group || d->group->isEnabled()) ;
+// #ifndef QT_NO_SHORTCUT
+//     d->setShortcutEnabled(d->enabled, qApp->d_func()->shortcutMap);
+// #endif
+//     d->sendDataChanged();
+// }
 
 
-bool QAction::isVisible() const
-{
-    Q_D(const QAction);
-    return d->visible;
-}
+// bool QAction::isVisible() const
+// {
+//     Q_D(const QAction);
+//     return d->visible;
+// }
 
 /*!
   \reimp
@@ -1165,11 +1167,11 @@ QAction::setData(const QVariant &data)
 
   \sa statusTip
 */
-bool
-QAction::showStatusText(QWidget *widget)
-{
-    return d_func()->showStatusText(widget, statusTip());
-}
+// bool
+// QAction::showStatusText(QWidget *widget)
+// {
+//     return d_func()->showStatusText(widget, statusTip());
+// }
 
 /*!
   Sends the relevant signals for ActionEvent \a event.
@@ -1194,9 +1196,9 @@ void QAction::activate(ActionEvent event)
         }
         if (!guard.isNull())
             emit triggered(d->checked);
-    } else if (event == Hover) {
+    }/* else if (event == Hover) {
         emit hovered();
-    }
+    }*/
 }
 
 /*!

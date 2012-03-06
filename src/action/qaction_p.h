@@ -53,9 +53,10 @@
 // We mean it.
 //
 
-#include "QtWidgets/qaction.h"
-#include "QtWidgets/qmenu.h"
-#include "private/qgraphicswidget_p.h"
+#include "UiHelpers/qaction.h"
+// #include "QtWidgets/qaction.h"
+// #include "QtWidgets/qmenu.h"
+// #include "private/qgraphicswidget_p.h"
 #include "private/qobject_p.h"
 #include "uihelpersglobal.h"
 
@@ -78,15 +79,15 @@ public:
         return q->d_func();
     }
 
-    bool showStatusText(QWidget *w, const QString &str);
+    // bool showStatusText(QWidget *w, const QString &str);
 
     QPointer<QActionGroup> group;
     QString text;
     // QString iconText;
     // QIcon icon;
-    QString tooltip;
-    QString statustip;
-    QString whatsthis;
+    // QString tooltip;
+    // QString statustip;
+    // QString whatsthis;
 #ifndef QT_NO_SHORTCUT
     QKeySequence shortcut;
     QList<QKeySequence> alternateShortcuts;
@@ -98,14 +99,14 @@ public:
     Qt::ShortcutContext shortcutContext;
     uint autorepeat : 1;
 #endif
-    QFont font;
-    QPointer<QMenu> menu;
+    // QFont font;
+    // QPointer<QMenu> menu;
     uint enabled : 1, forceDisabled : 1;
-    uint visible : 1, forceInvisible : 1;
+    // uint visible : 1, forceInvisible : 1;
     uint checkable : 1;
     uint checked : 1;
-    uint separator : 1;
-    uint fontSet : 1;
+    // uint separator : 1;
+    // uint fontSet : 1;
 
     //for soft keys management
     uint forceEnabledInSoftkeys : 1;
@@ -116,10 +117,10 @@ public:
     QAction::SoftKeyRole softKeyRole;
     QAction::Priority priority;
 
-    QList<QWidget *> widgets;
-#ifndef QT_NO_GRAPHICSVIEW
-    QList<QGraphicsWidget *> graphicsWidgets;
-#endif
+    // QList<QWidget *> widgets;
+// #ifndef QT_NO_GRAPHICSVIEW
+//     QList<QGraphicsWidget *> graphicsWidgets;
+// #endif
 #ifndef QT_NO_SHORTCUT
     void redoGrab(QShortcutMap &map);
     void redoGrabAlternate(QShortcutMap &map);

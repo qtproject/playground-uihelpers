@@ -45,7 +45,7 @@
 #include "uihelpersglobal.h"
 #include <QtGui/qkeysequence.h>
 #include <QtCore/qstring.h>
-#include <QtWidgets/qwidget.h>
+// #include <QtWidgets/qwidget.h>
 #include <QtCore/qvariant.h>
 // #include <QtWidgets/qicon.h>
 
@@ -56,10 +56,10 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 #ifndef QT_NO_ACTION
 
-class QMenu;
+// class QMenu;
 class QActionGroup;
 class QActionPrivate;
-class QGraphicsWidget;
+// class QGraphicsWidget;
 
 class UIHELPERS_EXPORT QAction : public QObject
 {
@@ -75,16 +75,16 @@ class UIHELPERS_EXPORT QAction : public QObject
     // Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY changed)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY changed)
     // Q_PROPERTY(QString iconText READ iconText WRITE setIconText NOTIFY changed)
-    Q_PROPERTY(QString toolTip READ toolTip WRITE setToolTip NOTIFY changed)
-    Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY changed)
-    Q_PROPERTY(QString whatsThis READ whatsThis WRITE setWhatsThis NOTIFY changed)
-    Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY changed)
+    // Q_PROPERTY(QString toolTip READ toolTip WRITE setToolTip NOTIFY changed)
+    // Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY changed)
+    // Q_PROPERTY(QString whatsThis READ whatsThis WRITE setWhatsThis NOTIFY changed)
+    // Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY changed)
 #ifndef QT_NO_SHORTCUT
     Q_PROPERTY(QKeySequence shortcut READ shortcut WRITE setShortcut NOTIFY changed)
     Q_PROPERTY(Qt::ShortcutContext shortcutContext READ shortcutContext WRITE setShortcutContext NOTIFY changed)
     Q_PROPERTY(bool autoRepeat READ autoRepeat WRITE setAutoRepeat NOTIFY changed)
 #endif
-    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY changed)
+    // Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY changed)
     Q_PROPERTY(MenuRole menuRole READ menuRole WRITE setMenuRole NOTIFY changed)
     Q_PROPERTY(SoftKeyRole softKeyRole READ softKeyRole WRITE setSoftKeyRole NOTIFY changed)
     // Q_PROPERTY(bool iconVisibleInMenu READ isIconVisibleInMenu WRITE setIconVisibleInMenu NOTIFY changed)
@@ -115,25 +115,25 @@ public:
     // void setIconText(const QString &text);
     // QString iconText() const;
 
-    void setToolTip(const QString &tip);
-    QString toolTip() const;
+    // void setToolTip(const QString &tip);
+    // QString toolTip() const;
 
-    void setStatusTip(const QString &statusTip);
-    QString statusTip() const;
+    // void setStatusTip(const QString &statusTip);
+    // QString statusTip() const;
 
-    void setWhatsThis(const QString &what);
-    QString whatsThis() const;
+    // void setWhatsThis(const QString &what);
+    // QString whatsThis() const;
 
     void setPriority(Priority priority);
     Priority priority() const;
 
-#ifndef QT_NO_MENU
-    QMenu *menu() const;
-    void setMenu(QMenu *menu);
-#endif
+// #ifndef QT_NO_MENU
+//     QMenu *menu() const;
+//     void setMenu(QMenu *menu);
+// #endif
 
-    void setSeparator(bool b);
-    bool isSeparator() const;
+    // void setSeparator(bool b);
+    // bool isSeparator() const;
 
 #ifndef QT_NO_SHORTCUT
     void setShortcut(const QKeySequence &shortcut);
@@ -150,8 +150,8 @@ public:
     bool autoRepeat() const;
 #endif
 
-    void setFont(const QFont &font);
-    QFont font() const;
+    // void setFont(const QFont &font);
+    // QFont font() const;
 
     void setCheckable(bool);
     bool isCheckable() const;
@@ -163,11 +163,11 @@ public:
 
     bool isEnabled() const;
 
-    bool isVisible() const;
+    // bool isVisible() const;
 
     enum ActionEvent { Trigger, Hover };
     void activate(ActionEvent event);
-    bool showStatusText(QWidget *widget=0);
+    // bool showStatusText(QWidget *widget=0);
 
     void setMenuRole(MenuRole menuRole);
     MenuRole menuRole() const;
@@ -179,12 +179,12 @@ public:
     // bool isIconVisibleInMenu() const;
 
 
-    QWidget *parentWidget() const;
+    // QWidget *parentWidget() const;
 
-    QList<QWidget *> associatedWidgets() const;
-#ifndef QT_NO_GRAPHICSVIEW
-    QList<QGraphicsWidget *> associatedGraphicsWidgets() const; // ### suboptimal
-#endif
+    // QList<QWidget *> associatedWidgets() const;
+// #ifndef QT_NO_GRAPHICSVIEW
+//     QList<QGraphicsWidget *> associatedGraphicsWidgets() const; // ### suboptimal
+// #endif
 
 protected:
     bool event(QEvent *);
@@ -192,36 +192,36 @@ protected:
 
 public Q_SLOTS:
     void trigger() { activate(Trigger); }
-    void hover() { activate(Hover); }
+    // void hover() { activate(Hover); }
     void setChecked(bool);
     void toggle();
     void setEnabled(bool);
     inline void setDisabled(bool b) { setEnabled(!b); }
-    void setVisible(bool);
+    // void setVisible(bool);
 
 Q_SIGNALS:
     void changed();
     void triggered(bool checked = false);
-    void hovered();
+    // void hovered();
     void toggled(bool);
 
 private:
     Q_DISABLE_COPY(QAction)
 
-    friend class QGraphicsWidget;
-    friend class QWidget;
+    // friend class QGraphicsWidget;
+    // friend class QWidget;
     friend class QActionGroup;
-    friend class QMenu;
-    friend class QMenuPrivate;
-    friend class QMenuBar;
-    friend class QToolButton;
+    // friend class QMenu;
+    // friend class QMenuPrivate;
+    // friend class QMenuBar;
+    // friend class QToolButton;
 #ifdef Q_OS_MAC
     friend void qt_mac_clear_status_text(QAction *action);
 #endif
 };
 
 QT_BEGIN_INCLUDE_NAMESPACE_UIHELPERS
-#include <QtWidgets/qactiongroup.h>
+#include <UiHelpers/qactiongroup.h>
 QT_END_INCLUDE_NAMESPACE_UIHELPERS
 
 #endif // QT_NO_ACTION
