@@ -58,7 +58,7 @@
         return; \
     }
 
-QT_BEGIN_NAMESPACE
+QT_BEGIN_NAMESPACE_UIHELPERS
 
 /*
   internal: guesses a descriptive text from a text suited for a menu entry
@@ -1356,7 +1356,7 @@ QAction::SoftKeyRole QAction::softKeyRole() const
 //     return d->iconVisibleInMenu;
 // }
 
-QT_END_NAMESPACE
+QT_END_NAMESPACE_UIHELPERS
 
 #include "moc_qaction.cpp"
 

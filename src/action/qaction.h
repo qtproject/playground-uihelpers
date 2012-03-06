@@ -42,6 +42,7 @@
 #ifndef QACTION_H
 #define QACTION_H
 
+#include "uihelpersglobal.h"
 #include <QtGui/qkeysequence.h>
 #include <QtCore/qstring.h>
 #include <QtWidgets/qwidget.h>
@@ -50,7 +51,7 @@
 
 QT_BEGIN_HEADER
 
-QT_BEGIN_NAMESPACE
+QT_BEGIN_NAMESPACE_UIHELPERS
 
 
 #ifndef QT_NO_ACTION
@@ -60,7 +61,7 @@ class QActionGroup;
 class QActionPrivate;
 class QGraphicsWidget;
 
-class Q_WIDGETS_EXPORT QAction : public QObject
+class UIHELPERS_EXPORT QAction : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(QAction)
@@ -219,13 +220,13 @@ private:
 #endif
 };
 
-QT_BEGIN_INCLUDE_NAMESPACE
+QT_BEGIN_INCLUDE_NAMESPACE_UIHELPERS
 #include <QtWidgets/qactiongroup.h>
-QT_END_INCLUDE_NAMESPACE
+QT_END_INCLUDE_NAMESPACE_UIHELPERS
 
 #endif // QT_NO_ACTION
 
-QT_END_NAMESPACE
+QT_END_NAMESPACE_UIHELPERS
 
 QT_END_HEADER
 

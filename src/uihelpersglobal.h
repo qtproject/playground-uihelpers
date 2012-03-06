@@ -72,11 +72,15 @@
 #  define QT_END_NAMESPACE_UIHELPERS } }
 #  define QT_USE_NAMESPACE_UIHELPERS using namespace QT_NAMESPACE::UiHelpers;
 #  define QT_PREPEND_NAMESPACE_UIHELPERS(name) ::QT_NAMESPACE::UiHelpers::name
+#  define QT_BEGIN_INCLUDE_NAMESPACE_UIHELPERS } }
+#  define QT_END_INCLUDE_NAMESPACE_UIHELPERS namespace QT_NAMESPACE { namespace UiHelpers {
 #else
 #  define QT_BEGIN_NAMESPACE_UIHELPERS namespace UiHelpers {
 #  define QT_END_NAMESPACE_UIHELPERS }
 #  define QT_USE_NAMESPACE_UIHELPERS using namespace UiHelpers;
 #  define QT_PREPEND_NAMESPACE_UIHELPERS(name) ::UiHelpers::name
+#  define QT_BEGIN_INCLUDE_NAMESPACE_UIHELPERS }
+#  define QT_END_INCLUDE_NAMESPACE_UIHELPERS namespace UiHelpers {
 #endif
 
 #endif // UIHELPERS_GLOBAL_H

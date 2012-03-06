@@ -57,15 +57,16 @@
 #include "QtWidgets/qmenu.h"
 #include "private/qgraphicswidget_p.h"
 #include "private/qobject_p.h"
+#include "uihelpersglobal.h"
 
-QT_BEGIN_NAMESPACE
+QT_BEGIN_NAMESPACE_UIHELPERS
 
 #ifndef QT_NO_ACTION
 
 
 class QShortcutMap;
 
-class Q_WIDGETS_EXPORT QActionPrivate : public QObjectPrivate
+class UIHELPERS_EXPORT QActionPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QAction)
 public:
@@ -132,6 +133,6 @@ public:
 
 #endif // QT_NO_ACTION
 
-QT_END_NAMESPACE
+QT_END_NAMESPACE_UIHELPERS
 
 #endif // QACTION_P_H
