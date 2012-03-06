@@ -94,6 +94,7 @@ class UIHELPERS_EXPORT QUndoStack : public QObject
     Q_DECLARE_PRIVATE(QUndoStack)
     Q_PROPERTY(bool active READ isActive WRITE setActive)
     Q_PROPERTY(int undoLimit READ undoLimit WRITE setUndoLimit)
+    Q_PROPERTY(QStringList stack READ stack NOTIFY stackChanged)
 
 public:
     explicit QUndoStack(QObject *parent = 0);
@@ -101,6 +102,8 @@ public:
     void clear();
 
     void push(QUndoCommand *cmd);
+
+    QStringList stack() const;
 
     bool canUndo() const;
     bool canRedo() const;
@@ -144,6 +147,7 @@ Q_SIGNALS:
     void canRedoChanged(bool canRedo);
     void undoTextChanged(const QString &undoText);
     void redoTextChanged(const QString &redoText);
+    void stackChanged();
 
 private:
     Q_DISABLE_COPY(QUndoStack)

@@ -625,6 +625,7 @@ void QUndoStack::push(QUndoCommand *cmd)
             d->setIndex(d->index + 1, false);
         }
     }
+    emit stackChanged();
 }
 
 /*!
@@ -704,6 +705,7 @@ void QUndoStack::undo()
     int idx = d->index - 1;
     d->command_list.at(idx)->undo();
     d->setIndex(idx, false);
+    emit stackChanged();
 }
 
 /*!
@@ -729,6 +731,7 @@ void QUndoStack::redo()
 
     d->command_list.at(d->index)->redo();
     d->setIndex(d->index + 1, false);
+    emit stackChanged();
 }
 
 /*!
@@ -1173,6 +1176,16 @@ bool QUndoStack::isActive() const
     used to enable or disable the redo action returned by createRedoAction().
     \a canRedo specifies the new value.
 */
+
+QStringList QUndoStack::stack() const {
+    Q_D(const QUndoStack);
+    QStringList list;
+    foreach (QUndoCommand *c, d->command_list) {
+        list += c->text();
+    }
+    return list;
+}
+
 
 QT_END_NAMESPACE_UIHELPERS
 
