@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     utils \
-    models
+    models \
+    action
