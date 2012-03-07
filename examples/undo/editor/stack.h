@@ -1,8 +1,8 @@
-#include <UiHelpers/QUndoStack>
+#include <UiHelpers/UiUndoStack>
 
 QT_USE_NAMESPACE_UIHELPERS;
 
-class Stack : public QUndoStack
+class Stack : public UiUndoStack
 {
     Q_OBJECT
 public:

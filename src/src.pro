@@ -18,5 +18,5 @@ HEADERS += \
     uihelpersversion.h \
     uihelpersglobal.h
 
-include(undo/undo.pri)
+include(utils/utils.pri)
 include(models/models.pri)

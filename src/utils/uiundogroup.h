@@ -39,76 +39,71 @@
 **
 ****************************************************************************/
 
-#ifndef UIHELPERS_QUNDOSTACK_P_H
-#define UIHELPERS_QUNDOSTACK_P_H
+#ifndef UIHELPERS_UIUNDOGROUP_H
+#define UIHELPERS_UIUNDOGROUP_H
 
-#include <private/qobject_p.h>
-#include <QtCore/qlist.h>
-#include <QtCore/qstring.h>
-//#include <QtWidgets/qaction.h>
 #include "uihelpersglobal.h"
-#include "qundostack.h"
+#include <QtCore/qobject.h>
+#include <QtCore/qstring.h>
+
+QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE_UIHELPERS
-class QUndoCommand;
-class QUndoGroup;
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists for the convenience
-// of qapplication_*.cpp, qwidget*.cpp and qfiledialog.cpp.  This header
-// file may change from version to version without notice, or even be removed.
-//
-// We mean it.
-//
+class UiUndoGroupPrivate;
+class UiUndoStack;
+class QAction;
 
-class QUndoCommandPrivate
-{
-public:
-    QUndoCommandPrivate() : id(-1) {}
-    QList<QUndoCommand*> child_list;
-    QString text;
-    QString actionText;
-    int id;
-};
+#ifndef QT_NO_UNDOGROUP
 
-#ifndef QT_NO_UNDOSTACK
-
-class QUndoStackPrivate : public QObjectPrivate
-{
-    Q_DECLARE_PUBLIC(QUndoStack)
-public:
-    QUndoStackPrivate() : index(0), clean_index(0), group(0), undo_limit(0) {}
-
-    QList<QUndoCommand*> command_list;
-    QList<QUndoCommand*> macro_stack;
-    int index;
-    int clean_index;
-    QUndoGroup *group;
-    int undo_limit;
-
-    void setIndex(int idx, bool clean);
-    bool checkUndoLimit();
-};
-
-#ifndef QT_NO_ACTION
-class QUndoAction : public QAction
+class UIHELPERS_EXPORT UiUndoGroup : public QObject
 {
     Q_OBJECT
-public:
-    QUndoAction(const QString &prefix, QObject *parent = 0);
-    void setTextFormat(const QString &textFormat, const QString &defaultText);
-public Q_SLOTS:
-    void setPrefixedText(const QString &text);
-private:
-    QString m_prefix;
-    QString m_defaultText;
-};
-#endif // QT_NO_ACTION
+    Q_DECLARE_PRIVATE(UiUndoGroup)
 
+public:
+    explicit UiUndoGroup(QObject *parent = 0);
+    ~UiUndoGroup();
+
+    void addStack(UiUndoStack *stack);
+    void removeStack(UiUndoStack *stack);
+    QList<UiUndoStack*> stacks() const;
+    UiUndoStack *activeStack() const;
+
+#ifndef QT_NO_ACTION
+    QAction *createUndoAction(QObject *parent,
+                                const QString &prefix = QString()) const;
+    QAction *createRedoAction(QObject *parent,
+                                const QString &prefix = QString()) const;
+#endif // QT_NO_ACTION
+    bool canUndo() const;
+    bool canRedo() const;
+    QString undoText() const;
+    QString redoText() const;
+    bool isClean() const;
+
+public Q_SLOTS:
+    void undo();
+    void redo();
+    void setActiveStack(UiUndoStack *stack);
+
+Q_SIGNALS:
+    void activeStackChanged(UiUndoStack *stack);
+    void indexChanged(int idx);
+    void cleanChanged(bool clean);
+    void canUndoChanged(bool canUndo);
+    void canRedoChanged(bool canRedo);
+    void undoTextChanged(const QString &undoText);
+    void redoTextChanged(const QString &redoText);
+
+private:
+    Q_DISABLE_COPY(UiUndoGroup)
+};
+
+#endif // QT_NO_UNDOGROUP
 
 QT_END_NAMESPACE_UIHELPERS
-#endif // QT_NO_UNDOSTACK
-#endif // UIHELPERS_QUNDOSTACK_P_H
+
+QT_END_HEADER
+
+#endif // UIHELPERS_UIUNDOGROUP_H

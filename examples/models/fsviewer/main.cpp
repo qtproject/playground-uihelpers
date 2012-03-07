@@ -2,13 +2,13 @@
 #include <QtGui/QGuiApplication>
 #include <QtQuick/QQuickView>
 #include <QtDeclarative/QDeclarativeContext>
-#include <UiHelpers/QFileSystemModel>
+#include <UiHelpers/UiFileSystemModel>
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    UiHelpers::QFileSystemModel model;
+    UiHelpers::UiFileSystemModel model;
     model.setRootPath(QDir::tempPath());
 
     QQuickView v;

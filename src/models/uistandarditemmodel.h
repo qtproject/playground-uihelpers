@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QSTANDARDITEMMODEL_H
-#define QSTANDARDITEMMODEL_H
+#ifndef UISTANDARDITEMMODEL_H
+#define UISTANDARDITEMMODEL_H
 
 #include "uihelpersglobal.h"
 #include <QtCore/qabstractitemmodel.h>
@@ -60,17 +60,17 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 //template <class T> class QList;
 
-class QStandardItemModel;
+class UiStandardItemModel;
 
-class QStandardItemPrivate;
-class UIHELPERS_EXPORT QStandardItem
+class UiStandardItemPrivate;
+class UIHELPERS_EXPORT UiStandardItem
 {
 public:
-    QStandardItem();
-    QStandardItem(const QString &text);
-//    QStandardItem(const QIcon &icon, const QString &text);
-    explicit QStandardItem(int rows, int columns = 1);
-    virtual ~QStandardItem();
+    UiStandardItem();
+    UiStandardItem(const QString &text);
+//    UiStandardItem(const QIcon &icon, const QString &text);
+    explicit UiStandardItem(int rows, int columns = 1);
+    virtual ~UiStandardItem();
 
     virtual QVariant data(int role = Qt::UserRole + 1) const;
     virtual void setData(const QVariant &value, int role = Qt::UserRole + 1);
@@ -186,11 +186,11 @@ public:
 //    void setDropEnabled(bool dropEnabled);
 //#endif // QT_NO_DRAGANDDROP
 
-    QStandardItem *parent() const;
+    UiStandardItem *parent() const;
     int row() const;
     int column() const;
     QModelIndex index() const;
-    QStandardItemModel *model() const;
+    UiStandardItemModel *model() const;
 
     int rowCount() const;
     void setRowCount(int rows);
@@ -198,13 +198,13 @@ public:
     void setColumnCount(int columns);
 
     bool hasChildren() const;
-    QStandardItem *child(int row, int column = 0) const;
-    void setChild(int row, int column, QStandardItem *item);
-    inline void setChild(int row, QStandardItem *item);
+    UiStandardItem *child(int row, int column = 0) const;
+    void setChild(int row, int column, UiStandardItem *item);
+    inline void setChild(int row, UiStandardItem *item);
 
-    void insertRow(int row, const QList<QStandardItem*> &items);
-    void insertColumn(int column, const QList<QStandardItem*> &items);
-    void insertRows(int row, const QList<QStandardItem*> &items);
+    void insertRow(int row, const QList<UiStandardItem*> &items);
+    void insertColumn(int column, const QList<UiStandardItem*> &items);
+    void insertRows(int row, const QList<UiStandardItem*> &items);
     void insertRows(int row, int count);
     void insertColumns(int column, int count);
 
@@ -213,19 +213,19 @@ public:
     void removeRows(int row, int count);
     void removeColumns(int column, int count);
 
-    inline void appendRow(const QList<QStandardItem*> &items);
-    inline void appendRows(const QList<QStandardItem*> &items);
-    inline void appendColumn(const QList<QStandardItem*> &items);
-    inline void insertRow(int row, QStandardItem *item);
-    inline void appendRow(QStandardItem *item);
+    inline void appendRow(const QList<UiStandardItem*> &items);
+    inline void appendRows(const QList<UiStandardItem*> &items);
+    inline void appendColumn(const QList<UiStandardItem*> &items);
+    inline void insertRow(int row, UiStandardItem *item);
+    inline void appendRow(UiStandardItem *item);
 
-    QStandardItem *takeChild(int row, int column = 0);
-    QList<QStandardItem*> takeRow(int row);
-    QList<QStandardItem*> takeColumn(int column);
+    UiStandardItem *takeChild(int row, int column = 0);
+    QList<UiStandardItem*> takeRow(int row);
+    QList<UiStandardItem*> takeColumn(int column);
 
     void sortChildren(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
-    virtual QStandardItem *clone() const;
+    virtual UiStandardItem *clone() const;
 
     enum ItemType { Type = 0, UserType = 1000 };
     virtual int type() const;
@@ -234,96 +234,96 @@ public:
     virtual void read(QDataStream &in);
     virtual void write(QDataStream &out) const;
 #endif
-    virtual bool operator<(const QStandardItem &other) const;
+    virtual bool operator<(const UiStandardItem &other) const;
 
 protected:
-    QStandardItem(const QStandardItem &other);
-    QStandardItem(QStandardItemPrivate &dd);
-    QStandardItem &operator=(const QStandardItem &other);
-    QScopedPointer<QStandardItemPrivate> d_ptr;
+    UiStandardItem(const UiStandardItem &other);
+    UiStandardItem(UiStandardItemPrivate &dd);
+    UiStandardItem &operator=(const UiStandardItem &other);
+    QScopedPointer<UiStandardItemPrivate> d_ptr;
 
     void emitDataChanged();
 
 private:
-    Q_DECLARE_PRIVATE(QStandardItem)
-    friend class QStandardItemModelPrivate;
-    friend class QStandardItemModel;
+    Q_DECLARE_PRIVATE(UiStandardItem)
+    friend class UiStandardItemModelPrivate;
+    friend class UiStandardItemModel;
 };
 
-inline void QStandardItem::setText(const QString &atext)
+inline void UiStandardItem::setText(const QString &atext)
 { setData(atext, Qt::DisplayRole); }
 
-//inline void QStandardItem::setIcon(const QIcon &aicon)
+//inline void UiStandardItem::setIcon(const QIcon &aicon)
 //{ setData(aicon, Qt::DecorationRole); }
 //
 //#ifndef QT_NO_TOOLTIP
-//inline void QStandardItem::setToolTip(const QString &atoolTip)
+//inline void UiStandardItem::setToolTip(const QString &atoolTip)
 //{ setData(atoolTip, Qt::ToolTipRole); }
 //#endif
 //
 //#ifndef QT_NO_STATUSTIP
-//inline void QStandardItem::setStatusTip(const QString &astatusTip)
+//inline void UiStandardItem::setStatusTip(const QString &astatusTip)
 //{ setData(astatusTip, Qt::StatusTipRole); }
 //#endif
 //
 //#ifndef QT_NO_WHATSTHIS
-//inline void QStandardItem::setWhatsThis(const QString &awhatsThis)
+//inline void UiStandardItem::setWhatsThis(const QString &awhatsThis)
 //{ setData(awhatsThis, Qt::WhatsThisRole); }
 //#endif
 //
-//inline void QStandardItem::setSizeHint(const QSize &asizeHint)
+//inline void UiStandardItem::setSizeHint(const QSize &asizeHint)
 //{ setData(asizeHint, Qt::SizeHintRole); }
 //
-//inline void QStandardItem::setFont(const QFont &afont)
+//inline void UiStandardItem::setFont(const QFont &afont)
 //{ setData(afont, Qt::FontRole); }
 //
-//inline void QStandardItem::setTextAlignment(Qt::Alignment atextAlignment)
+//inline void UiStandardItem::setTextAlignment(Qt::Alignment atextAlignment)
 //{ setData(int(atextAlignment), Qt::TextAlignmentRole); }
 //
-//inline void QStandardItem::setBackground(const QBrush &abrush)
+//inline void UiStandardItem::setBackground(const QBrush &abrush)
 //{ setData(abrush, Qt::BackgroundRole); }
 //
-//inline void QStandardItem::setForeground(const QBrush &abrush)
+//inline void UiStandardItem::setForeground(const QBrush &abrush)
 //{ setData(abrush, Qt::ForegroundRole); }
 //
-//inline void QStandardItem::setCheckState(Qt::CheckState acheckState)
+//inline void UiStandardItem::setCheckState(Qt::CheckState acheckState)
 //{ setData(acheckState, Qt::CheckStateRole); }
 //
-//inline void QStandardItem::setAccessibleText(const QString &aaccessibleText)
+//inline void UiStandardItem::setAccessibleText(const QString &aaccessibleText)
 //{ setData(aaccessibleText, Qt::AccessibleTextRole); }
 //
-//inline void QStandardItem::setAccessibleDescription(const QString &aaccessibleDescription)
+//inline void UiStandardItem::setAccessibleDescription(const QString &aaccessibleDescription)
 //{ setData(aaccessibleDescription, Qt::AccessibleDescriptionRole); }
 
-inline void QStandardItem::setChild(int arow, QStandardItem *aitem)
+inline void UiStandardItem::setChild(int arow, UiStandardItem *aitem)
 { setChild(arow, 0, aitem); }
 
-inline void QStandardItem::appendRow(const QList<QStandardItem*> &aitems)
+inline void UiStandardItem::appendRow(const QList<UiStandardItem*> &aitems)
 { insertRow(rowCount(), aitems); }
 
-inline void QStandardItem::appendRows(const QList<QStandardItem*> &aitems)
+inline void UiStandardItem::appendRows(const QList<UiStandardItem*> &aitems)
 { insertRows(rowCount(), aitems); }
 
-inline void QStandardItem::appendColumn(const QList<QStandardItem*> &aitems)
+inline void UiStandardItem::appendColumn(const QList<UiStandardItem*> &aitems)
 { insertColumn(columnCount(), aitems); }
 
-inline void QStandardItem::insertRow(int arow, QStandardItem *aitem)
-{ insertRow(arow, QList<QStandardItem*>() << aitem); }
+inline void UiStandardItem::insertRow(int arow, UiStandardItem *aitem)
+{ insertRow(arow, QList<UiStandardItem*>() << aitem); }
 
-inline void QStandardItem::appendRow(QStandardItem *aitem)
+inline void UiStandardItem::appendRow(UiStandardItem *aitem)
 { insertRow(rowCount(), aitem); }
 
-class QStandardItemModelPrivate;
+class UiStandardItemModelPrivate;
 
-class UIHELPERS_EXPORT QStandardItemModel : public QAbstractItemModel
+class UIHELPERS_EXPORT UiStandardItemModel : public QAbstractItemModel
 {
     Q_OBJECT
     Q_PROPERTY(int sortRole READ sortRole WRITE setSortRole)
 
 public:
-    explicit QStandardItemModel(QObject *parent = 0);
-    QStandardItemModel(int rows, int columns, QObject *parent = 0);
-    ~QStandardItemModel();
+    explicit UiStandardItemModel(QObject *parent = 0);
+    UiStandardItemModel(int rows, int columns, QObject *parent = 0);
+    ~UiStandardItemModel();
 
     void setItemRoleNames(const QHash<int,QByteArray> &roleNames);
 
@@ -363,18 +363,18 @@ public:
 
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
-    QStandardItem *itemFromIndex(const QModelIndex &index) const;
-    QModelIndex indexFromItem(const QStandardItem *item) const;
+    UiStandardItem *itemFromIndex(const QModelIndex &index) const;
+    QModelIndex indexFromItem(const UiStandardItem *item) const;
 
-    QStandardItem *item(int row, int column = 0) const;
-    void setItem(int row, int column, QStandardItem *item);
-    inline void setItem(int row, QStandardItem *item);
-    QStandardItem *invisibleRootItem() const;
+    UiStandardItem *item(int row, int column = 0) const;
+    void setItem(int row, int column, UiStandardItem *item);
+    inline void setItem(int row, UiStandardItem *item);
+    UiStandardItem *invisibleRootItem() const;
 
-//    QStandardItem *horizontalHeaderItem(int column) const;
-//    void setHorizontalHeaderItem(int column, QStandardItem *item);
-//    QStandardItem *verticalHeaderItem(int row) const;
-//    void setVerticalHeaderItem(int row, QStandardItem *item);
+//    UiStandardItem *horizontalHeaderItem(int column) const;
+//    void setHorizontalHeaderItem(int column, UiStandardItem *item);
+//    UiStandardItem *verticalHeaderItem(int row) const;
+//    void setVerticalHeaderItem(int row, UiStandardItem *item);
 //
 //    void setHorizontalHeaderLabels(const QStringList &labels);
 //    void setVerticalHeaderLabels(const QStringList &labels);
@@ -382,28 +382,28 @@ public:
     void setRowCount(int rows);
     void setColumnCount(int columns);
 
-    void appendRow(const QList<QStandardItem*> &items);
-    void appendColumn(const QList<QStandardItem*> &items);
-    inline void appendRow(QStandardItem *item);
+    void appendRow(const QList<UiStandardItem*> &items);
+    void appendColumn(const QList<UiStandardItem*> &items);
+    inline void appendRow(UiStandardItem *item);
 
-    void insertRow(int row, const QList<QStandardItem*> &items);
-    void insertColumn(int column, const QList<QStandardItem*> &items);
-    inline void insertRow(int row, QStandardItem *item);
+    void insertRow(int row, const QList<UiStandardItem*> &items);
+    void insertColumn(int column, const QList<UiStandardItem*> &items);
+    inline void insertRow(int row, UiStandardItem *item);
 
     inline bool insertRow(int row, const QModelIndex &parent = QModelIndex());
     inline bool insertColumn(int column, const QModelIndex &parent = QModelIndex());
 
-    QStandardItem *takeItem(int row, int column = 0);
-    QList<QStandardItem*> takeRow(int row);
-    QList<QStandardItem*> takeColumn(int column);
+    UiStandardItem *takeItem(int row, int column = 0);
+    QList<UiStandardItem*> takeRow(int row);
+    QList<UiStandardItem*> takeColumn(int column);
 
-//    QStandardItem *takeHorizontalHeaderItem(int column);
-//    QStandardItem *takeVerticalHeaderItem(int row);
+//    UiStandardItem *takeHorizontalHeaderItem(int column);
+//    UiStandardItem *takeVerticalHeaderItem(int row);
 
-    const QStandardItem *itemPrototype() const;
-    void setItemPrototype(const QStandardItem *item);
+    const UiStandardItem *itemPrototype() const;
+    void setItemPrototype(const UiStandardItem *item);
 
-    QList<QStandardItem*> findItems(const QString &text,
+    QList<UiStandardItem*> findItems(const QString &text,
                                     Qt::MatchFlags flags = Qt::MatchExactly,
                                     int column = 0) const;
 
@@ -415,38 +415,38 @@ public:
     // bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
 Q_SIGNALS:
-    void itemChanged(QStandardItem *item);
+    void itemChanged(UiStandardItem *item);
 
 protected:
-    QStandardItemModel(QStandardItemModelPrivate &dd, QObject *parent = 0);
+    UiStandardItemModel(UiStandardItemModelPrivate &dd, QObject *parent = 0);
 
 private:
-    friend class QStandardItemPrivate;
-    friend class QStandardItem;
-    Q_DISABLE_COPY(QStandardItemModel)
-    Q_DECLARE_PRIVATE(QStandardItemModel)
+    friend class UiStandardItemPrivate;
+    friend class UiStandardItem;
+    Q_DISABLE_COPY(UiStandardItemModel)
+    Q_DECLARE_PRIVATE(UiStandardItemModel)
 
     Q_PRIVATE_SLOT(d_func(), void _q_emitItemChanged(const QModelIndex &topLeft,
                                                      const QModelIndex &bottomRight))
 };
 
-inline void QStandardItemModel::setItem(int arow, QStandardItem *aitem)
+inline void UiStandardItemModel::setItem(int arow, UiStandardItem *aitem)
 { setItem(arow, 0, aitem); }
 
-inline void QStandardItemModel::appendRow(QStandardItem *aitem)
-{ appendRow(QList<QStandardItem*>() << aitem); }
+inline void UiStandardItemModel::appendRow(UiStandardItem *aitem)
+{ appendRow(QList<UiStandardItem*>() << aitem); }
 
-inline void QStandardItemModel::insertRow(int arow, QStandardItem *aitem)
-{ insertRow(arow, QList<QStandardItem*>() << aitem); }
+inline void UiStandardItemModel::insertRow(int arow, UiStandardItem *aitem)
+{ insertRow(arow, QList<UiStandardItem*>() << aitem); }
 
-inline bool QStandardItemModel::insertRow(int arow, const QModelIndex &aparent)
+inline bool UiStandardItemModel::insertRow(int arow, const QModelIndex &aparent)
 { return QAbstractItemModel::insertRow(arow, aparent); }
-inline bool QStandardItemModel::insertColumn(int acolumn, const QModelIndex &aparent)
+inline bool UiStandardItemModel::insertColumn(int acolumn, const QModelIndex &aparent)
 { return QAbstractItemModel::insertColumn(acolumn, aparent); }
 
 #ifndef QT_NO_DATASTREAM
-UIHELPERS_EXPORT QDataStream &operator>>(QDataStream &in, QStandardItem &item);
-UIHELPERS_EXPORT QDataStream &operator<<(QDataStream &out, const QStandardItem &item);
+UIHELPERS_EXPORT QDataStream &operator>>(QDataStream &in, UiStandardItem &item);
+UIHELPERS_EXPORT QDataStream &operator<<(QDataStream &out, const UiStandardItem &item);
 #endif
 
 #endif // QT_NO_STANDARDITEMMODEL
@@ -455,4 +455,4 @@ QT_END_NAMESPACE_UIHELPERS
 
 QT_END_HEADER
 
-#endif //QSTANDARDITEMMODEL_H
+#endif //UISTANDARDITEMMODEL_H

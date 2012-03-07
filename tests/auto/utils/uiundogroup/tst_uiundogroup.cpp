@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 #include <QtTest/QtTest>
-#include <UiHelpers/QUndoGroup>
-#include <UiHelpers/QUndoStack>
+#include <UiHelpers/UiUndoGroup>
+#include <UiHelpers/UiUndoStack>
 
 QT_USE_NAMESPACE_UIHELPERS
 
@@ -51,11 +51,11 @@ QT_USE_NAMESPACE_UIHELPERS
 ** Commands
 */
 
-class InsertCommand : public QUndoCommand
+class InsertCommand : public UiUndoCommand
 {
 public:
     InsertCommand(QString *str, int idx, const QString &text,
-                    QUndoCommand *parent = 0);
+                    UiUndoCommand *parent = 0);
 
     virtual void undo();
     virtual void redo();
@@ -66,10 +66,10 @@ private:
     QString m_text;
 };
 
-class RemoveCommand : public QUndoCommand
+class RemoveCommand : public UiUndoCommand
 {
 public:
-    RemoveCommand(QString *str, int idx, int len, QUndoCommand *parent = 0);
+    RemoveCommand(QString *str, int idx, int len, UiUndoCommand *parent = 0);
 
     virtual void undo();
     virtual void redo();
@@ -80,15 +80,15 @@ private:
     QString m_text;
 };
 
-class AppendCommand : public QUndoCommand
+class AppendCommand : public UiUndoCommand
 {
 public:
-    AppendCommand(QString *str, const QString &text, QUndoCommand *parent = 0);
+    AppendCommand(QString *str, const QString &text, UiUndoCommand *parent = 0);
 
     virtual void undo();
     virtual void redo();
     virtual int id() const;
-    virtual bool mergeWith(const QUndoCommand *other);
+    virtual bool mergeWith(const UiUndoCommand *other);
 
     bool merged;
 
@@ -98,8 +98,8 @@ private:
 };
 
 InsertCommand::InsertCommand(QString *str, int idx, const QString &text,
-                            QUndoCommand *parent)
-    : QUndoCommand(parent)
+                            UiUndoCommand *parent)
+    : UiUndoCommand(parent)
 {
     QVERIFY(str->length() >= idx);
 
@@ -124,8 +124,8 @@ void InsertCommand::undo()
     m_str->remove(m_idx, m_text.length());
 }
 
-RemoveCommand::RemoveCommand(QString *str, int idx, int len, QUndoCommand *parent)
-    : QUndoCommand(parent)
+RemoveCommand::RemoveCommand(QString *str, int idx, int len, UiUndoCommand *parent)
+    : UiUndoCommand(parent)
 {
     QVERIFY(str->length() >= idx + len);
 
@@ -150,8 +150,8 @@ void RemoveCommand::undo()
     m_str->insert(m_idx, m_text);
 }
 
-AppendCommand::AppendCommand(QString *str, const QString &text, QUndoCommand *parent)
-    : QUndoCommand(parent)
+AppendCommand::AppendCommand(QString *str, const QString &text, UiUndoCommand *parent)
+    : UiUndoCommand(parent)
 {
     setText("append");
 
@@ -177,7 +177,7 @@ int AppendCommand::id() const
     return 1;
 }
 
-bool AppendCommand::mergeWith(const QUndoCommand *other)
+bool AppendCommand::mergeWith(const UiUndoCommand *other)
 {
     if (other->id() != id())
         return false;
@@ -187,14 +187,14 @@ bool AppendCommand::mergeWith(const QUndoCommand *other)
 }
 
 /******************************************************************************
-** tst_QUndoGroup
+** tst_UiUndoGroup
 */
 
-class tst_QUndoGroup : public QObject
+class tst_UiUndoGroup : public QObject
 {
     Q_OBJECT
 public:
-    tst_QUndoGroup();
+    tst_UiUndoGroup();
 
 private slots:
     void setActive();
@@ -204,20 +204,20 @@ private slots:
     void addStackAndDie();
 };
 
-tst_QUndoGroup::tst_QUndoGroup()
+tst_UiUndoGroup::tst_UiUndoGroup()
 {
 }
 
-void tst_QUndoGroup::setActive()
+void tst_UiUndoGroup::setActive()
 {
-    QUndoGroup group;
-    QUndoStack stack1(&group), stack2(&group);
+    UiUndoGroup group;
+    UiUndoStack stack1(&group), stack2(&group);
 
-    QCOMPARE(group.activeStack(), (QUndoStack*)0);
+    QCOMPARE(group.activeStack(), (UiUndoStack*)0);
     QCOMPARE(stack1.isActive(), false);
     QCOMPARE(stack2.isActive(), false);
 
-    QUndoStack stack3;
+    UiUndoStack stack3;
     QCOMPARE(stack3.isActive(), true);
 
     group.addStack(&stack3);
@@ -236,78 +236,78 @@ void tst_QUndoGroup::setActive()
     QCOMPARE(stack3.isActive(), false);
 
     group.removeStack(&stack2);
-    QCOMPARE(group.activeStack(), (QUndoStack*)0);
+    QCOMPARE(group.activeStack(), (UiUndoStack*)0);
     QCOMPARE(stack1.isActive(), false);
     QCOMPARE(stack2.isActive(), true);
     QCOMPARE(stack3.isActive(), false);
 
     group.removeStack(&stack2);
-    QCOMPARE(group.activeStack(), (QUndoStack*)0);
+    QCOMPARE(group.activeStack(), (UiUndoStack*)0);
     QCOMPARE(stack1.isActive(), false);
     QCOMPARE(stack2.isActive(), true);
     QCOMPARE(stack3.isActive(), false);
 }
 
-void tst_QUndoGroup::addRemoveStack()
+void tst_UiUndoGroup::addRemoveStack()
 {
-    QUndoGroup group;
+    UiUndoGroup group;
 
-    QUndoStack stack1(&group);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << &stack1);
+    UiUndoStack stack1(&group);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << &stack1);
 
-    QUndoStack stack2;
+    UiUndoStack stack2;
     group.addStack(&stack2);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << &stack1 << &stack2);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << &stack1 << &stack2);
 
     group.addStack(&stack1);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << &stack1 << &stack2);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << &stack1 << &stack2);
 
     group.removeStack(&stack1);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << &stack2);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << &stack2);
 
     group.removeStack(&stack1);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << &stack2);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << &stack2);
 
     group.removeStack(&stack2);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>());
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>());
 }
 
-void tst_QUndoGroup::deleteStack()
+void tst_UiUndoGroup::deleteStack()
 {
-    QUndoGroup group;
+    UiUndoGroup group;
 
-    QUndoStack *stack1 = new QUndoStack(&group);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << stack1);
-    QCOMPARE(group.activeStack(), (QUndoStack*)0);
+    UiUndoStack *stack1 = new UiUndoStack(&group);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << stack1);
+    QCOMPARE(group.activeStack(), (UiUndoStack*)0);
 
     stack1->setActive();
     QCOMPARE(group.activeStack(), stack1);
 
-    QUndoStack *stack2 = new QUndoStack(&group);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << stack1 << stack2);
+    UiUndoStack *stack2 = new UiUndoStack(&group);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << stack1 << stack2);
     QCOMPARE(group.activeStack(), stack1);
 
-    QUndoStack *stack3 = new QUndoStack(&group);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << stack1 << stack2 << stack3);
+    UiUndoStack *stack3 = new UiUndoStack(&group);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << stack1 << stack2 << stack3);
     QCOMPARE(group.activeStack(), stack1);
 
     delete stack2;
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << stack1 << stack3);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << stack1 << stack3);
     QCOMPARE(group.activeStack(), stack1);
 
     delete stack1;
-    QCOMPARE(group.stacks(), QList<QUndoStack*>() << stack3);
-    QCOMPARE(group.activeStack(), (QUndoStack*)0);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>() << stack3);
+    QCOMPARE(group.activeStack(), (UiUndoStack*)0);
 
     stack3->setActive(false);
-    QCOMPARE(group.activeStack(), (QUndoStack*)0);
+    QCOMPARE(group.activeStack(), (UiUndoStack*)0);
 
     stack3->setActive(true);
     QCOMPARE(group.activeStack(), stack3);
 
     group.removeStack(stack3);
-    QCOMPARE(group.stacks(), QList<QUndoStack*>());
-    QCOMPARE(group.activeStack(), (QUndoStack*)0);
+    QCOMPARE(group.stacks(), QList<UiUndoStack*>());
+    QCOMPARE(group.activeStack(), (UiUndoStack*)0);
 
     delete stack3;
 }
@@ -326,7 +326,7 @@ static QString glue(const QString &s1, const QString &s2)
 
 #define CHECK_STATE(_activeStack, _clean, _canUndo, _undoText, _canRedo, _redoText, \
                     _cleanChanged, _indexChanged, _undoChanged, _redoChanged) \
-    QCOMPARE(group.activeStack(), (QUndoStack*)_activeStack); \
+    QCOMPARE(group.activeStack(), (UiUndoStack*)_activeStack); \
     QCOMPARE(group.isClean(), _clean); \
     QCOMPARE(group.canUndo(), _canUndo); \
     QCOMPARE(group.undoText(), QString(_undoText)); \
@@ -368,9 +368,9 @@ static QString glue(const QString &s1, const QString &s2)
         QCOMPARE(redoTextChangedSpy.count(), 0); \
     }
 
-void tst_QUndoGroup::checkSignals()
+void tst_UiUndoGroup::checkSignals()
 {
-    QUndoGroup group;
+    UiUndoGroup group;
     QSignalSpy indexChangedSpy(&group, SIGNAL(indexChanged(int)));
     QSignalSpy cleanChangedSpy(&group, SIGNAL(cleanChanged(bool)));
     QSignalSpy canUndoChangedSpy(&group, SIGNAL(canUndoChanged(bool)));
@@ -415,7 +415,7 @@ void tst_QUndoGroup::checkSignals()
                 false,      // undoChanged
                 false)      // redoChanged
 
-    QUndoStack *stack1 = new QUndoStack(&group);
+    UiUndoStack *stack1 = new UiUndoStack(&group);
     CHECK_STATE(0,          // activeStack
                 true,       // clean
                 false,      // canUndo
@@ -535,7 +535,7 @@ void tst_QUndoGroup::checkSignals()
                 true,       // undoChanged
                 true)       // redoChanged
 
-    QUndoStack *stack2 = new QUndoStack(&group);
+    UiUndoStack *stack2 = new UiUndoStack(&group);
     CHECK_STATE(0,          // activeStack
                 true,       // clean
                 false,      // canUndo
@@ -584,12 +584,12 @@ void tst_QUndoGroup::checkSignals()
                 true)       // redoChanged
 }
 
-void tst_QUndoGroup::addStackAndDie()
+void tst_UiUndoGroup::addStackAndDie()
 {
-    // Test that QUndoStack doesn't keep a reference to QUndoGroup after the
+    // Test that UiUndoStack doesn't keep a reference to UiUndoGroup after the
     // group is deleted.
-    QUndoStack *stack = new QUndoStack;
-    QUndoGroup *group = new QUndoGroup;
+    UiUndoStack *stack = new UiUndoStack;
+    UiUndoGroup *group = new UiUndoGroup;
     group->addStack(stack);
     delete group;
     stack->setActive(true);
@@ -597,11 +597,11 @@ void tst_QUndoGroup::addStackAndDie()
 }
 
 #else
-class tst_QUndoGroup : public QObject
+class tst_UiUndoGroup : public QObject
 {
     Q_OBJECT
 public:
-    tst_QUndoGroup() {}
+    tst_UiUndoGroup() {}
 
 private slots:
     void setActive() { QSKIP( "Not tested on irix-g++"); }
@@ -612,7 +612,7 @@ private slots:
 };
 #endif
 
-QTEST_MAIN(tst_QUndoGroup)
+QTEST_MAIN(tst_UiUndoGroup)
 
-#include "tst_qundogroup.moc"
+#include "tst_uiundogroup.moc"
 

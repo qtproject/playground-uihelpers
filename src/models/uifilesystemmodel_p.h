@@ -53,13 +53,13 @@
 // We mean it.
 //
 
-#include "qfilesystemmodel.h"
+#include "uifilesystemmodel.h"
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
 #include <private/qabstractitemmodel_p.h>
 #include <qabstractitemmodel.h>
-#include "qfileinfogatherer_p.h"
+#include "uifileinfogatherer_p.h"
 #include <qpair.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -70,11 +70,11 @@
 QT_BEGIN_NAMESPACE_UIHELPERS
 
 class ExtendedInformation;
-class QFileSystemModelPrivate;
+class UiFileSystemModelPrivate;
 
-class Q_AUTOTEST_EXPORT QFileSystemModelPrivate : public QAbstractItemModelPrivate
+class Q_AUTOTEST_EXPORT UiFileSystemModelPrivate : public QAbstractItemModelPrivate
 {
-    Q_DECLARE_PUBLIC(QFileSystemModel)
+    Q_DECLARE_PUBLIC(UiFileSystemModel)
 
 public:
     class QFileSystemNode
@@ -134,7 +134,7 @@ public:
                 return fileName < name;
             return QString::compare(fileName, name, Qt::CaseInsensitive) < 0;
         }
-        inline bool operator !=(const QExtendedInformation &fileInfo) const {
+        inline bool operator !=(const UiExtendedInformation &fileInfo) const {
             return !operator==(fileInfo);
         }
         bool operator ==(const QString &name) const {
@@ -142,15 +142,15 @@ public:
                 return fileName == name;
             return QString::compare(fileName, name, Qt::CaseInsensitive) == 0;
         }
-        bool operator ==(const QExtendedInformation &fileInfo) const {
+        bool operator ==(const UiExtendedInformation &fileInfo) const {
             return info && (*info == fileInfo);
         }
 
         inline bool hasInformation() const { return info != 0; }
 
-        void populate(const QExtendedInformation &fileInfo) {
+        void populate(const UiExtendedInformation &fileInfo) {
             if (!info)
-                info = new QExtendedInformation(fileInfo.fileInfo());
+                info = new UiExtendedInformation(fileInfo.fileInfo());
             (*info) = fileInfo;
         }
 
@@ -200,11 +200,11 @@ public:
         QFileSystemNode *parent;
 
 
-        QExtendedInformation *info;
+        UiExtendedInformation *info;
 
     };
 
-    QFileSystemModelPrivate() :
+    UiFileSystemModelPrivate() :
             forceSort(true),
             sortColumn(0),
             sortOrder(Qt::AscendingOrder),
@@ -257,9 +257,9 @@ public:
         // Vista == "Computer",
         // OS X == "Computer" (sometime user generated) "Benjamin's PowerBook G4"
 #ifdef Q_OS_WIN
-        return QFileSystemModel::tr("My Computer");
+        return UiFileSystemModel::tr("My Computer");
 #else
-        return QFileSystemModel::tr("Computer");
+        return UiFileSystemModel::tr("Computer");
 #endif
     }
 
@@ -273,7 +273,7 @@ public:
        return QString::compare(s1, s2, Qt::CaseInsensitive) < 0;
     }
 
-    static bool nodeCaseInsensitiveLessThan(const QFileSystemModelPrivate::QFileSystemNode &s1, const QFileSystemModelPrivate::QFileSystemNode &s2)
+    static bool nodeCaseInsensitiveLessThan(const UiFileSystemModelPrivate::QFileSystemNode &s1, const UiFileSystemModelPrivate::QFileSystemNode &s2)
     {
        return QString::compare(s1.fileName, s2.fileName, Qt::CaseInsensitive) < 0;
     }
@@ -296,7 +296,7 @@ public:
 
     QDir rootDir;
 #ifndef QT_NO_FILESYSTEMWATCHER
-    QFileInfoGatherer fileInfoGatherer;
+    UiFileInfoGatherer fileInfoGatherer;
 #endif
     QTimer delayedSortTimer;
     bool forceSort;

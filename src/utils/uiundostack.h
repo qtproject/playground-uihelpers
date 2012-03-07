@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef UIHELPERS_QUNDOSTACK_H
-#define UIHELPERS_QUNDOSTACK_H
+#ifndef UIHELPERS_UIUNDOSTACK_H
+#define UIHELPERS_UIUNDOSTACK_H
 
 #include "uihelpersglobal.h"
 #include <QtCore/qobject.h>
@@ -53,18 +53,18 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 
 class QAction;
-class QUndoCommandPrivate;
-class QUndoStackPrivate;
+class UiUndoCommandPrivate;
+class UiUndoStackPrivate;
 
 #ifndef QT_NO_UNDOCOMMAND
 
-class UIHELPERS_EXPORT QUndoCommand
+class UIHELPERS_EXPORT UiUndoCommand
 {
-    QUndoCommandPrivate *d;
+    UiUndoCommandPrivate *d;
 public:
-    explicit QUndoCommand(QUndoCommand *parent = 0);
-    explicit QUndoCommand(const QString &text, QUndoCommand *parent = 0);
-    virtual ~QUndoCommand();
+    explicit UiUndoCommand(UiUndoCommand *parent = 0);
+    explicit UiUndoCommand(const QString &text, UiUndoCommand *parent = 0);
+    virtual ~UiUndoCommand();
 
     virtual void undo();
     virtual void redo();
@@ -74,34 +74,34 @@ public:
     void setText(const QString &text);
 
     virtual int id() const;
-    virtual bool mergeWith(const QUndoCommand *other);
+    virtual bool mergeWith(const UiUndoCommand *other);
 
     int childCount() const;
-    const QUndoCommand *child(int index) const;
+    const UiUndoCommand *child(int index) const;
 
 private:
-    Q_DISABLE_COPY(QUndoCommand)
-    friend class QUndoStack;
+    Q_DISABLE_COPY(UiUndoCommand)
+    friend class UiUndoStack;
 };
 
 #endif // QT_NO_UNDOCOMMAND
 
 #ifndef QT_NO_UNDOSTACK
 
-class UIHELPERS_EXPORT QUndoStack : public QObject
+class UIHELPERS_EXPORT UiUndoStack : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(QUndoStack)
+    Q_DECLARE_PRIVATE(UiUndoStack)
     Q_PROPERTY(bool active READ isActive WRITE setActive)
     Q_PROPERTY(int undoLimit READ undoLimit WRITE setUndoLimit)
     Q_PROPERTY(QStringList stack READ stack NOTIFY stackChanged)
 
 public:
-    explicit QUndoStack(QObject *parent = 0);
-    ~QUndoStack();
+    explicit UiUndoStack(QObject *parent = 0);
+    ~UiUndoStack();
     void clear();
 
-    void push(QUndoCommand *cmd);
+    void push(UiUndoCommand *cmd);
 
     QStringList stack() const;
 
@@ -131,7 +131,7 @@ public:
     void setUndoLimit(int limit);
     int undoLimit() const;
 
-    const QUndoCommand *command(int index) const;
+    const UiUndoCommand *command(int index) const;
 
 public Q_SLOTS:
     void setClean();
@@ -150,8 +150,8 @@ Q_SIGNALS:
     void stackChanged();
 
 private:
-    Q_DISABLE_COPY(QUndoStack)
-    friend class QUndoGroup;
+    Q_DISABLE_COPY(UiUndoStack)
+    friend class UiUndoGroup;
 };
 
 #endif // QT_NO_UNDOSTACK
@@ -160,4 +160,4 @@ QT_END_NAMESPACE_UIHELPERS
 
 QT_END_HEADER
 
-#endif // UIHELPERS_QUNDOSTACK_H
+#endif // UIHELPERS_UIUNDOSTACK_H

@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QFILESYSTEMMODEL_H
-#define QFILESYSTEMMODEL_H
+#ifndef UIFILESYSTEMMODEL_H
+#define UIFILESYSTEMMODEL_H
 
 #include "uihelpersglobal.h"
 #include <QtCore/qabstractitemmodel.h>
@@ -57,10 +57,10 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 #ifndef QT_NO_FILESYSTEMMODEL
 
 //class ExtendedInformation;
-class QFileSystemModelPrivate;
+class UiFileSystemModelPrivate;
 //class QFileIconProvider;
 
-class UIHELPERS_EXPORT QFileSystemModel : public QAbstractItemModel
+class UIHELPERS_EXPORT UiFileSystemModel : public QAbstractItemModel
 {
     Q_OBJECT
     Q_PROPERTY(bool resolveSymlinks READ resolveSymlinks WRITE setResolveSymlinks)
@@ -80,8 +80,8 @@ public:
         FilePermissions = Qt::UserRole + 3
     };
 
-    explicit QFileSystemModel(QObject *parent = 0);
-    ~QFileSystemModel();
+    explicit UiFileSystemModel(QObject *parent = 0);
+    ~UiFileSystemModel();
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex index(const QString &path, int column = 0) const;
@@ -109,7 +109,7 @@ public:
                       int row, int column, const QModelIndex &parent);
     Qt::DropActions supportedDropActions() const;
 
-    // QFileSystemModel specific API
+    // UiFileSystemModel specific API
     QModelIndex setRootPath(const QString &path);
     QString rootPath() const;
     QDir rootDirectory() const;
@@ -147,13 +147,13 @@ public:
     bool remove(const QModelIndex &index) const;
 
 protected:
-    QFileSystemModel(QFileSystemModelPrivate &, QObject *parent = 0);
+    UiFileSystemModel(UiFileSystemModelPrivate &, QObject *parent = 0);
     void timerEvent(QTimerEvent *event);
     bool event(QEvent *event);
 
 private:
-    Q_DECLARE_PRIVATE(QFileSystemModel)
-    Q_DISABLE_COPY(QFileSystemModel)
+    Q_DECLARE_PRIVATE(UiFileSystemModel)
+    Q_DISABLE_COPY(UiFileSystemModel)
 
     Q_PRIVATE_SLOT(d_func(), void _q_directoryChanged(const QString &directory, const QStringList &list))
     Q_PRIVATE_SLOT(d_func(), void _q_performDelayedSort())
@@ -163,11 +163,11 @@ private:
     friend class QFileDialogPrivate;
 };
 
-inline QString QFileSystemModel::fileName(const QModelIndex &aindex) const
+inline QString UiFileSystemModel::fileName(const QModelIndex &aindex) const
 { return aindex.data(Qt::DisplayRole).toString(); }
-//inline QIcon QFileSystemModel::fileIcon(const QModelIndex &aindex) const
+//inline QIcon UiFileSystemModel::fileIcon(const QModelIndex &aindex) const
 //{ return qvariant_cast<QIcon>(aindex.data(Qt::DecorationRole)); }
-inline QFileInfo QFileSystemModel::fileInfo(const QModelIndex &aindex) const
+inline QFileInfo UiFileSystemModel::fileInfo(const QModelIndex &aindex) const
 { return QFileInfo(filePath(aindex)); }
 
 #endif // QT_NO_FILESYSTEMMODEL
@@ -176,5 +176,5 @@ QT_END_NAMESPACE_UIHELPERS
 
 QT_END_HEADER
 
-#endif // QFILESYSTEMMODEL_H
+#endif // UIFILESYSTEMMODEL_H
 

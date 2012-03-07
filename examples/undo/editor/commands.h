@@ -41,14 +41,14 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-#include <UiHelpers/QUndoCommand>
+#include <UiHelpers/UiUndoStack>
 
 QT_USE_NAMESPACE_UIHELPERS;
 
-class CreateFileCommand : public QUndoCommand
+class CreateFileCommand : public UiUndoCommand
 {
 public:
-    CreateFileCommand(QUndoCommand *parent = 0);
+    CreateFileCommand(UiUndoCommand *parent = 0);
     ~CreateFileCommand();
 
     void undo();

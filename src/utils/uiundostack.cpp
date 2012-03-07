@@ -40,17 +40,17 @@
 ****************************************************************************/
 
 #include <QtCore/qdebug.h>
-#include "qundostack.h"
-#include "qundogroup.h"
-#include "qundostack_p.h"
+#include "uiundostack.h"
+#include "uiundogroup.h"
+#include "uiundostack_p.h"
 
 #ifndef QT_NO_UNDOCOMMAND
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
 /*!
-    \class QUndoCommand
-    \brief The QUndoCommand class is the base class of all commands stored on a QUndoStack.
+    \class UiUndoCommand
+    \brief The UiUndoCommand class is the base class of all commands stored on a UiUndoStack.
     \since 4.2
 
     \inmodule UiHelpers
@@ -58,30 +58,30 @@ QT_BEGIN_NAMESPACE_UIHELPERS
     For an overview of Qt's Undo Framework, see the
     \l{Overview of Qt's Undo Framework}{overview document}.
 
-    A QUndoCommand represents a single editing action on a document; for example,
-    inserting or deleting a block of text in a text editor. QUndoCommand can apply
+    A UiUndoCommand represents a single editing action on a document; for example,
+    inserting or deleting a block of text in a text editor. UiUndoCommand can apply
     a change to the document with redo() and undo the change with undo(). The
     implementations for these functions must be provided in a derived class.
 
-    \snippet doc/src/snippets/code/src_gui_util_qundostack.cpp 0
+    \snippet doc/src/snippets/code/src_gui_util_UiUndostack.cpp 0
 
-    A QUndoCommand has an associated text(). This is a short string
+    A UiUndoCommand has an associated text(). This is a short string
     describing what the command does. It is used to update the text
     properties of the stack's undo and redo actions; see
-    QUndoStack::createUndoAction() and QUndoStack::createRedoAction().
+    UiUndoStack::createUndoAction() and UiUndoStack::createRedoAction().
 
-    QUndoCommand objects are owned by the stack they were pushed on.
-    QUndoStack deletes a command if it has been undone and a new command is pushed. For example:
+    UiUndoCommand objects are owned by the stack they were pushed on.
+    UiUndoStack deletes a command if it has been undone and a new command is pushed. For example:
 
-\snippet doc/src/snippets/code/src_gui_util_qundostack.cpp 1
+\snippet doc/src/snippets/code/src_gui_util_UiUndostack.cpp 1
 
     In effect, when a command is pushed, it becomes the top-most command
     on the stack.
 
-    To support command compression, QUndoCommand has an id() and the virtual function
-    mergeWith(). These functions are used by QUndoStack::push().
+    To support command compression, UiUndoCommand has an id() and the virtual function
+    mergeWith(). These functions are used by UiUndoStack::push().
 
-    To support command macros, a QUndoCommand object can have any number of child
+    To support command macros, a UiUndoCommand object can have any number of child
     commands. Undoing or redoing the parent command will cause the child
     commands to be undone or redone. A command can be assigned
     to a parent explicitly in the constructor. In this case, the command
@@ -93,56 +93,56 @@ QT_BEGIN_NAMESPACE_UIHELPERS
     redo() on all its children. The parent should, however, have a meaningful
     text().
 
-    \snippet doc/src/snippets/code/src_gui_util_qundostack.cpp 2
+    \snippet doc/src/snippets/code/src_gui_util_UiUndostack.cpp 2
 
     Another way to create macros is to use the convenience functions
-    QUndoStack::beginMacro() and QUndoStack::endMacro().
+    UiUndoStack::beginMacro() and UiUndoStack::endMacro().
 
-    \sa QUndoStack
+    \sa UiUndoStack
 */
 
 /*!
-    Constructs a QUndoCommand object with the given \a parent and \a text.
+    Constructs a UiUndoCommand object with the given \a parent and \a text.
 
     If \a parent is not 0, this command is appended to parent's child list.
     The parent command then owns this command and will delete it in its
     destructor.
 
-    \sa ~QUndoCommand()
+    \sa ~UiUndoCommand()
 */
 
-QUndoCommand::QUndoCommand(const QString &text, QUndoCommand *parent)
+UiUndoCommand::UiUndoCommand(const QString &text, UiUndoCommand *parent)
 {
-    d = new QUndoCommandPrivate;
+    d = new UiUndoCommandPrivate;
     if (parent != 0)
         parent->d->child_list.append(this);
     setText(text);
 }
 
 /*!
-    Constructs a QUndoCommand object with parent \a parent.
+    Constructs a UiUndoCommand object with parent \a parent.
 
     If \a parent is not 0, this command is appended to parent's child list.
     The parent command then owns this command and will delete it in its
     destructor.
 
-    \sa ~QUndoCommand()
+    \sa ~UiUndoCommand()
 */
 
-QUndoCommand::QUndoCommand(QUndoCommand *parent)
+UiUndoCommand::UiUndoCommand(UiUndoCommand *parent)
 {
-    d = new QUndoCommandPrivate;
+    d = new UiUndoCommandPrivate;
     if (parent != 0)
         parent->d->child_list.append(this);
 }
 
 /*!
-    Destroys the QUndoCommand object and all child commands.
+    Destroys the UiUndoCommand object and all child commands.
 
-    \sa QUndoCommand()
+    \sa UiUndoCommand()
 */
 
-QUndoCommand::~QUndoCommand()
+UiUndoCommand::~UiUndoCommand()
 {
     qDeleteAll(d->child_list);
     delete d;
@@ -157,13 +157,13 @@ QUndoCommand::~QUndoCommand()
     If the command supports compression this function must be overridden in the
     derived class to return the correct ID. The base implementation returns -1.
 
-    QUndoStack::push() will only try to merge two commands if they have the
+    UiUndoStack::push() will only try to merge two commands if they have the
     same ID, and the ID is not -1.
 
-    \sa mergeWith(), QUndoStack::push()
+    \sa mergeWith(), UiUndoStack::push()
 */
 
-int QUndoCommand::id() const
+int UiUndoCommand::id() const
 {
     return -1;
 }
@@ -177,17 +177,17 @@ int QUndoCommand::id() const
     Similarly, calling this command's undo() must have the same effect as undoing
     \a command and this command.
 
-    QUndoStack will only try to merge two commands if they have the same id, and
+    UiUndoStack will only try to merge two commands if they have the same id, and
     the id is not -1.
 
     The default implementation returns false.
 
-    \snippet doc/src/snippets/code/src_gui_util_qundostack.cpp 3
+    \snippet doc/src/snippets/code/src_gui_util_UiUndostack.cpp 3
 
-    \sa id() QUndoStack::push()
+    \sa id() UiUndoStack::push()
 */
 
-bool QUndoCommand::mergeWith(const QUndoCommand *command)
+bool UiUndoCommand::mergeWith(const UiUndoCommand *command)
 {
     Q_UNUSED(command);
     return false;
@@ -195,8 +195,8 @@ bool QUndoCommand::mergeWith(const QUndoCommand *command)
 
 /*!
     Applies a change to the document. This function must be implemented in
-    the derived class. Calling QUndoStack::push(),
-    QUndoStack::undo() or QUndoStack::redo() from this function leads to
+    the derived class. Calling UiUndoStack::push(),
+    UiUndoStack::undo() or UiUndoStack::redo() from this function leads to
     undefined beahavior.
 
     The default implementation calls redo() on all child commands.
@@ -204,7 +204,7 @@ bool QUndoCommand::mergeWith(const QUndoCommand *command)
     \sa undo()
 */
 
-void QUndoCommand::redo()
+void UiUndoCommand::redo()
 {
     for (int i = 0; i < d->child_list.size(); ++i)
         d->child_list.at(i)->redo();
@@ -213,8 +213,8 @@ void QUndoCommand::redo()
 /*!
     Reverts a change to the document. After undo() is called, the state of
     the document should be the same as before redo() was called. This function must
-    be implemented in the derived class. Calling QUndoStack::push(),
-    QUndoStack::undo() or QUndoStack::redo() from this function leads to
+    be implemented in the derived class. Calling UiUndoStack::push(),
+    UiUndoStack::undo() or UiUndoStack::redo() from this function leads to
     undefined beahavior.
 
     The default implementation calls undo() on all child commands in reverse order.
@@ -222,7 +222,7 @@ void QUndoCommand::redo()
     \sa redo()
 */
 
-void QUndoCommand::undo()
+void UiUndoCommand::undo()
 {
     for (int i = d->child_list.size() - 1; i >= 0; --i)
         d->child_list.at(i)->undo();
@@ -232,12 +232,12 @@ void QUndoCommand::undo()
     Returns a short text string describing what this command does; for example,
     "insert text".
 
-    The text is used for names of items in QUndoView.
+    The text is used for names of items in UiUndoView.
 
-    \sa actionText(), setText(), QUndoStack::createUndoAction(), QUndoStack::createRedoAction()
+    \sa actionText(), setText(), UiUndoStack::createUndoAction(), UiUndoStack::createRedoAction()
 */
 
-QString QUndoCommand::text() const
+QString UiUndoCommand::text() const
 {
     return d->text;
 }
@@ -251,10 +251,10 @@ QString QUndoCommand::text() const
     The text is used when the text properties of the stack's undo and redo
     actions are updated.
 
-    \sa text(), setText(), QUndoStack::createUndoAction(), QUndoStack::createRedoAction()
+    \sa text(), setText(), UiUndoStack::createUndoAction(), UiUndoStack::createRedoAction()
 */
 
-QString QUndoCommand::actionText() const
+QString UiUndoCommand::actionText() const
 {
     return d->actionText;
 }
@@ -271,10 +271,10 @@ QString QUndoCommand::actionText() const
     different strings in order to match specific languages' needs.
     The described feature and the function actionText() are available since Qt 4.8.
 
-    \sa text() actionText() QUndoStack::createUndoAction() QUndoStack::createRedoAction()
+    \sa text() actionText() UiUndoStack::createUndoAction() UiUndoStack::createRedoAction()
 */
 
-void QUndoCommand::setText(const QString &text)
+void UiUndoCommand::setText(const QString &text)
 {
     int cdpos = text.indexOf(QLatin1Char('\n'));
     if (cdpos > 0) {
@@ -294,7 +294,7 @@ void QUndoCommand::setText(const QString &text)
     \sa child()
 */
 
-int QUndoCommand::childCount() const
+int UiUndoCommand::childCount() const
 {
     return d->child_list.count();
 }
@@ -304,10 +304,10 @@ int QUndoCommand::childCount() const
 
     Returns the child command at \a index.
 
-    \sa childCount(), QUndoStack::command()
+    \sa childCount(), UiUndoStack::command()
 */
 
-const QUndoCommand *QUndoCommand::child(int index) const
+const UiUndoCommand *UiUndoCommand::child(int index) const
 {
     if (index < 0 || index >= d->child_list.count())
         return 0;
@@ -319,8 +319,8 @@ const QUndoCommand *QUndoCommand::child(int index) const
 #ifndef QT_NO_UNDOSTACK
 
 /*!
-    \class QUndoStack
-    \brief The QUndoStack class is a stack of QUndoCommand objects.
+    \class UiUndoStack
+    \brief The UiUndoStack class is a stack of UiUndoCommand objects.
     \since 4.2
 
     \inmodule UiHelpers
@@ -335,24 +335,24 @@ const QUndoCommand *QUndoCommand::child(int index) const
     undone and redone using undo() and redo(), or by triggering the
     actions returned by createUndoAction() and createRedoAction().
 
-    QUndoStack keeps track of the \a current command. This is the command
+    UiUndoStack keeps track of the \a current command. This is the command
     which will be executed by the next call to redo(). The index of this
     command is returned by index(). The state of the edited object can be
     rolled forward or back using setIndex(). If the top-most command on the
     stack has already been redone, index() is equal to count().
 
-    QUndoStack provides support for undo and redo actions, command
+    UiUndoStack provides support for undo and redo actions, command
     compression, command macros, and supports the concept of a
     \e{clean state}.
 
     \section1 Undo and Redo Actions
 
-    QUndoStack provides convenient undo and redo QAction objects, which
+    UiUndoStack provides convenient undo and redo QAction objects, which
     can be inserted into a menu or a toolbar. When commands are undone or
-    redone, QUndoStack updates the text properties of these actions
+    redone, UiUndoStack updates the text properties of these actions
     to reflect what change they will trigger. The actions are also disabled
     when no command is available for undo or redo. These actions
-    are returned by QUndoStack::createUndoAction() and QUndoStack::createRedoAction().
+    are returned by UiUndoStack::createUndoAction() and UiUndoStack::createRedoAction().
 
     \section1 Command Compression and Macros
 
@@ -364,14 +364,14 @@ const QUndoCommand *QUndoCommand::child(int index) const
     to undo or redo typing of whole words, sentences, or paragraphs.
     Command compression allows these single-character commands to be merged
     into a single command which inserts or deletes sections of text.
-    For more information, see QUndoCommand::mergeWith() and push().
+    For more information, see UiUndoCommand::mergeWith() and push().
 
     A command macro is a sequence of commands, all of which are undone and
     redone in one go. Command macros are created by giving a command a list
     of child commands.
     Undoing or redoing the parent command will cause the child commands to
     be undone or redone. Command macros may be created explicitly
-    by specifying a parent in the QUndoCommand constructor, or by using the
+    by specifying a parent in the UiUndoCommand constructor, or by using the
     convenience functions beginMacro() and endMacro().
 
     Although command compression and macros appear to have the same effect to the
@@ -385,7 +385,7 @@ const QUndoCommand *QUndoCommand::child(int index) const
 
     \section1 Clean State
 
-    QUndoStack supports the concept of a clean state. When the
+    UiUndoStack supports the concept of a clean state. When the
     document is saved to disk, the stack can be marked as clean using
     setClean(). Whenever the stack returns to this state through undoing and
     redoing commands, it emits the signal cleanChanged(). This signal
@@ -394,18 +394,18 @@ const QUndoCommand *QUndoCommand::child(int index) const
     and to update the document's title to reflect that it contains unsaved
     changes.
 
-    \sa QUndoCommand, QUndoView
+    \sa UiUndoCommand, UiUndoView
 */
 
 #ifndef QT_NO_ACTION
 
-QUndoAction::QUndoAction(const QString &prefix, QObject *parent)
+UiUndoAction::UiUndoAction(const QString &prefix, QObject *parent)
     : QAction(parent)
 {
     m_prefix = prefix;
 }
 
-void QUndoAction::setPrefixedText(const QString &text)
+void UiUndoAction::setPrefixedText(const QString &text)
 {
     if (m_defaultText.isEmpty()) {
         QString s = m_prefix;
@@ -421,7 +421,7 @@ void QUndoAction::setPrefixedText(const QString &text)
     }
 }
 
-void QUndoAction::setTextFormat(const QString &textFormat, const QString &defaultText)
+void UiUndoAction::setTextFormat(const QString &textFormat, const QString &defaultText)
 {
     m_prefix = textFormat;
     m_defaultText = defaultText;
@@ -434,9 +434,9 @@ void QUndoAction::setTextFormat(const QString &textFormat, const QString &defaul
     makes \a idx the clean index as well.
 */
 
-void QUndoStackPrivate::setIndex(int idx, bool clean)
+void UiUndoStackPrivate::setIndex(int idx, bool clean)
 {
-    Q_Q(QUndoStack);
+    Q_Q(UiUndoStack);
 
     bool was_clean = index == clean_index;
 
@@ -464,7 +464,7 @@ void QUndoStackPrivate::setIndex(int idx, bool clean)
     Returns true if commands were deleted.
 */
 
-bool QUndoStackPrivate::checkUndoLimit()
+bool UiUndoStackPrivate::checkUndoLimit()
 {
     if (undo_limit <= 0 || !macro_stack.isEmpty() || undo_limit >= command_list.count())
         return false;
@@ -488,31 +488,31 @@ bool QUndoStackPrivate::checkUndoLimit()
 /*!
     Constructs an empty undo stack with the parent \a parent. The
     stack will initially be in the clean state. If \a parent is a
-    QUndoGroup object, the stack is automatically added to the group.
+    UiUndoGroup object, the stack is automatically added to the group.
 
     \sa push()
 */
 
-QUndoStack::QUndoStack(QObject *parent)
-    : QObject(*(new QUndoStackPrivate), parent)
+UiUndoStack::UiUndoStack(QObject *parent)
+    : QObject(*(new UiUndoStackPrivate), parent)
 {
 #ifndef QT_NO_UNDOGROUP
-    if (QUndoGroup *group = qobject_cast<QUndoGroup*>(parent))
+    if (UiUndoGroup *group = qobject_cast<UiUndoGroup*>(parent))
         group->addStack(this);
 #endif
 }
 
 /*!
     Destroys the undo stack, deleting any commands that are on it. If the
-    stack is in a QUndoGroup, the stack is automatically removed from the group.
+    stack is in a UiUndoGroup, the stack is automatically removed from the group.
 
-    \sa QUndoStack()
+    \sa UiUndoStack()
 */
 
-QUndoStack::~QUndoStack()
+UiUndoStack::~UiUndoStack()
 {
 #ifndef QT_NO_UNDOGROUP
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
     if (d->group != 0)
         d->group->removeStack(this);
 #endif
@@ -529,12 +529,12 @@ QUndoStack::~QUndoStack()
     This function is usually used when the contents of the document are
     abandoned.
 
-    \sa QUndoStack()
+    \sa UiUndoStack()
 */
 
-void QUndoStack::clear()
+void UiUndoStack::clear()
 {
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
 
     if (d->command_list.isEmpty())
         return;
@@ -563,9 +563,9 @@ void QUndoStack::clear()
     In either case, executes \a cmd by calling its redo() function.
 
     If \a cmd's id is not -1, and if the id is the same as that of the
-    most recently executed command, QUndoStack will attempt to merge the two
-    commands by calling QUndoCommand::mergeWith() on the most recently executed
-    command. If QUndoCommand::mergeWith() returns true, \a cmd is deleted.
+    most recently executed command, UiUndoStack will attempt to merge the two
+    commands by calling UiUndoCommand::mergeWith() on the most recently executed
+    command. If UiUndoCommand::mergeWith() returns true, \a cmd is deleted.
 
     In all other cases \a cmd is simply pushed on the stack.
 
@@ -578,19 +578,19 @@ void QUndoStack::clear()
     been executed will almost always lead to corruption of the document's
     state.
 
-    \sa QUndoCommand::id() QUndoCommand::mergeWith()
+    \sa UiUndoCommand::id() UiUndoCommand::mergeWith()
 */
 
-void QUndoStack::push(QUndoCommand *cmd)
+void UiUndoStack::push(UiUndoCommand *cmd)
 {
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
     cmd->redo();
 
     bool macro = !d->macro_stack.isEmpty();
 
-    QUndoCommand *cur = 0;
+    UiUndoCommand *cur = 0;
     if (macro) {
-        QUndoCommand *macro_cmd = d->macro_stack.last();
+        UiUndoCommand *macro_cmd = d->macro_stack.last();
         if (!macro_cmd->d->child_list.isEmpty())
             cur = macro_cmd->d->child_list.last();
     } else {
@@ -639,11 +639,11 @@ void QUndoStack::push(QUndoCommand *cmd)
     \sa isClean(), cleanIndex()
 */
 
-void QUndoStack::setClean()
+void UiUndoStack::setClean()
 {
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
     if (!d->macro_stack.isEmpty()) {
-        qWarning("QUndoStack::setClean(): cannot set clean in the middle of a macro");
+        qWarning("UiUndoStack::setClean(): cannot set clean in the middle of a macro");
         return;
     }
 
@@ -656,9 +656,9 @@ void QUndoStack::setClean()
     \sa setClean() cleanIndex()
 */
 
-bool QUndoStack::isClean() const
+bool UiUndoStack::isClean() const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
     if (!d->macro_stack.isEmpty())
         return false;
     return d->clean_index == d->index;
@@ -675,14 +675,14 @@ bool QUndoStack::isClean() const
     \sa isClean() setClean()
 */
 
-int QUndoStack::cleanIndex() const
+int UiUndoStack::cleanIndex() const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
     return d->clean_index;
 }
 
 /*!
-    Undoes the command below the current command by calling QUndoCommand::undo().
+    Undoes the command below the current command by calling UiUndoCommand::undo().
     Decrements the current command index.
 
     If the stack is empty, or if the bottom command on the stack has already been
@@ -691,14 +691,14 @@ int QUndoStack::cleanIndex() const
     \sa redo() index()
 */
 
-void QUndoStack::undo()
+void UiUndoStack::undo()
 {
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
     if (d->index == 0)
         return;
 
     if (!d->macro_stack.isEmpty()) {
-        qWarning("QUndoStack::undo(): cannot undo in the middle of a macro");
+        qWarning("UiUndoStack::undo(): cannot undo in the middle of a macro");
         return;
     }
 
@@ -709,7 +709,7 @@ void QUndoStack::undo()
 }
 
 /*!
-    Redoes the current command by calling QUndoCommand::redo(). Increments the current
+    Redoes the current command by calling UiUndoCommand::redo(). Increments the current
     command index.
 
     If the stack is empty, or if the top command on the stack has already been
@@ -718,14 +718,14 @@ void QUndoStack::undo()
     \sa undo() index()
 */
 
-void QUndoStack::redo()
+void UiUndoStack::redo()
 {
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
     if (d->index == d->command_list.size())
         return;
 
     if (!d->macro_stack.isEmpty()) {
-        qWarning("QUndoStack::redo(): cannot redo in the middle of a macro");
+        qWarning("UiUndoStack::redo(): cannot redo in the middle of a macro");
         return;
     }
 
@@ -741,9 +741,9 @@ void QUndoStack::redo()
     \sa index() setIndex() command()
 */
 
-int QUndoStack::count() const
+int UiUndoStack::count() const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
     return d->command_list.size();
 }
 
@@ -755,9 +755,9 @@ int QUndoStack::count() const
     \sa undo() redo() count()
 */
 
-int QUndoStack::index() const
+int UiUndoStack::index() const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
     return d->index;
 }
 
@@ -769,11 +769,11 @@ int QUndoStack::index() const
     \sa index() count() undo() redo()
 */
 
-void QUndoStack::setIndex(int idx)
+void UiUndoStack::setIndex(int idx)
 {
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
     if (!d->macro_stack.isEmpty()) {
-        qWarning("QUndoStack::setIndex(): cannot set index in the middle of a macro");
+        qWarning("UiUndoStack::setIndex(): cannot set index in the middle of a macro");
         return;
     }
 
@@ -802,9 +802,9 @@ void QUndoStack::setIndex(int idx)
     \sa index() canRedo()
 */
 
-bool QUndoStack::canUndo() const
+bool UiUndoStack::canUndo() const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
     if (!d->macro_stack.isEmpty())
         return false;
     return d->index > 0;
@@ -821,9 +821,9 @@ bool QUndoStack::canUndo() const
     \sa index() canUndo()
 */
 
-bool QUndoStack::canRedo() const
+bool UiUndoStack::canRedo() const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
     if (!d->macro_stack.isEmpty())
         return false;
     return d->index < d->command_list.size();
@@ -832,12 +832,12 @@ bool QUndoStack::canRedo() const
 /*!
     Returns the text of the command which will be undone in the next call to undo().
 
-    \sa QUndoCommand::actionText() redoText()
+    \sa UiUndoCommand::actionText() redoText()
 */
 
-QString QUndoStack::undoText() const
+QString UiUndoStack::undoText() const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
     if (!d->macro_stack.isEmpty())
         return QString();
     if (d->index > 0)
@@ -848,12 +848,12 @@ QString QUndoStack::undoText() const
 /*!
     Returns the text of the command which will be redone in the next call to redo().
 
-    \sa QUndoCommand::actionText() undoText()
+    \sa UiUndoCommand::actionText() undoText()
 */
 
-QString QUndoStack::redoText() const
+QString UiUndoStack::redoText() const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
     if (!d->macro_stack.isEmpty())
         return QString();
     if (d->index < d->command_list.size())
@@ -874,12 +874,12 @@ QString QUndoStack::redoText() const
     If \a prefix is empty, the default template "Undo %1" is used instead of prefix.
     Before Qt 4.8, the prefix "Undo" was used by default.
 
-    \sa createRedoAction(), canUndo(), QUndoCommand::text()
+    \sa createRedoAction(), canUndo(), UiUndoCommand::text()
 */
 
-QAction *QUndoStack::createUndoAction(QObject *parent, const QString &prefix) const
+QAction *UiUndoStack::createUndoAction(QObject *parent, const QString &prefix) const
 {
-    QUndoAction *result = new QUndoAction(prefix, parent);
+    UiUndoAction *result = new UiUndoAction(prefix, parent);
     if (prefix.isEmpty())
         result->setTextFormat(tr("Undo %1"), tr("Undo", "Default text for undo action"));
 
@@ -904,12 +904,12 @@ QAction *QUndoStack::createUndoAction(QObject *parent, const QString &prefix) co
     If \a prefix is empty, the default template "Redo %1" is used instead of prefix.
     Before Qt 4.8, the prefix "Redo" was used by default.
 
-    \sa createUndoAction(), canRedo(), QUndoCommand::text()
+    \sa createUndoAction(), canRedo(), UiUndoCommand::text()
 */
 
-QAction *QUndoStack::createRedoAction(QObject *parent, const QString &prefix) const
+QAction *UiUndoStack::createRedoAction(QObject *parent, const QString &prefix) const
 {
-    QUndoAction *result = new QUndoAction(prefix, parent);
+    UiUndoAction *result = new UiUndoAction(prefix, parent);
     if (prefix.isEmpty())
         result->setTextFormat(tr("Redo %1"), tr("Redo", "Default text for redo action"));
 
@@ -946,19 +946,19 @@ QAction *QUndoStack::createRedoAction(QObject *parent, const QString &prefix) co
     The stack becomes enabled and appropriate signals are emitted when endMacro()
     is called for the outermost macro.
 
-    \snippet doc/src/snippets/code/src_gui_util_qundostack.cpp 4
+    \snippet doc/src/snippets/code/src_gui_util_UiUndostack.cpp 4
 
     This code is equivalent to:
 
-    \snippet doc/src/snippets/code/src_gui_util_qundostack.cpp 5
+    \snippet doc/src/snippets/code/src_gui_util_UiUndostack.cpp 5
 
     \sa endMacro()
 */
 
-void QUndoStack::beginMacro(const QString &text)
+void UiUndoStack::beginMacro(const QString &text)
 {
-    Q_D(QUndoStack);
-    QUndoCommand *cmd = new QUndoCommand();
+    Q_D(UiUndoStack);
+    UiUndoCommand *cmd = new UiUndoCommand();
     cmd->setText(text);
 
     if (d->macro_stack.isEmpty()) {
@@ -989,11 +989,11 @@ void QUndoStack::beginMacro(const QString &text)
     \sa beginMacro()
 */
 
-void QUndoStack::endMacro()
+void UiUndoStack::endMacro()
 {
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
     if (d->macro_stack.isEmpty()) {
-        qWarning("QUndoStack::endMacro(): no matching beginMacro()");
+        qWarning("UiUndoStack::endMacro(): no matching beginMacro()");
         return;
     }
 
@@ -1015,11 +1015,11 @@ void QUndoStack::endMacro()
   causes corruption of the state of the document, if the command is
   later undone or redone.
 
-  \sa QUndoCommand::child()
+  \sa UiUndoCommand::child()
 */
-const QUndoCommand *QUndoStack::command(int index) const
+const UiUndoCommand *UiUndoStack::command(int index) const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
 
     if (index < 0 || index >= d->command_list.count())
         return 0;
@@ -1032,9 +1032,9 @@ const QUndoCommand *QUndoStack::command(int index) const
     \sa beginMacro()
 */
 
-QString QUndoStack::text(int idx) const
+QString UiUndoStack::text(int idx) const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
 
     if (idx < 0 || idx >= d->command_list.size())
         return QString();
@@ -1042,7 +1042,7 @@ QString QUndoStack::text(int idx) const
 }
 
 /*!
-    \property QUndoStack::undoLimit
+    \property UiUndoStack::undoLimit
     \brief the maximum number of commands on this stack.
     \since 4.3
 
@@ -1056,12 +1056,12 @@ QString QUndoStack::text(int idx) const
     on a non-empty stack prints a warning and does nothing.
 */
 
-void QUndoStack::setUndoLimit(int limit)
+void UiUndoStack::setUndoLimit(int limit)
 {
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
 
     if (!d->command_list.isEmpty()) {
-        qWarning("QUndoStack::setUndoLimit(): an undo limit can only be set when the stack is empty");
+        qWarning("UiUndoStack::setUndoLimit(): an undo limit can only be set when the stack is empty");
         return;
     }
 
@@ -1071,36 +1071,36 @@ void QUndoStack::setUndoLimit(int limit)
     d->checkUndoLimit();
 }
 
-int QUndoStack::undoLimit() const
+int UiUndoStack::undoLimit() const
 {
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
 
     return d->undo_limit;
 }
 
 /*!
-    \property QUndoStack::active
+    \property UiUndoStack::active
     \brief the active status of this stack.
 
     An application often has multiple undo stacks, one for each opened document. The active
     stack is the one associated with the currently active document. If the stack belongs
-    to a QUndoGroup, calls to QUndoGroup::undo() or QUndoGroup::redo() will be forwarded
-    to this stack when it is active. If the QUndoGroup is watched by a QUndoView, the view
+    to a UiUndoGroup, calls to UiUndoGroup::undo() or UiUndoGroup::redo() will be forwarded
+    to this stack when it is active. If the UiUndoGroup is watched by a UiUndoView, the view
     will display the contents of this stack when it is active. If the stack does not belong to
-    a QUndoGroup, making it active has no effect.
+    a UiUndoGroup, making it active has no effect.
 
     It is the programmer's responsibility to specify which stack is active by
     calling setActive(), usually when the associated document window receives focus.
 
-    \sa QUndoGroup
+    \sa UiUndoGroup
 */
 
-void QUndoStack::setActive(bool active)
+void UiUndoStack::setActive(bool active)
 {
 #ifdef QT_NO_UNDOGROUP
     Q_UNUSED(active);
 #else
-    Q_D(QUndoStack);
+    Q_D(UiUndoStack);
 
     if (d->group != 0) {
         if (active)
@@ -1111,18 +1111,18 @@ void QUndoStack::setActive(bool active)
 #endif
 }
 
-bool QUndoStack::isActive() const
+bool UiUndoStack::isActive() const
 {
 #ifdef QT_NO_UNDOGROUP
     return true;
 #else
-    Q_D(const QUndoStack);
+    Q_D(const UiUndoStack);
     return d->group == 0 || d->group->activeStack() == this;
 #endif
 }
 
 /*!
-    \fn void QUndoStack::indexChanged(int idx)
+    \fn void UiUndoStack::indexChanged(int idx)
 
     This signal is emitted whenever a command modifies the state of the document.
     This happens when a command is undone or redone. When a macro
@@ -1136,7 +1136,7 @@ bool QUndoStack::isActive() const
 */
 
 /*!
-    \fn void QUndoStack::cleanChanged(bool clean)
+    \fn void UiUndoStack::cleanChanged(bool clean)
 
     This signal is emitted whenever the stack enters or leaves the clean state.
     If \a clean is true, the stack is in a clean state; otherwise this signal
@@ -1146,7 +1146,7 @@ bool QUndoStack::isActive() const
 */
 
 /*!
-    \fn void QUndoStack::undoTextChanged(const QString &undoText)
+    \fn void UiUndoStack::undoTextChanged(const QString &undoText)
 
     This signal is emitted whenever the value of undoText() changes. It is
     used to update the text property of the undo action returned by createUndoAction().
@@ -1154,7 +1154,7 @@ bool QUndoStack::isActive() const
 */
 
 /*!
-    \fn void QUndoStack::canUndoChanged(bool canUndo)
+    \fn void UiUndoStack::canUndoChanged(bool canUndo)
 
     This signal is emitted whenever the value of canUndo() changes. It is
     used to enable or disable the undo action returned by createUndoAction().
@@ -1162,7 +1162,7 @@ bool QUndoStack::isActive() const
 */
 
 /*!
-    \fn void QUndoStack::redoTextChanged(const QString &redoText)
+    \fn void UiUndoStack::redoTextChanged(const QString &redoText)
 
     This signal is emitted whenever the value of redoText() changes. It is
     used to update the text property of the redo action returned by createRedoAction().
@@ -1170,17 +1170,17 @@ bool QUndoStack::isActive() const
 */
 
 /*!
-    \fn void QUndoStack::canRedoChanged(bool canRedo)
+    \fn void UiUndoStack::canRedoChanged(bool canRedo)
 
     This signal is emitted whenever the value of canRedo() changes. It is
     used to enable or disable the redo action returned by createRedoAction().
     \a canRedo specifies the new value.
 */
 
-QStringList QUndoStack::stack() const {
-    Q_D(const QUndoStack);
+QStringList UiUndoStack::stack() const {
+    Q_D(const UiUndoStack);
     QStringList list;
-    foreach (QUndoCommand *c, d->command_list) {
+    foreach (UiUndoCommand *c, d->command_list) {
         list += c->text();
     }
     return list;

@@ -1,13 +1,13 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-    $$PWD/qfilesystemmodel.h \
-    $$PWD/qfilesystemmodel_p.h \
-    $$PWD/qfileinfogatherer_p.h \
-    $$PWD/qstandarditemmodel.h \
-    $$PWD/qstandarditemmodel_p.h
+    $$PWD/uifilesystemmodel.h \
+    $$PWD/uifilesystemmodel_p.h \
+    $$PWD/uifileinfogatherer_p.h \
+    $$PWD/uistandarditemmodel.h \
+    $$PWD/uistandarditemmodel_p.h
 
 SOURCES += \
-    $$PWD/qfilesystemmodel.cpp \
-    $$PWD/qfileinfogatherer.cpp \
-    $$PWD/qstandarditemmodel.cpp
+    $$PWD/uifilesystemmodel.cpp \
+    $$PWD/uifileinfogatherer.cpp \
+    $$PWD/uistandarditemmodel.cpp

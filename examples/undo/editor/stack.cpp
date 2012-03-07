@@ -2,7 +2,7 @@
 #include "commands.h"
 
 Stack::Stack(QObject *parent)
-    : QUndoStack(parent)
+    : UiUndoStack(parent)
 {
 }
 

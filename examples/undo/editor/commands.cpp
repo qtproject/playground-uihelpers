@@ -47,8 +47,8 @@
 
 static int counter = 0;
 
-CreateFileCommand::CreateFileCommand(QUndoCommand *parent)
-    : QUndoCommand(parent),
+CreateFileCommand::CreateFileCommand(UiUndoCommand *parent)
+    : UiUndoCommand(parent),
       m_fileName(QString::number(++counter) + ".tst")
 {
     createFile();

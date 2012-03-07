@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QSTANDARDITEMMODEL_P_H
-#define QSTANDARDITEMMODEL_P_H
+#ifndef UISTANDARDITEMMODEL_P_H
+#define UISTANDARDITEMMODEL_P_H
 
 //
 //  W A R N I N G
@@ -53,7 +53,7 @@
 // We mean it.
 //
 
-#include "private/qabstractitemmodel_p.h"
+#include <private/qabstractitemmodel_p.h>
 
 #ifndef QT_NO_STANDARDITEMMODEL
 
@@ -68,26 +68,26 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 // from src/widgets/itemviews/qwidgetitemdata_p.h
 
-class QStandardItemData
+class UiStandardItemData
 {
 public:
-    inline QStandardItemData() : role(-1) {}
-    inline QStandardItemData(int r, QVariant v) : role(r), value(v) {}
+    inline UiStandardItemData() : role(-1) {}
+    inline UiStandardItemData(int r, QVariant v) : role(r), value(v) {}
     int role;
     QVariant value;
-    inline bool operator==(const QStandardItemData &other) const { return role == other.role && value == other.value; }
+    inline bool operator==(const UiStandardItemData &other) const { return role == other.role && value == other.value; }
 };
 
 #ifndef QT_NO_DATASTREAM
 
-inline QDataStream &operator>>(QDataStream &in, QStandardItemData &data)
+inline QDataStream &operator>>(QDataStream &in, UiStandardItemData &data)
 {
     in >> data.role;
     in >> data.value;
     return in;
 }
 
-inline QDataStream &operator<<(QDataStream &out, const QStandardItemData &data)
+inline QDataStream &operator<<(QDataStream &out, const UiStandardItemData &data)
 {
     out << data.role;
     out << data.value;
@@ -98,11 +98,11 @@ inline QDataStream &operator<<(QDataStream &out, const QStandardItemData &data)
 
 //
 
-class QStandardItemPrivate
+class UiStandardItemPrivate
 {
-    Q_DECLARE_PUBLIC(QStandardItem)
+    Q_DECLARE_PUBLIC(UiStandardItem)
 public:
-    inline QStandardItemPrivate()
+    inline UiStandardItemPrivate()
         : model(0),
           parent(0),
           rows(0),
@@ -110,7 +110,7 @@ public:
           q_ptr(0),
           lastIndexOf(2)
         { }
-    virtual ~QStandardItemPrivate();
+    virtual ~UiStandardItemPrivate();
 
     inline int childIndex(int row, int column) const {
         if ((row < 0) || (column < 0)
@@ -119,15 +119,15 @@ public:
         }
         return (row * columnCount()) + column;
     }
-    inline int childIndex(const QStandardItem *child) {
+    inline int childIndex(const UiStandardItem *child) {
         int start = qMax(0, lastIndexOf -2);
-        lastIndexOf = children.indexOf(const_cast<QStandardItem*>(child), start);
+        lastIndexOf = children.indexOf(const_cast<UiStandardItem*>(child), start);
         if (lastIndexOf == -1 && start != 0)
-            lastIndexOf = children.lastIndexOf(const_cast<QStandardItem*>(child), start);
+            lastIndexOf = children.lastIndexOf(const_cast<UiStandardItem*>(child), start);
         return lastIndexOf;
     }
     QPair<int, int> position() const;
-    void setChild(int row, int column, QStandardItem *item,
+    void setChild(int row, int column, UiStandardItem *item,
                   bool emitChanged = false);
     inline int rowCount() const {
         return rows;
@@ -135,13 +135,13 @@ public:
     inline int columnCount() const {
         return columns;
     }
-    void childDeleted(QStandardItem *child);
+    void childDeleted(UiStandardItem *child);
 
-    void setModel(QStandardItemModel *mod);
+    void setModel(UiStandardItemModel *mod);
 
     inline void setParentAndModel(
-        QStandardItem *par,
-        QStandardItemModel *mod) {
+        UiStandardItem *par,
+        UiStandardItemModel *mod) {
         setModel(mod);
         parent = par;
     }
@@ -150,71 +150,71 @@ public:
     void setItemData(const QMap<int, QVariant> &roles);
     const QMap<int, QVariant> itemData() const;
 
-    bool insertRows(int row, int count, const QList<QStandardItem*> &items);
-    bool insertRows(int row, const QList<QStandardItem*> &items);
-    bool insertColumns(int column, int count, const QList<QStandardItem*> &items);
+    bool insertRows(int row, int count, const QList<UiStandardItem*> &items);
+    bool insertRows(int row, const QList<UiStandardItem*> &items);
+    bool insertColumns(int column, int count, const QList<UiStandardItem*> &items);
 
     void sortChildren(int column, Qt::SortOrder order);
 
-    QStandardItemModel *model;
-    QStandardItem *parent;
-    QVector<QStandardItemData> values;
-    QVector<QStandardItem*> children;
+    UiStandardItemModel *model;
+    UiStandardItem *parent;
+    QVector<UiStandardItemData> values;
+    QVector<UiStandardItem*> children;
     int rows;
     int columns;
 
-    QStandardItem *q_ptr;
+    UiStandardItem *q_ptr;
 
     int lastIndexOf;
 };
 
-class QStandardItemModelPrivate : public QAbstractItemModelPrivate
+class UiStandardItemModelPrivate : public QAbstractItemModelPrivate
 {
-    Q_DECLARE_PUBLIC(QStandardItemModel)
+    Q_DECLARE_PUBLIC(UiStandardItemModel)
 
 public:
-    QStandardItemModelPrivate();
-    virtual ~QStandardItemModelPrivate();
+    UiStandardItemModelPrivate();
+    virtual ~UiStandardItemModelPrivate();
 
     void init();
 
-    inline QStandardItem *createItem() const {
-        return itemPrototype ? itemPrototype->clone() : new QStandardItem;
+    inline UiStandardItem *createItem() const {
+        return itemPrototype ? itemPrototype->clone() : new UiStandardItem;
     }
 
-    inline QStandardItem *itemFromIndex(const QModelIndex &index) const {
-        Q_Q(const QStandardItemModel);
+    inline UiStandardItem *itemFromIndex(const QModelIndex &index) const {
+        Q_Q(const UiStandardItemModel);
         if (!index.isValid())
             return root.data();
         if (index.model() != q)
             return 0;
-        QStandardItem *parent = static_cast<QStandardItem*>(index.internalPointer());
+        UiStandardItem *parent = static_cast<UiStandardItem*>(index.internalPointer());
         if (parent == 0)
             return 0;
         return parent->child(index.row(), index.column());
     }
 
-    void sort(QStandardItem *parent, int column, Qt::SortOrder order);
-    void itemChanged(QStandardItem *item);
-    void rowsAboutToBeInserted(QStandardItem *parent, int start, int end);
-    void columnsAboutToBeInserted(QStandardItem *parent, int start, int end);
-    void rowsAboutToBeRemoved(QStandardItem *parent, int start, int end);
-    void columnsAboutToBeRemoved(QStandardItem *parent, int start, int end);
-    void rowsInserted(QStandardItem *parent, int row, int count);
-    void columnsInserted(QStandardItem *parent, int column, int count);
-    void rowsRemoved(QStandardItem *parent, int row, int count);
-    void columnsRemoved(QStandardItem *parent, int column, int count);
+    void sort(UiStandardItem *parent, int column, Qt::SortOrder order);
+    void itemChanged(UiStandardItem *item);
+    void rowsAboutToBeInserted(UiStandardItem *parent, int start, int end);
+    void columnsAboutToBeInserted(UiStandardItem *parent, int start, int end);
+    void rowsAboutToBeRemoved(UiStandardItem *parent, int start, int end);
+    void columnsAboutToBeRemoved(UiStandardItem *parent, int start, int end);
+    void rowsInserted(UiStandardItem *parent, int row, int count);
+    void columnsInserted(UiStandardItem *parent, int column, int count);
+    void rowsRemoved(UiStandardItem *parent, int row, int count);
+    void columnsRemoved(UiStandardItem *parent, int column, int count);
 
     void _q_emitItemChanged(const QModelIndex &topLeft,
                             const QModelIndex &bottomRight);
 
-    // Used only by QStandardItemModel::dropMimeData
-    // void decodeDataRecursive(QDataStream &stream, QStandardItem *item);
+    // Used only by UiStandardItemModel::dropMimeData
+    // void decodeDataRecursive(QDataStream &stream, UiStandardItem *item);
 
-    // QVector<QStandardItem*> columnHeaderItems;
-    // QVector<QStandardItem*> rowHeaderItems;
-    QScopedPointer<QStandardItem> root;
-    const QStandardItem *itemPrototype;
+    // QVector<UiStandardItem*> columnHeaderItems;
+    // QVector<UiStandardItem*> rowHeaderItems;
+    QScopedPointer<UiStandardItem> root;
+    const UiStandardItem *itemPrototype;
     int sortRole;
 };
 
@@ -222,4 +222,4 @@ QT_END_NAMESPACE_UIHELPERS
 
 #endif // QT_NO_STANDARDITEMMODEL
 
-#endif // QSTANDARDITEMMODEL_P_H
+#endif // UISTANDARDITEMMODEL_P_H

@@ -3,13 +3,11 @@
 #include <QtQuick/QQuickView>
 #include <QtQml/QQmlContext>
 #include <UiHelpers/uihelpersglobal.h>
-#include <UiHelpers/QUndoStack>
+#include <UiHelpers/UiUndoStack>
 
 #include "stack.h"
 
 QT_USE_NAMESPACE_UIHELPERS;
-
-#include "main.moc"
 
 int main(int argc, char *argv[])
 {

@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QFILEINFOGATHERER_H
-#define QFILEINFOGATHERER_H
+#ifndef UIFILEINFOGATHERER_H
+#define UIFILEINFOGATHERER_H
 
 //
 //  W A R N I N G
@@ -69,18 +69,18 @@
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
-class QExtendedInformation {
+class UiExtendedInformation {
 public:
     enum Type { Dir, File, System };
 
-    QExtendedInformation() {}
-    QExtendedInformation(const QFileInfo &info) : mFileInfo(info) {}
+    UiExtendedInformation() {}
+    UiExtendedInformation(const QFileInfo &info) : mFileInfo(info) {}
 
     inline bool isDir() { return type() == Dir; }
     inline bool isFile() { return type() == File; }
     inline bool isSystem() { return type() == System; }
 
-    bool operator ==(const QExtendedInformation &fileInfo) const {
+    bool operator ==(const UiExtendedInformation &fileInfo) const {
        return mFileInfo == fileInfo.mFileInfo
        && displayType == fileInfo.displayType
        && permissions() == fileInfo.permissions();
@@ -98,15 +98,15 @@ public:
 
     Type type() const {
         if (mFileInfo.isDir()) {
-            return QExtendedInformation::Dir;
+            return UiExtendedInformation::Dir;
         }
         if (mFileInfo.isFile()) {
-            return QExtendedInformation::File;
+            return UiExtendedInformation::File;
         }
         if (!mFileInfo.exists() && mFileInfo.isSymLink()) {
-            return QExtendedInformation::System;
+            return UiExtendedInformation::System;
         }
-        return QExtendedInformation::System;
+        return UiExtendedInformation::System;
     }
 
     bool isSymLink() const {
@@ -127,9 +127,9 @@ public:
 
     qint64 size() const {
         qint64 size = -1;
-        if (type() == QExtendedInformation::Dir)
+        if (type() == UiExtendedInformation::Dir)
             size = 0;
-        if (type() == QExtendedInformation::File)
+        if (type() == UiExtendedInformation::File)
             size = mFileInfo.size();
         if (!mFileInfo.exists() && !mFileInfo.isSymLink())
             size = -1;
@@ -147,7 +147,7 @@ private :
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
-class Q_AUTOTEST_EXPORT QFileInfoGatherer : public QThread
+class Q_AUTOTEST_EXPORT UiFileInfoGatherer : public QThread
 {
 Q_OBJECT
 
@@ -158,12 +158,12 @@ Q_SIGNALS:
     void directoryLoaded(const QString &path);
 
 public:
-    QFileInfoGatherer(QObject *parent = 0);
-    ~QFileInfoGatherer();
+    UiFileInfoGatherer(QObject *parent = 0);
+    ~UiFileInfoGatherer();
 
     void clear();
     void removePath(const QString &path);
-    QExtendedInformation getInfo(const QFileInfo &info) const;
+    UiExtendedInformation getInfo(const QFileInfo &info) const;
 
 public Q_SLOTS:
     void list(const QString &directoryPath);
@@ -239,5 +239,5 @@ private:
 
 
 QT_END_NAMESPACE_UIHELPERS
-#endif // QFILEINFOGATHERER_H
+#endif // UIFILEINFOGATHERER_H
 

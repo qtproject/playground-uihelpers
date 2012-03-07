@@ -5,6 +5,10 @@
 );
 %classnames = (
     "uihelpersversion.h" => "UiHelpersVersion",
+    "uiundostack.h" => "UiUndoStack",
+    "uiundogroup.h" => "UiUndoGroup",
+    "uifilesystemmodel.h" => "UiFileSystemModel",
+    "uistandarditemmodel.h" => "UiStandardModel",
 );
 %mastercontent = (
 );

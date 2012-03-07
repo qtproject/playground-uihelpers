@@ -41,7 +41,7 @@
 
 
 #include <QtTest/QtTest>
-#include <UiHelpers/QUndoStack>
+#include <UiHelpers/UiUndoStack>
 
 QT_USE_NAMESPACE_UIHELPERS
 
@@ -49,11 +49,11 @@ QT_USE_NAMESPACE_UIHELPERS
 ** Commands
 */
 
-class InsertCommand : public QUndoCommand
+class InsertCommand : public UiUndoCommand
 {
 public:
     InsertCommand(QString *str, int idx, const QString &text,
-                    QUndoCommand *parent = 0);
+                    UiUndoCommand *parent = 0);
 
     virtual void undo();
     virtual void redo();
@@ -64,10 +64,10 @@ private:
     QString m_text;
 };
 
-class RemoveCommand : public QUndoCommand
+class RemoveCommand : public UiUndoCommand
 {
 public:
-    RemoveCommand(QString *str, int idx, int len, QUndoCommand *parent = 0);
+    RemoveCommand(QString *str, int idx, int len, UiUndoCommand *parent = 0);
 
     virtual void undo();
     virtual void redo();
@@ -78,17 +78,17 @@ private:
     QString m_text;
 };
 
-class AppendCommand : public QUndoCommand
+class AppendCommand : public UiUndoCommand
 {
 public:
     AppendCommand(QString *str, const QString &text, bool _fail_merge = false,
-                    QUndoCommand *parent = 0);
+                    UiUndoCommand *parent = 0);
     ~AppendCommand();
 
     virtual void undo();
     virtual void redo();
     virtual int id() const;
-    virtual bool mergeWith(const QUndoCommand *other);
+    virtual bool mergeWith(const UiUndoCommand *other);
 
     bool merged;
     bool fail_merge;
@@ -99,10 +99,10 @@ private:
     QString m_text;
 };
 
-class IdleCommand : public QUndoCommand
+class IdleCommand : public UiUndoCommand
 {
 public:
-    IdleCommand(QUndoCommand *parent = 0);
+    IdleCommand(UiUndoCommand *parent = 0);
     ~IdleCommand();
 
     virtual void undo();
@@ -110,8 +110,8 @@ public:
 };
 
 InsertCommand::InsertCommand(QString *str, int idx, const QString &text,
-                            QUndoCommand *parent)
-    : QUndoCommand(parent)
+                            UiUndoCommand *parent)
+    : UiUndoCommand(parent)
 {
     QVERIFY(str->length() >= idx);
 
@@ -136,8 +136,8 @@ void InsertCommand::undo()
     m_str->remove(m_idx, m_text.length());
 }
 
-RemoveCommand::RemoveCommand(QString *str, int idx, int len, QUndoCommand *parent)
-    : QUndoCommand(parent)
+RemoveCommand::RemoveCommand(QString *str, int idx, int len, UiUndoCommand *parent)
+    : UiUndoCommand(parent)
 {
     QVERIFY(str->length() >= idx + len);
 
@@ -165,8 +165,8 @@ void RemoveCommand::undo()
 int AppendCommand::delete_cnt = 0;
 
 AppendCommand::AppendCommand(QString *str, const QString &text, bool _fail_merge,
-                                QUndoCommand *parent)
-    : QUndoCommand(parent)
+                                UiUndoCommand *parent)
+    : UiUndoCommand(parent)
 {
     setText("append");
 
@@ -198,7 +198,7 @@ int AppendCommand::id() const
     return 1;
 }
 
-bool AppendCommand::mergeWith(const QUndoCommand *other)
+bool AppendCommand::mergeWith(const UiUndoCommand *other)
 {
     if (other->id() != id())
         return false;
@@ -209,11 +209,11 @@ bool AppendCommand::mergeWith(const QUndoCommand *other)
     return true;
 }
 
-IdleCommand::IdleCommand(QUndoCommand *parent)
-    : QUndoCommand(parent)
+IdleCommand::IdleCommand(UiUndoCommand *parent)
+    : UiUndoCommand(parent)
 {
-    // "idle-item" goes to QUndoStack::{redo,undo}Text
-    // "idle-action" goes to all other places (e.g. QUndoView)
+    // "idle-item" goes to UiUndoStack::{redo,undo}Text
+    // "idle-action" goes to all other places (e.g. UiUndoView)
     setText("idle-item\nidle-action");
 }
 
@@ -230,14 +230,14 @@ void IdleCommand::undo()
 }
 
 /******************************************************************************
-** tst_QUndoStack
+** tst_UiUndoStack
 */
 
-class tst_QUndoStack : public QObject
+class tst_UiUndoStack : public QObject
 {
     Q_OBJECT
 public:
-    tst_QUndoStack();
+    tst_UiUndoStack();
 
 private slots:
     void undoRedo();
@@ -251,7 +251,7 @@ private slots:
     void separateUndoText();
 };
 
-tst_QUndoStack::tst_QUndoStack()
+tst_UiUndoStack::tst_UiUndoStack()
 {
 }
 
@@ -273,7 +273,7 @@ static void checkState(QSignalSpy &redoTextChangedSpy,
                        QSignalSpy &canUndoChangedSpy,
                        QSignalSpy &cleanChangedSpy,
                        QSignalSpy &indexChangedSpy,
-                       QUndoStack &stack,
+                       UiUndoStack &stack,
                        const bool _clean,
                        const int _count,
                        const int _index,
@@ -331,9 +331,9 @@ static void checkState(QSignalSpy &redoTextChangedSpy,
     }
 }
 
-void tst_QUndoStack::undoRedo()
+void tst_UiUndoStack::undoRedo()
 {
-    QUndoStack stack;
+    UiUndoStack stack;
     QSignalSpy indexChangedSpy(&stack, SIGNAL(indexChanged(int)));
     QSignalSpy cleanChangedSpy(&stack, SIGNAL(cleanChanged(bool)));
     QSignalSpy canUndoChangedSpy(&stack, SIGNAL(canUndoChanged(bool)));
@@ -660,9 +660,9 @@ void tst_QUndoStack::undoRedo()
                 true);      // redoChanged
 }
 
-void tst_QUndoStack::setIndex()
+void tst_UiUndoStack::setIndex()
 {
-    QUndoStack stack;
+    UiUndoStack stack;
     QSignalSpy indexChangedSpy(&stack, SIGNAL(indexChanged(int)));
     QSignalSpy cleanChangedSpy(&stack, SIGNAL(cleanChanged(bool)));
     QSignalSpy canUndoChangedSpy(&stack, SIGNAL(canUndoChanged(bool)));
@@ -900,9 +900,9 @@ void tst_QUndoStack::setIndex()
                 true);      // redoChanged
 }
 
-void tst_QUndoStack::setClean()
+void tst_UiUndoStack::setClean()
 {
-    QUndoStack stack;
+    UiUndoStack stack;
     QSignalSpy indexChangedSpy(&stack, SIGNAL(indexChanged(int)));
     QSignalSpy cleanChangedSpy(&stack, SIGNAL(cleanChanged(bool)));
     QSignalSpy canUndoChangedSpy(&stack, SIGNAL(canUndoChanged(bool)));
@@ -1131,9 +1131,9 @@ void tst_QUndoStack::setClean()
     QCOMPARE(stack.cleanIndex(), -1);
 }
 
-void tst_QUndoStack::clear()
+void tst_UiUndoStack::clear()
 {
-    QUndoStack stack;
+    UiUndoStack stack;
     QSignalSpy indexChangedSpy(&stack, SIGNAL(indexChanged(int)));
     QSignalSpy cleanChangedSpy(&stack, SIGNAL(cleanChanged(bool)));
     QSignalSpy canUndoChangedSpy(&stack, SIGNAL(canUndoChanged(bool)));
@@ -1311,9 +1311,9 @@ void tst_QUndoStack::clear()
                 true);      // redoChanged
 }
 
-void tst_QUndoStack::childCommand()
+void tst_UiUndoStack::childCommand()
 {
-    QUndoStack stack;
+    UiUndoStack stack;
     QSignalSpy indexChangedSpy(&stack, SIGNAL(indexChanged(int)));
     QSignalSpy cleanChangedSpy(&stack, SIGNAL(cleanChanged(bool)));
     QSignalSpy canUndoChangedSpy(&stack, SIGNAL(canUndoChanged(bool)));
@@ -1343,7 +1343,7 @@ void tst_QUndoStack::childCommand()
                 true,       // undoChanged
                 true);      // redoChanged
 
-    QUndoCommand *cmd = new QUndoCommand();
+    UiUndoCommand *cmd = new UiUndoCommand();
     cmd->setText("ding");
     new InsertCommand(&str, 5, "world", cmd);
     new RemoveCommand(&str, 4, 1, cmd);
@@ -1411,9 +1411,9 @@ void tst_QUndoStack::childCommand()
                 true);      // redoChanged
 }
 
-void tst_QUndoStack::macroBeginEnd()
+void tst_UiUndoStack::macroBeginEnd()
 {
-    QUndoStack stack;
+    UiUndoStack stack;
     QSignalSpy indexChangedSpy(&stack, SIGNAL(indexChanged(int)));
     QSignalSpy cleanChangedSpy(&stack, SIGNAL(cleanChanged(bool)));
     QSignalSpy canUndoChangedSpy(&stack, SIGNAL(canUndoChanged(bool)));
@@ -1836,9 +1836,9 @@ void tst_QUndoStack::macroBeginEnd()
                 true);      // redoChanged
 }
 
-void tst_QUndoStack::compression()
+void tst_UiUndoStack::compression()
 {
-    QUndoStack stack;
+    UiUndoStack stack;
     QSignalSpy indexChangedSpy(&stack, SIGNAL(indexChanged(int)));
     QSignalSpy cleanChangedSpy(&stack, SIGNAL(cleanChanged(bool)));
     QSignalSpy canUndoChangedSpy(&stack, SIGNAL(canUndoChanged(bool)));
@@ -2240,9 +2240,9 @@ void tst_QUndoStack::compression()
                 true);      // redoChanged
 }
 
-void tst_QUndoStack::undoLimit()
+void tst_UiUndoStack::undoLimit()
 {
-    QUndoStack stack;
+    UiUndoStack stack;
     QSignalSpy indexChangedSpy(&stack, SIGNAL(indexChanged(int)));
     QSignalSpy cleanChangedSpy(&stack, SIGNAL(cleanChanged(bool)));
     QSignalSpy canUndoChangedSpy(&stack, SIGNAL(canUndoChanged(bool)));
@@ -2719,12 +2719,12 @@ void tst_QUndoStack::undoLimit()
                 true);      // redoChanged
 }
 
-void tst_QUndoStack::separateUndoText()
+void tst_UiUndoStack::separateUndoText()
 {
-    QUndoStack stack;
+    UiUndoStack stack;
 
-    QUndoCommand *command1 = new IdleCommand();
-    QUndoCommand *command2 = new IdleCommand();
+    UiUndoCommand *command1 = new IdleCommand();
+    UiUndoCommand *command2 = new IdleCommand();
     stack.push(command1);
     stack.push(command2);
     stack.undo();
@@ -2743,6 +2743,6 @@ void tst_QUndoStack::separateUndoText()
     QCOMPARE(command1->text(), QString("idle-item"));
 }
 
-QTEST_MAIN(tst_QUndoStack)
+QTEST_MAIN(tst_UiUndoStack)
 
-#include "tst_qundostack.moc"
+#include "tst_uiundostack.moc"
