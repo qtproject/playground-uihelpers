@@ -43,7 +43,7 @@
 #define QACTION_H
 
 #include "uihelpersglobal.h"
-#include <QtGui/qkeysequence.h>
+// #include <QtGui/qkeysequence.h> // XXX: Won't be removed
 #include <QtCore/qstring.h>
 // #include <QtWidgets/qwidget.h>
 #include <QtCore/qvariant.h>

@@ -48,7 +48,7 @@
 #include "qevent.h"
 #include "qlist.h"
 #include "qdebug.h"
-#include <private/qshortcutmap_p.h>
+// #include <private/qshortcutmap_p.h>
 #include <private/qapplication_p.h>
 // #include <private/qmenu_p.h>
 
