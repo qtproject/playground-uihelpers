@@ -39,17 +39,17 @@
 **
 ****************************************************************************/
 
-#include "qaction.h"
-#include "qactiongroup.h"
+#include "uiaction.h"
+#include "uiactiongroup.h"
 
 #ifndef QT_NO_ACTION
-#include "qaction_p.h"
-#include "qapplication.h"
-#include "qevent.h"
+#include "uiaction_p.h"
+#include "qguiapplication.h"
+//#include "qevent.h"
 #include "qlist.h"
 #include "qdebug.h"
 // #include <private/qshortcutmap_p.h>
-#include <private/qapplication_p.h>
+#include <private/qguiapplication_p.h>
 // #include <private/qmenu_p.h>
 
 #define QAPP_CHECK(functionName) \
@@ -59,6 +59,16 @@
     }
 
 QT_BEGIN_NAMESPACE_UIHELPERS
+
+UiActionEvent::UiActionEvent(int type, UiAction *action, UiAction *before)
+    : QEvent(static_cast<QEvent::Type>(type)), act(action), bef(before)
+{}
+
+/*! \internal
+*/
+UiActionEvent::~UiActionEvent()
+{
+}
 
 /*
   internal: guesses a descriptive text from a text suited for a menu entry
@@ -79,13 +89,13 @@ static QString qt_strippedText(QString s)
 }
 
 
-QActionPrivate::QActionPrivate() : group(0), enabled(1), forceDisabled(0),
+UiActionPrivate::UiActionPrivate() : group(0), enabled(1), forceDisabled(0),
                                    // visible(1), forceInvisible(0), checkable(0), checked(0), separator(0), fontSet(false),
                                    checkable(0), checked(0),
                                    forceEnabledInSoftkeys(false), menuActionSoftkeys(false),
                                    // iconVisibleInMenu(-1),
-                                   menuRole(QAction::TextHeuristicRole), softKeyRole(QAction::NoSoftKey),
-                                   priority(QAction::NormalPriority)
+                                   menuRole(UiAction::TextHeuristicRole), softKeyRole(UiAction::NoSoftKey),
+                                   priority(UiAction::NormalPriority)
 {
 #ifndef QT_NO_SHORTCUT
     shortcutId = 0;
@@ -94,7 +104,7 @@ QActionPrivate::QActionPrivate() : group(0), enabled(1), forceDisabled(0),
 #endif
 }
 
-QActionPrivate::~QActionPrivate()
+UiActionPrivate::~UiActionPrivate()
 {
 }
 
@@ -113,10 +123,10 @@ QActionPrivate::~QActionPrivate()
 //     return false;
 // }
 
-void QActionPrivate::sendDataChanged()
+void UiActionPrivate::sendDataChanged()
 {
-    Q_Q(QAction);
-    QActionEvent e(QEvent::ActionChanged, q);
+    Q_Q(UiAction);
+    UiActionEvent e(QEvent::ActionChanged, q);
 //     for (int i = 0; i < widgets.size(); ++i) {
 //         QWidget *w = widgets.at(i);
 //         QApplication::sendEvent(w, &e);
@@ -127,15 +137,15 @@ void QActionPrivate::sendDataChanged()
 //         QApplication::sendEvent(w, &e);
 //     }
 // #endif
-    QApplication::sendEvent(q, &e);
+    QGuiApplication::sendEvent(q, &e);
 
     emit q->changed();
 }
 
 #ifndef QT_NO_SHORTCUT
-void QActionPrivate::redoGrab(QShortcutMap &map)
+void UiActionPrivate::redoGrab(QShortcutMap &map)
 {
-    Q_Q(QAction);
+    Q_Q(UiAction);
     if (shortcutId)
         map.removeShortcut(shortcutId, q);
     if (shortcut.isEmpty())
@@ -147,9 +157,9 @@ void QActionPrivate::redoGrab(QShortcutMap &map)
         map.setShortcutAutoRepeat(false, shortcutId, q);
 }
 
-void QActionPrivate::redoGrabAlternate(QShortcutMap &map)
+void UiActionPrivate::redoGrabAlternate(QShortcutMap &map)
 {
-    Q_Q(QAction);
+    Q_Q(UiAction);
     for (int i = 0; i < alternateShortcutIds.count(); ++i) {
         if (const int id = alternateShortcutIds.at(i))
             map.removeShortcut(id, q);
@@ -178,9 +188,9 @@ void QActionPrivate::redoGrabAlternate(QShortcutMap &map)
     }
 }
 
-void QActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
+void UiActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
 {
-    Q_Q(QAction);
+    Q_Q(UiAction);
     if (shortcutId)
         map.setShortcutEnabled(enable, shortcutId, q);
     for (int i = 0; i < alternateShortcutIds.count(); ++i) {
@@ -306,11 +316,11 @@ void QActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
     Constructs an action with \a parent. If \a parent is an action
     group the action will be automatically inserted into the group.
 */
-QAction::QAction(QObject* parent)
-    : QObject(*(new QActionPrivate), parent)
+UiAction::UiAction(QObject* parent)
+    : QObject(*(new UiActionPrivate), parent)
 {
-    Q_D(QAction);
-    d->group = qobject_cast<QActionGroup *>(parent);
+    Q_D(UiAction);
+    d->group = qobject_cast<UiActionGroup *>(parent);
     if (d->group)
         d->group->addAction(this);
 }
@@ -329,12 +339,12 @@ QAction::QAction(QObject* parent)
     setToolTip().
 
 */
-QAction::QAction(const QString &text, QObject* parent)
-    : QObject(*(new QActionPrivate), parent)
+UiAction::UiAction(const QString &text, QObject* parent)
+    : QObject(*(new UiActionPrivate), parent)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     d->text = text;
-    d->group = qobject_cast<QActionGroup *>(parent);
+    d->group = qobject_cast<UiActionGroup *>(parent);
     if (d->group)
         d->group->addAction(this);
 }
@@ -365,11 +375,11 @@ QAction::QAction(const QString &text, QObject* parent)
 /*!
     \internal
 */
-QAction::QAction(QActionPrivate &dd, QObject *parent)
+UiAction::UiAction(UiActionPrivate &dd, QObject *parent)
     : QObject(dd, parent)
 {
-    Q_D(QAction);
-    d->group = qobject_cast<QActionGroup *>(parent);
+    Q_D(UiAction);
+    d->group = qobject_cast<UiActionGroup *>(parent);
     if (d->group)
         d->group->addAction(this);
 }
@@ -419,11 +429,11 @@ QAction::QAction(QActionPrivate &dd, QObject *parent)
     Valid keycodes for this property can be found in \l Qt::Key and
     \l Qt::Modifier. There is no default shortcut key.
 */
-void QAction::setShortcut(const QKeySequence &shortcut)
+void UiAction::setShortcut(const QKeySequence &shortcut)
 {
     QAPP_CHECK("setShortcut");
 
-    Q_D(QAction);
+    Q_D(UiAction);
     if (d->shortcut == shortcut)
         return;
 
@@ -440,9 +450,9 @@ void QAction::setShortcut(const QKeySequence &shortcut)
 
     \sa shortcut
 */
-void QAction::setShortcuts(const QList<QKeySequence> &shortcuts)
+void UiAction::setShortcuts(const QList<QKeySequence> &shortcuts)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
 
     QList <QKeySequence> listCopy = shortcuts;
 
@@ -472,7 +482,7 @@ void QAction::setShortcuts(const QList<QKeySequence> &shortcuts)
 
     \sa QKeySequence::keyBindings()
 */
-void QAction::setShortcuts(QKeySequence::StandardKey key)
+void UiAction::setShortcuts(QKeySequence::StandardKey key)
 {
     QList <QKeySequence> list = QKeySequence::keyBindings(key);
     setShortcuts(list);
@@ -483,9 +493,9 @@ void QAction::setShortcuts(QKeySequence::StandardKey key)
 
     \sa setShortcuts()
 */
-QKeySequence QAction::shortcut() const
+QKeySequence UiAction::shortcut() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->shortcut;
 }
 
@@ -497,9 +507,9 @@ QKeySequence QAction::shortcut() const
 
     \sa setShortcuts()
 */
-QList<QKeySequence> QAction::shortcuts() const
+QList<QKeySequence> UiAction::shortcuts() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     QList <QKeySequence> shortcuts;
     if (!d->shortcut.isEmpty())
         shortcuts << d->shortcut;
@@ -515,9 +525,9 @@ QList<QKeySequence> QAction::shortcuts() const
     Valid values for this property can be found in \l Qt::ShortcutContext.
     The default value is Qt::WindowShortcut.
 */
-void QAction::setShortcutContext(Qt::ShortcutContext context)
+void UiAction::setShortcutContext(Qt::ShortcutContext context)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (d->shortcutContext == context)
         return;
     QAPP_CHECK("setShortcutContext");
@@ -527,9 +537,9 @@ void QAction::setShortcutContext(Qt::ShortcutContext context)
     d->sendDataChanged();
 }
 
-Qt::ShortcutContext QAction::shortcutContext() const
+Qt::ShortcutContext UiAction::shortcutContext() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->shortcutContext;
 }
 
@@ -543,9 +553,9 @@ Qt::ShortcutContext QAction::shortcutContext() const
     enabled on the system.
     The default value is true.
 */
-void QAction::setAutoRepeat(bool on)
+void UiAction::setAutoRepeat(bool on)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (d->autorepeat == on)
         return;
     QAPP_CHECK("setAutoRepeat");
@@ -555,9 +565,9 @@ void QAction::setAutoRepeat(bool on)
     d->sendDataChanged();
 }
 
-bool QAction::autoRepeat() const
+bool UiAction::autoRepeat() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->autorepeat;
 }
 #endif // QT_NO_SHORTCUT
@@ -595,9 +605,9 @@ bool QAction::autoRepeat() const
 /*!
     Destroys the object and frees allocated resources.
 */
-QAction::~QAction()
+UiAction::~UiAction()
 {
-    Q_D(QAction);
+    Q_D(UiAction);
 //     for (int i = d->widgets.size()-1; i >= 0; --i) {
 //         QWidget *w = d->widgets.at(i);
 //         w->removeAction(this);
@@ -629,9 +639,9 @@ QAction::~QAction()
 
   \sa QActionGroup, QAction::actionGroup()
 */
-void QAction::setActionGroup(QActionGroup *group)
+void UiAction::setActionGroup(UiActionGroup *group)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (group == d->group)
         return;
 
@@ -648,9 +658,9 @@ void QAction::setActionGroup(QActionGroup *group)
 
   \sa QActionGroup, QAction::setActionGroup()
 */
-QActionGroup *QAction::actionGroup() const
+UiActionGroup *UiAction::actionGroup() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->group;
 }
 
@@ -751,9 +761,9 @@ QActionGroup *QAction::actionGroup() const
 
     \sa iconText
 */
-void QAction::setText(const QString &text)
+void UiAction::setText(const QString &text)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (d->text == text)
         return;
 
@@ -761,9 +771,9 @@ void QAction::setText(const QString &text)
     d->sendDataChanged();
 }
 
-QString QAction::text() const
+QString UiAction::text() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     QString s = d->text;
     // if (s.isEmpty()) {
     //     s = d->iconText;
@@ -929,9 +939,9 @@ QString QAction::text() const
     mode set, then actions with LowPriority will not show the text
     labels.
 */
-void QAction::setPriority(Priority priority)
+void UiAction::setPriority(Priority priority)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (d->priority == priority)
         return;
 
@@ -939,9 +949,9 @@ void QAction::setPriority(Priority priority)
     d->sendDataChanged();
 }
 
-QAction::Priority QAction::priority() const
+UiAction::Priority UiAction::priority() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->priority;
 }
 
@@ -964,9 +974,9 @@ QAction::Priority QAction::priority() const
 
     \sa QAction::setChecked()
 */
-void QAction::setCheckable(bool b)
+void UiAction::setCheckable(bool b)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (d->checkable == b)
         return;
 
@@ -975,9 +985,9 @@ void QAction::setCheckable(bool b)
     d->sendDataChanged();
 }
 
-bool QAction::isCheckable() const
+bool UiAction::isCheckable() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->checkable;
 }
 
@@ -987,9 +997,9 @@ bool QAction::isCheckable() const
     This is a convenience function for the \l checked property.
     Connect to it to change the checked state to its opposite state.
 */
-void QAction::toggle()
+void UiAction::toggle()
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     setChecked(!d->checked);
 }
 
@@ -1002,22 +1012,22 @@ void QAction::toggle()
 
     \sa checkable
 */
-void QAction::setChecked(bool b)
+void UiAction::setChecked(bool b)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (!d->checkable || d->checked == b)
         return;
 
-    QPointer<QAction> guard(this);
+    QPointer<UiAction> guard(this);
     d->checked = b;
     d->sendDataChanged();
     if (guard)
         emit toggled(b);
 }
 
-bool QAction::isChecked() const
+bool UiAction::isChecked() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->checked;
 }
 
@@ -1050,9 +1060,9 @@ bool QAction::isChecked() const
 
     \sa text
 */
-void QAction::setEnabled(bool b)
+void UiAction::setEnabled(bool b)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (b == d->enabled && b != d->forceDisabled)
         return;
     d->forceDisabled = !b;
@@ -1067,9 +1077,9 @@ void QAction::setEnabled(bool b)
     d->sendDataChanged();
 }
 
-bool QAction::isEnabled() const
+bool UiAction::isEnabled() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->enabled;
 }
 
@@ -1112,13 +1122,13 @@ bool QAction::isEnabled() const
   \reimp
 */
 bool
-QAction::event(QEvent *e)
+UiAction::event(QEvent *e)
 {
 #ifndef QT_NO_SHORTCUT
     if (e->type() == QEvent::Shortcut) {
         QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
         Q_ASSERT_X(se->key() == d_func()->shortcut || d_func()->alternateShortcuts.contains(se->key()),
-                   "QAction::event",
+                   "UiAction::event",
                    "Received shortcut event from incorrect shortcut");
         if (se->isAmbiguous())
             qWarning("QAction::eventFilter: Ambiguous shortcut overload: %s", se->key().toString(QKeySequence::NativeText).toLatin1().constData());
@@ -1136,9 +1146,9 @@ QAction::event(QEvent *e)
   \sa setData()
 */
 QVariant
-QAction::data() const
+UiAction::data() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->userData;
 }
 
@@ -1150,9 +1160,9 @@ QAction::data() const
   \sa data()
 */
 void
-QAction::setData(const QVariant &data)
+UiAction::setData(const QVariant &data)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     d->userData = data;
     d->sendDataChanged();
 }
@@ -1179,9 +1189,9 @@ QAction::setData(const QVariant &data)
   Action based widgets use this API to cause the QAction
   to emit signals as well as emitting their own.
 */
-void QAction::activate(ActionEvent event)
+void UiAction::activate(ActionEvent event)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (event == Trigger) {
         QWeakPointer<QObject> guard = this;
         if (d->checkable) {
@@ -1273,9 +1283,9 @@ void QAction::activate(ActionEvent event)
     bar in Mac OS X (usually just before the first application window is
     shown).
 */
-void QAction::setMenuRole(MenuRole menuRole)
+void UiAction::setMenuRole(MenuRole menuRole)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (d->menuRole == menuRole)
         return;
 
@@ -1283,9 +1293,9 @@ void QAction::setMenuRole(MenuRole menuRole)
     d->sendDataChanged();
 }
 
-QAction::MenuRole QAction::menuRole() const
+UiAction::MenuRole UiAction::menuRole() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->menuRole;
 }
 
@@ -1300,9 +1310,9 @@ QAction::MenuRole QAction::menuRole() const
 
     The softkey role can be changed any time.
 */
-void QAction::setSoftKeyRole(SoftKeyRole softKeyRole)
+void UiAction::setSoftKeyRole(SoftKeyRole softKeyRole)
 {
-    Q_D(QAction);
+    Q_D(UiAction);
     if (d->softKeyRole == softKeyRole)
         return;
 
@@ -1310,9 +1320,9 @@ void QAction::setSoftKeyRole(SoftKeyRole softKeyRole)
     d->sendDataChanged();
 }
 
-QAction::SoftKeyRole QAction::softKeyRole() const
+UiAction::SoftKeyRole UiAction::softKeyRole() const
 {
-    Q_D(const QAction);
+    Q_D(const UiAction);
     return d->softKeyRole;
 }
 
@@ -1360,6 +1370,6 @@ QAction::SoftKeyRole QAction::softKeyRole() const
 
 QT_END_NAMESPACE_UIHELPERS
 
-#include "moc_qaction.cpp"
+#include "moc_uiaction.cpp"
 
 #endif // QT_NO_ACTION

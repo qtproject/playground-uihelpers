@@ -42,7 +42,9 @@
 #ifndef QACTIONGROUP_H
 #define QACTIONGROUP_H
 
-#include <UiHelpers/qaction.h>
+#include "uihelpersglobal.h"
+#include <UiHelpers/uiaction.h>
+#include <QtCore/QObject>
 
 QT_BEGIN_HEADER
 
@@ -51,28 +53,28 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 #ifndef QT_NO_ACTION
 
-class QActionGroupPrivate;
+class UiActionGroupPrivate;
 
-class UIHELPERS_EXPORT QActionGroup : public QObject
+class UIHELPERS_EXPORT UiActionGroup : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(QActionGroup)
+    Q_DECLARE_PRIVATE(UiActionGroup)
 
     Q_PROPERTY(bool exclusive READ isExclusive WRITE setExclusive)
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
     // Q_PROPERTY(bool visible READ isVisible WRITE setVisible)
 
 public:
-    explicit QActionGroup(QObject* parent);
-    ~QActionGroup();
+    explicit UiActionGroup(QObject* parent);
+    ~UiActionGroup();
 
-    QAction *addAction(QAction* a);
-    QAction *addAction(const QString &text);
+    UiAction *addAction(UiAction* a);
+    UiAction *addAction(const QString &text);
     // QAction *addAction(const QIcon &icon, const QString &text);
-    void removeAction(QAction *a);
-    QList<QAction*> actions() const;
+    void removeAction(UiAction *a);
+    QList<UiAction*> actions() const;
 
-    QAction *checkedAction() const;
+    UiAction *checkedAction() const;
     bool isExclusive() const;
     bool isEnabled() const;
     // bool isVisible() const;
@@ -85,11 +87,11 @@ public Q_SLOTS:
     void setExclusive(bool);
 
 Q_SIGNALS:
-    void triggered(QAction *);
+    void triggered(UiAction *);
     // void hovered(QAction *);
 
 private:
-    Q_DISABLE_COPY(QActionGroup)
+    Q_DISABLE_COPY(UiActionGroup)
     Q_PRIVATE_SLOT(d_func(), void _q_actionTriggered())
     Q_PRIVATE_SLOT(d_func(), void _q_actionChanged())
     // Q_PRIVATE_SLOT(d_func(), void _q_actionHovered())

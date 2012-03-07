@@ -9,6 +9,8 @@
     "uiundogroup.h" => "UiUndoGroup",
     "uifilesystemmodel.h" => "UiFileSystemModel",
     "uistandarditemmodel.h" => "UiStandardModel",
+    "uiaction.h" => "UiAction",
+    "uiactiongroup.h" => "UiActionGroup",
 );
 %mastercontent = (
 );

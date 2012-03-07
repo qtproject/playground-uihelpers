@@ -41,6 +41,8 @@
 
 
 #include <QtTest/QtTest>
+#include <UiHelpers/UiAction>
+#include <UiHelpers/UiActionGroup>
 
 #include <qapplication.h>
 #include <qevent.h>
@@ -49,16 +51,16 @@
 #include <qplatformtheme_qpa.h>
 #include <private/qguiapplication_p.h>
 
-class tst_QAction : public QObject
+class tst_UiAction : public QObject
 {
     Q_OBJECT
 
 public:
-    tst_QAction();
-    virtual ~tst_QAction();
+    tst_UiAction();
+    virtual ~tst_UiAction();
 
 
-    void updateState(QActionEvent *e);
+    // void updateState(QActionEvent *e);
 
 public slots:
     void initTestCase();
@@ -80,21 +82,21 @@ private slots:
 private:
     int m_lastEventType;
     int m_keyboardScheme;
-    QAction *m_lastAction;
-    QWidget *m_tstWidget;
+    UiAction *m_lastAction;
+    // QWidget *m_tstWidget;
 };
 
 // Testing get/set functions
-void tst_QAction::getSetCheck()
+void tst_UiAction::getSetCheck()
 {
-    QAction obj1(0);
+    UiAction obj1(0);
     // QActionGroup * QAction::actionGroup()
     // void QAction::setActionGroup(QActionGroup *)
-    QActionGroup *var1 = new QActionGroup(0);
+    UiActionGroup *var1 = new UiActionGroup(0);
     obj1.setActionGroup(var1);
     QCOMPARE(var1, obj1.actionGroup());
-    obj1.setActionGroup((QActionGroup *)0);
-    QCOMPARE((QActionGroup *)0, obj1.actionGroup());
+    obj1.setActionGroup((UiActionGroup *)0);
+    QCOMPARE((UiActionGroup *)0, obj1.actionGroup());
     delete var1;
 
     // QMenu * QAction::menu()
@@ -106,36 +108,36 @@ void tst_QAction::getSetCheck()
     QCOMPARE((QMenu *)0, obj1.menu());
     delete var2;
 
-    QCOMPARE(obj1.priority(), QAction::NormalPriority);
-    obj1.setPriority(QAction::LowPriority);
-    QCOMPARE(obj1.priority(), QAction::LowPriority);
+    QCOMPARE(obj1.priority(), UiAction::NormalPriority);
+    obj1.setPriority(UiAction::LowPriority);
+    QCOMPARE(obj1.priority(), UiAction::LowPriority);
 }
 
-class MyWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    MyWidget(tst_QAction *tst, QWidget *parent = 0) : QWidget(parent) { this->tst = tst; }
+// class MyWidget : public QWidget
+// {
+//     Q_OBJECT
+// public:
+//     MyWidget(tst_QAction *tst, QWidget *parent = 0) : QWidget(parent) { this->tst = tst; }
+//
+// protected:
+//     virtual void actionEvent(QActionEvent *e) { tst->updateState(e); }
+//
+// private:
+//     tst_QAction *tst;
+// };
 
-protected:
-    virtual void actionEvent(QActionEvent *e) { tst->updateState(e); }
-
-private:
-    tst_QAction *tst;
-};
-
-tst_QAction::tst_QAction() : m_keyboardScheme(QPlatformTheme::WindowsKeyboardScheme)
+tst_UiAction::tst_UiAction()// : m_keyboardScheme(QPlatformTheme::WindowsKeyboardScheme)
 {
     if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme())
         m_keyboardScheme = theme->themeHint(QPlatformTheme::KeyboardScheme).toInt();
 }
 
-tst_QAction::~tst_QAction()
+tst_UiAction::~tst_UiAction()
 {
 
 }
 
-void tst_QAction::initTestCase()
+void tst_UiAction::initTestCase()
 {
     m_lastEventType = 0;
     m_lastAction = 0;
@@ -146,7 +148,7 @@ void tst_QAction::initTestCase()
     qApp->setActiveWindow(mw);
 }
 
-void tst_QAction::cleanupTestCase()
+void tst_UiAction::cleanupTestCase()
 {
     QWidget *testWidget = m_tstWidget;
     if (testWidget) {
@@ -378,5 +380,5 @@ void tst_QAction::task229128TriggeredSignalWhenInActiongroup()
     QCOMPARE(actionSpy.count(), 1);
 }
 
-QTEST_MAIN(tst_QAction)
-#include "tst_qaction.moc"
+QTEST_MAIN(tst_UiAction)
+#include "tst_uiaction.moc"

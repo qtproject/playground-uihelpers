@@ -53,7 +53,7 @@
 // We mean it.
 //
 
-#include "UiHelpers/qaction.h"
+#include "UiHelpers/uiaction.h"
 // #include "QtWidgets/qaction.h"
 // #include "QtWidgets/qmenu.h"
 // #include "private/qgraphicswidget_p.h"
@@ -67,21 +67,21 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 class QShortcutMap;
 
-class UIHELPERS_EXPORT QActionPrivate : public QObjectPrivate
+class UIHELPERS_EXPORT UiActionPrivate : public QObjectPrivate
 {
-    Q_DECLARE_PUBLIC(QAction)
+    Q_DECLARE_PUBLIC(UiAction)
 public:
-    QActionPrivate();
-    ~QActionPrivate();
+    UiActionPrivate();
+    ~UiActionPrivate();
 
-    static QActionPrivate *get(QAction *q)
+    static UiActionPrivate *get(UiAction *q)
     {
         return q->d_func();
     }
 
     // bool showStatusText(QWidget *w, const QString &str);
 
-    QPointer<QActionGroup> group;
+    QPointer<UiActionGroup> group;
     QString text;
     // QString iconText;
     // QIcon icon;
@@ -113,9 +113,9 @@ public:
     uint menuActionSoftkeys : 1;
     // int iconVisibleInMenu : 3;  // Only has values -1, 0, and 1
 
-    QAction::MenuRole menuRole;
-    QAction::SoftKeyRole softKeyRole;
-    QAction::Priority priority;
+    UiAction::MenuRole menuRole;
+    UiAction::SoftKeyRole softKeyRole;
+    UiAction::Priority priority;
 
     // QList<QWidget *> widgets;
 // #ifndef QT_NO_GRAPHICSVIEW

@@ -1,7 +1,7 @@
 CONFIG += testcase
-TARGET = tst_qaction
+TARGET = tst_uiaction
 
 QT += testlib uihelpers
 QT += gui-private core-private widgets
 
-SOURCES += tst_qaction.cpp
+SOURCES += tst_uiaction.cpp

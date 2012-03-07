@@ -39,25 +39,25 @@
 **
 ****************************************************************************/
 
-#include "qactiongroup.h"
+#include "uiactiongroup.h"
 
 #ifndef QT_NO_ACTION
 
-#include "qaction_p.h"
+#include "uiaction_p.h"
 // #include "qapplication.h"
 // #include "qevent.h"
 #include "qlist.h"
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
-class QActionGroupPrivate : public QObjectPrivate
+class UiActionGroupPrivate : public QObjectPrivate
 {
-    Q_DECLARE_PUBLIC(QActionGroup)
+    Q_DECLARE_PUBLIC(UiActionGroup)
 public:
     // QActionGroupPrivate() : exclusive(1), enabled(1), visible(1)  { }
-    QActionGroupPrivate() : exclusive(1), enabled(1)  { }
-    QList<QAction *> actions;
-    QPointer<QAction> current;
+    UiActionGroupPrivate() : exclusive(1), enabled(1)  { }
+    QList<UiAction *> actions;
+    QPointer<UiAction> current;
     uint exclusive : 1;
     uint enabled : 1;
     // uint visible : 1;
@@ -68,10 +68,10 @@ private:
     // void _q_actionHovered();    //private slot
 };
 
-void QActionGroupPrivate::_q_actionChanged()
+void UiActionGroupPrivate::_q_actionChanged()
 {
-    Q_Q(QActionGroup);
-    QAction *action = qobject_cast<QAction*>(q->sender());
+    Q_Q(UiActionGroup);
+    UiAction *action = qobject_cast<UiAction*>(q->sender());
     Q_ASSERT_X(action != 0, "QWidgetGroup::_q_actionChanged", "internal error");
     if (exclusive) {
         if (action->isChecked()) {
@@ -86,10 +86,10 @@ void QActionGroupPrivate::_q_actionChanged()
     }
 }
 
-void QActionGroupPrivate::_q_actionTriggered()
+void UiActionGroupPrivate::_q_actionTriggered()
 {
-    Q_Q(QActionGroup);
-    QAction *action = qobject_cast<QAction*>(q->sender());
+    Q_Q(UiActionGroup);
+    UiAction *action = qobject_cast<UiAction*>(q->sender());
     Q_ASSERT_X(action != 0, "QWidgetGroup::_q_actionTriggered", "internal error");
     emit q->triggered(action);
 }
@@ -154,14 +154,14 @@ void QActionGroupPrivate::_q_actionTriggered()
     The action group is exclusive by default. Call setExclusive(false)
     to make the action group non-exclusive.
 */
-QActionGroup::QActionGroup(QObject* parent) : QObject(*new QActionGroupPrivate, parent)
+UiActionGroup::UiActionGroup(QObject* parent) : QObject(*new UiActionGroupPrivate, parent)
 {
 }
 
 /*!
     Destroys the action group.
 */
-QActionGroup::~QActionGroup()
+UiActionGroup::~UiActionGroup()
 {
 }
 
@@ -175,9 +175,9 @@ QActionGroup::~QActionGroup()
 
     \sa QAction::setActionGroup()
 */
-QAction *QActionGroup::addAction(QAction* a)
+UiAction *UiActionGroup::addAction(UiAction* a)
 {
-    Q_D(QActionGroup);
+    Q_D(UiActionGroup);
     if (!d->actions.contains(a)) {
         d->actions.append(a);
         QObject::connect(a, SIGNAL(triggered()), this, SLOT(_q_actionTriggered()));
@@ -194,7 +194,7 @@ QAction *QActionGroup::addAction(QAction* a)
     // }
     if (a->isChecked())
         d->current = a;
-    QActionGroup *oldGroup = a->d_func()->group;
+    UiActionGroup *oldGroup = a->d_func()->group;
     if (oldGroup != this) {
         if (oldGroup)
             oldGroup->removeAction(a);
@@ -212,9 +212,9 @@ QAction *QActionGroup::addAction(QAction* a)
 
     \sa QAction::setActionGroup()
 */
-QAction *QActionGroup::addAction(const QString &text)
+UiAction *UiActionGroup::addAction(const QString &text)
 {
-    return new QAction(text, this);
+    return new UiAction(text, this);
 }
 
 /*!
@@ -237,9 +237,9 @@ QAction *QActionGroup::addAction(const QString &text)
 
   \sa QAction::setActionGroup()
 */
-void QActionGroup::removeAction(QAction *action)
+void UiActionGroup::removeAction(UiAction *action)
 {
-    Q_D(QActionGroup);
+    Q_D(UiActionGroup);
     if (d->actions.removeAll(action)) {
         if (action == d->current)
             d->current = 0;
@@ -253,9 +253,9 @@ void QActionGroup::removeAction(QAction *action)
 /*!
     Returns the list of this groups's actions. This may be empty.
 */
-QList<QAction*> QActionGroup::actions() const
+QList<UiAction*> UiActionGroup::actions() const
 {
-    Q_D(const QActionGroup);
+    Q_D(const UiActionGroup);
     return d->actions;
 }
 
@@ -270,15 +270,15 @@ QList<QAction*> QActionGroup::actions() const
 
     \sa QAction::checkable
 */
-void QActionGroup::setExclusive(bool b)
+void UiActionGroup::setExclusive(bool b)
 {
-    Q_D(QActionGroup);
+    Q_D(UiActionGroup);
     d->exclusive = b;
 }
 
-bool QActionGroup::isExclusive() const
+bool UiActionGroup::isExclusive() const
 {
-    Q_D(const QActionGroup);
+    Q_D(const UiActionGroup);
     return d->exclusive;
 }
 
@@ -299,11 +299,11 @@ bool QActionGroup::isExclusive() const
 
     \sa QAction::setEnabled()
 */
-void QActionGroup::setEnabled(bool b)
+void UiActionGroup::setEnabled(bool b)
 {
-    Q_D(QActionGroup);
+    Q_D(UiActionGroup);
     d->enabled = b;
-    for (QList<QAction*>::const_iterator it = d->actions.constBegin(); it != d->actions.constEnd(); ++it) {
+    for (QList<UiAction*>::const_iterator it = d->actions.constBegin(); it != d->actions.constEnd(); ++it) {
         if (!(*it)->d_func()->forceDisabled) {
             (*it)->setEnabled(b);
             (*it)->d_func()->forceDisabled = false;
@@ -311,9 +311,9 @@ void QActionGroup::setEnabled(bool b)
     }
 }
 
-bool QActionGroup::isEnabled() const
+bool UiActionGroup::isEnabled() const
 {
-    Q_D(const QActionGroup);
+    Q_D(const UiActionGroup);
     return d->enabled;
 }
 
@@ -321,9 +321,9 @@ bool QActionGroup::isEnabled() const
   Returns the currently checked action in the group, or 0 if none
   are checked.
 */
-QAction *QActionGroup::checkedAction() const
+UiAction *UiActionGroup::checkedAction() const
 {
-    Q_D(const QActionGroup);
+    Q_D(const UiActionGroup);
     return d->current;
 }
 
@@ -412,6 +412,6 @@ QAction *QActionGroup::checkedAction() const
 
 QT_END_NAMESPACE_UIHELPERS
 
-#include "moc_qactiongroup.cpp"
+#include "moc_uiactiongroup.cpp"
 
 #endif // QT_NO_ACTION

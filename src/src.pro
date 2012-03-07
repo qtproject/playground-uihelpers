@@ -20,4 +20,3 @@ HEADERS += \
 
 include(utils/utils.pri)
 include(models/models.pri)
-include(action/action.pri)

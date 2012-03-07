@@ -48,6 +48,7 @@
 // #include <QtWidgets/qwidget.h>
 #include <QtCore/qvariant.h>
 // #include <QtWidgets/qicon.h>
+#include <QtCore/QEvent>
 
 QT_BEGIN_HEADER
 
@@ -57,14 +58,26 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 #ifndef QT_NO_ACTION
 
 // class QMenu;
-class QActionGroup;
-class QActionPrivate;
+class UiAction;
+class UiActionGroup;
+class UiActionPrivate;
 // class QGraphicsWidget;
 
-class UIHELPERS_EXPORT QAction : public QObject
+class UIHELPERS_EXPORT UiActionEvent : public QEvent
+{
+    UiAction *act, *bef;
+public:
+    UiActionEvent(int type, UiAction *action, UiAction *before = 0);
+    ~UiActionEvent();
+
+    inline UiAction *action() const { return act; }
+    inline UiAction *before() const { return bef; }
+};
+
+class UIHELPERS_EXPORT UiAction : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(QAction)
+    Q_DECLARE_PRIVATE(UiAction)
 
     Q_ENUMS(MenuRole)
     Q_ENUMS(SoftKeyRole)
@@ -98,14 +111,14 @@ public:
     enum Priority { LowPriority = 0,
                     NormalPriority = 128,
                     HighPriority = 256};
-    explicit QAction(QObject* parent);
-    QAction(const QString &text, QObject* parent);
+    explicit UiAction(QObject* parent);
+    UiAction(const QString &text, QObject* parent);
     // QAction(const QIcon &icon, const QString &text, QObject* parent);
 
-    ~QAction();
+    ~UiAction();
 
-    void setActionGroup(QActionGroup *group);
-    QActionGroup *actionGroup() const;
+    void setActionGroup(UiActionGroup *group);
+    UiActionGroup *actionGroup() const;
     // void setIcon(const QIcon &icon);
     // QIcon icon() const;
 
@@ -188,7 +201,7 @@ public:
 
 protected:
     bool event(QEvent *);
-    QAction(QActionPrivate &dd, QObject *parent);
+    UiAction(UiActionPrivate &dd, QObject *parent);
 
 public Q_SLOTS:
     void trigger() { activate(Trigger); }
@@ -206,23 +219,23 @@ Q_SIGNALS:
     void toggled(bool);
 
 private:
-    Q_DISABLE_COPY(QAction)
+    Q_DISABLE_COPY(UiAction)
 
     // friend class QGraphicsWidget;
     // friend class QWidget;
-    friend class QActionGroup;
+    friend class UiActionGroup;
     // friend class QMenu;
     // friend class QMenuPrivate;
     // friend class QMenuBar;
     // friend class QToolButton;
 #ifdef Q_OS_MAC
-    friend void qt_mac_clear_status_text(QAction *action);
+    friend void qt_mac_clear_status_text(UiAction *action);
 #endif
 };
 
-QT_BEGIN_INCLUDE_NAMESPACE_UIHELPERS
-#include <UiHelpers/qactiongroup.h>
-QT_END_INCLUDE_NAMESPACE_UIHELPERS
+//QT_BEGIN_INCLUDE_NAMESPACE_UIHELPERS
+//#include <UiHelpers/uiactiongroup.h>
+//QT_END_INCLUDE_NAMESPACE_UIHELPERS
 
 #endif // QT_NO_ACTION
 
