@@ -52,7 +52,7 @@ QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE_UIHELPERS
 
 
-class QAction;
+class UiAction;
 class UiUndoCommandPrivate;
 class UiUndoStackPrivate;
 
@@ -115,9 +115,9 @@ public:
     QString text(int idx) const;
 
 #ifndef QT_NO_ACTION
-    QAction *createUndoAction(QObject *parent,
+    UiAction *createUndoAction(QObject *parent,
                                 const QString &prefix = QString()) const;
-    QAction *createRedoAction(QObject *parent,
+    UiAction *createRedoAction(QObject *parent,
                                 const QString &prefix = QString()) const;
 #endif // QT_NO_ACTION
 

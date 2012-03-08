@@ -45,7 +45,7 @@
 #include <private/qobject_p.h>
 #include <QtCore/qlist.h>
 #include <QtCore/qstring.h>
-//#include <QtWidgets/qaction.h>
+#include <UiHelpers/uiaction.h>
 #include "uihelpersglobal.h"
 #include "uiundostack.h"
 
@@ -94,7 +94,7 @@ public:
 };
 
 #ifndef QT_NO_ACTION
-class UiUndoAction : public QAction
+class UiUndoAction : public UiAction
 {
     Q_OBJECT
 public:

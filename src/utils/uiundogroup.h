@@ -52,7 +52,7 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 class UiUndoGroupPrivate;
 class UiUndoStack;
-class QAction;
+class UiAction;
 
 #ifndef QT_NO_UNDOGROUP
 
@@ -71,9 +71,9 @@ public:
     UiUndoStack *activeStack() const;
 
 #ifndef QT_NO_ACTION
-    QAction *createUndoAction(QObject *parent,
+    UiAction *createUndoAction(QObject *parent,
                                 const QString &prefix = QString()) const;
-    QAction *createRedoAction(QObject *parent,
+    UiAction *createRedoAction(QObject *parent,
                                 const QString &prefix = QString()) const;
 #endif // QT_NO_ACTION
     bool canUndo() const;

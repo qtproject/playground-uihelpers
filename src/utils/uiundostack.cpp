@@ -43,6 +43,7 @@
 #include "uiundostack.h"
 #include "uiundogroup.h"
 #include "uiundostack_p.h"
+#include "uiaction.h"
 
 #ifndef QT_NO_UNDOCOMMAND
 
@@ -347,7 +348,7 @@ const UiUndoCommand *UiUndoCommand::child(int index) const
 
     \section1 Undo and Redo Actions
 
-    UiUndoStack provides convenient undo and redo QAction objects, which
+    UiUndoStack provides convenient undo and redo UiAction objects, which
     can be inserted into a menu or a toolbar. When commands are undone or
     redone, UiUndoStack updates the text properties of these actions
     to reflect what change they will trigger. The actions are also disabled
@@ -400,7 +401,7 @@ const UiUndoCommand *UiUndoCommand::child(int index) const
 #ifndef QT_NO_ACTION
 
 UiUndoAction::UiUndoAction(const QString &prefix, QObject *parent)
-    : QAction(parent)
+    : UiAction(parent)
 {
     m_prefix = prefix;
 }
@@ -864,7 +865,7 @@ QString UiUndoStack::redoText() const
 #ifndef QT_NO_ACTION
 
 /*!
-    Creates an undo QAction object with the given \a parent.
+    Creates an undo UiAction object with the given \a parent.
 
     Triggering this action will cause a call to undo(). The text of this action
     is the text of the command which will be undone in the next call to undo(),
@@ -877,7 +878,7 @@ QString UiUndoStack::redoText() const
     \sa createRedoAction(), canUndo(), UiUndoCommand::text()
 */
 
-QAction *UiUndoStack::createUndoAction(QObject *parent, const QString &prefix) const
+UiAction *UiUndoStack::createUndoAction(QObject *parent, const QString &prefix) const
 {
     UiUndoAction *result = new UiUndoAction(prefix, parent);
     if (prefix.isEmpty())
@@ -894,7 +895,7 @@ QAction *UiUndoStack::createUndoAction(QObject *parent, const QString &prefix) c
 }
 
 /*!
-    Creates an redo QAction object with the given \a parent.
+    Creates an redo UiAction object with the given \a parent.
 
     Triggering this action will cause a call to redo(). The text of this action
     is the text of the command which will be redone in the next call to redo(),
@@ -907,7 +908,7 @@ QAction *UiUndoStack::createUndoAction(QObject *parent, const QString &prefix) c
     \sa createUndoAction(), canRedo(), UiUndoCommand::text()
 */
 
-QAction *UiUndoStack::createRedoAction(QObject *parent, const QString &prefix) const
+UiAction *UiUndoStack::createRedoAction(QObject *parent, const QString &prefix) const
 {
     UiUndoAction *result = new UiUndoAction(prefix, parent);
     if (prefix.isEmpty())

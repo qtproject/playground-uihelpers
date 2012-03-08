@@ -42,6 +42,7 @@
 #include "uiundogroup.h"
 #include "uiundostack.h"
 #include "uiundostack_p.h"
+#include "uiaction.h"
 
 #ifndef QT_NO_UNDOGROUP
 
@@ -368,7 +369,7 @@ bool UiUndoGroup::isClean() const
 #ifndef QT_NO_ACTION
 
 /*!
-    Creates an undo QAction object with parent \a parent.
+    Creates an undo UiAction object with parent \a parent.
 
     Triggering this action will cause a call to UiUndoStack::undo() on the active stack.
     The text of this action will always be the text of the command which will be undone
@@ -382,7 +383,7 @@ bool UiUndoGroup::isClean() const
     \sa createRedoAction() canUndo() UiUndoCommand::text()
 */
 
-QAction *UiUndoGroup::createUndoAction(QObject *parent, const QString &prefix) const
+UiAction *UiUndoGroup::createUndoAction(QObject *parent, const QString &prefix) const
 {
     UiUndoAction *result = new UiUndoAction(prefix, parent);
     if (prefix.isEmpty())
@@ -399,7 +400,7 @@ QAction *UiUndoGroup::createUndoAction(QObject *parent, const QString &prefix) c
 }
 
 /*!
-    Creates an redo QAction object with parent \a parent.
+    Creates an redo UiAction object with parent \a parent.
 
     Triggering this action will cause a call to UiUndoStack::redo() on the active stack.
     The text of this action will always be the text of the command which will be redone
@@ -413,7 +414,7 @@ QAction *UiUndoGroup::createUndoAction(QObject *parent, const QString &prefix) c
     \sa createUndoAction() canRedo() UiUndoCommand::text()
 */
 
-QAction *UiUndoGroup::createRedoAction(QObject *parent, const QString &prefix) const
+UiAction *UiUndoGroup::createRedoAction(QObject *parent, const QString &prefix) const
 {
     UiUndoAction *result = new UiUndoAction(prefix, parent);
     if (prefix.isEmpty())
