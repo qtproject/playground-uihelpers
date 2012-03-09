@@ -2,4 +2,5 @@ TEMPLATE=subdirs
 SUBDIRS=\
    uiundogroup \
    uiundostack \
-   uiaction
+   uiaction \
+   uiactiongroup
