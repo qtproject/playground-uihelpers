@@ -7,6 +7,7 @@
     "uihelpersversion.h" => "UiHelpersVersion",
     "uiundostack.h" => "UiUndoStack",
     "uiundogroup.h" => "UiUndoGroup",
+    "uicompletionmodel.h" => "UiCompletionModel",
     "uifilesystemmodel.h" => "UiFileSystemModel",
     "uistandarditemmodel.h" => "UiStandardModel",
     "uiaction.h" => "UiAction",
