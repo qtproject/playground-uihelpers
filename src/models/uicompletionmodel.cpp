@@ -39,10 +39,9 @@
 **
 ****************************************************************************/
 
+#ifndef QT_NO_COMPLETIONMODEL
+
 #include "uicompletionmodel_p.h"
-
-#ifndef QT_NO_COMPLETER
-
 #include "QtCore/qstringlistmodel.h"
 #include "QtCore/qdir.h"
 
@@ -824,4 +823,4 @@ QT_END_NAMESPACE_UIHELPERS
 
 #include "moc_uicompletionmodel.cpp"
 
-#endif // QT_NO_COMPLETER
+#endif // QT_NO_COMPLETIONMODEL

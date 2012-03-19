@@ -42,10 +42,14 @@
 #ifndef UICOMPLETIONMODEL_H
 #define UICOMPLETIONMODEL_H
 
+#ifndef QT_NO_COMPLETIONMODEL
+
+#include "uihelpersglobal.h"
 #include <QtCore/qobject.h>
 #include <QtCore/qpoint.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qabstractitemmodel.h>
+#include "QtCore/qabstractproxymodel.h"
 #include <QtCore/qrect.h>
 
 QT_BEGIN_HEADER
@@ -54,9 +58,10 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 class UiCompletionModelPrivate;
 
-class UiCompletionModel : public QAbstractProxyModel
+class UIHELPERS_EXPORT UiCompletionModel : public QAbstractProxyModel
 {
     Q_OBJECT
+    Q_ENUMS(ModelSorting)
     Q_PROPERTY(Qt::CaseSensitivity caseSensitivity READ caseSensitivity WRITE setCaseSensitivity)
     Q_PROPERTY(ModelSorting modelSorting READ modelSorting WRITE setModelSorting)
     Q_PROPERTY(int completionColumn READ completionColumn WRITE setCompletionColumn)
@@ -120,4 +125,5 @@ QT_END_NAMESPACE_UIHELPERS
 
 QT_END_HEADER
 
+#endif // QT_NO_COMPLETIONMODEL
 #endif // UICOMPLETIONMODEL_H

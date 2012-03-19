@@ -42,6 +42,7 @@
 #ifndef UICOMPLETIONMODEL_P_H
 #define UICOMPLETIONMODEL_P_H
 
+#ifndef QT_NO_COMPLETIONMODEL
 
 //
 //  W A R N I N G
@@ -56,10 +57,6 @@
 
 #include "private/qobject_p.h"
 
-#ifndef QT_NO_COMPLETIONMODEL
-
-#include "uihelpersglobal.h"
-#include "QtCore/qabstractproxymodel.h"
 #include "uicompletionmodel.h"
 #include "private/qabstractproxymodel_p.h"
 #include "QtCore/qstringlist.h"
