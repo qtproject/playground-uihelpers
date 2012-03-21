@@ -321,19 +321,19 @@ void UiCompletionModel::filter(const QStringList& parts)
 
 void UiCompletionModel::resetModel()
 {
-    if (rowCount() == 0) {
-        beginResetModel();
-        endResetModel();
-        return;
+    beginResetModel();
+
+    if (rowCount() > 0) {
+        emit layoutAboutToBeChanged();
+        QModelIndexList piList = persistentIndexList();
+        QModelIndexList empty;
+        for (int i = 0; i < piList.size(); i++)
+            empty.append(QModelIndex());
+        changePersistentIndexList(piList, empty);
+        emit layoutChanged();
     }
 
-    emit layoutAboutToBeChanged();
-    QModelIndexList piList = persistentIndexList();
-    QModelIndexList empty;
-    for (int i = 0; i < piList.size(); i++)
-        empty.append(QModelIndex());
-    changePersistentIndexList(piList, empty);
-    emit layoutChanged();
+    endResetModel();
 }
 
 /*!
@@ -415,9 +415,6 @@ UiCompletionModel::ModelSorting UiCompletionModel::modelSorting() const
 /*!
     \property UiCompletionModel::completionColumn
     \brief the column in the model in which completions are searched for.
-
-    If the popup() is a QListView, it is automatically setup to display
-    this column.
 
     By default, the match column is 0.
 
