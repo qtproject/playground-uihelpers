@@ -1,7 +1,7 @@
 #include <QtCore/QDir>
 #include <QtGui/QGuiApplication>
 #include <QtQuick/QQuickView>
-#include <QtDeclarative/QDeclarativeContext>
+#include <QtQml/QQmlContext>
 #include <UiHelpers/UiFileSystemModel>
 
 int main(int argc, char *argv[])
