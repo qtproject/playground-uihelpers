@@ -1,7 +1,8 @@
 *.o
+*.so
 *.moc
 moc_*
-*.pro.user
+*.user
 *~
 uihelpersversion.h
 lib/
@@ -16,3 +17,7 @@ release/
 tmp/
 Makefile
 *.rc
+qrc_*
+examples/undo/editor/editor
+examples/models/fsviewer/fsviewer
+examples/models/completionmodel/completionmodel
