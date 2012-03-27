@@ -8,10 +8,14 @@ CONFIG += qt plugin
 
 SOURCES += plugin.cpp
 
-SOURCES += uiquickundocommands.cpp \
+SOURCES += uiquickbaseundocommand.cpp \
+           uiquickundocommand.cpp \
+           uiquickundopropertycommand.cpp \
            uiquickundostack.cpp
 
-HEADERS += uiquickundocommands_p.h \
+HEADERS += uiquickbaseundocommand_p.h \
+           uiquickundocommand_p.h \
+           uiquickundopropertycommand_p.h \
            uiquickundostack_p.h
 
 

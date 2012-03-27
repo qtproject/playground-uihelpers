@@ -40,7 +40,8 @@
 ****************************************************************************/
 
 #include "uiquickundostack_p.h"
-#include "uiquickundocommands_p.h"
+#include "uiquickundocommand_p.h"
+#include "uiquickundopropertycommand_p.h"
 
 UiQuickUndoStackPrivate::UiQuickUndoStackPrivate(QObject *parent)
     : UiUndoStack(parent)
@@ -72,22 +73,20 @@ UiQuickUndoStack::~UiQuickUndoStack()
 {
 }
 
-void UiQuickUndoStack::push(UiQuickBaseUndoCommand *cmd, QObject *target)
+void UiQuickUndoStack::push(UiQuickBaseUndoCommand *quickCommand, QObject *target)
 {
     Q_D(UiQuickUndoStack);
 
-    if (!cmd || !target)
+    if (!quickCommand || !target)
         return; // XXX: notify error
 
     d->commit();
 
-    UiQuickUndoPropertyCommand *upc = qobject_cast<UiQuickUndoPropertyCommand *>(cmd);
-    if (upc) {
-        d->currentCommand = new UndoPropertyCommand(target, upc);
-    } else {
-        UiQuickUndoCommand *uc = qobject_cast<UiQuickUndoCommand *>(cmd);
-        d->push(new UndoCommand(target, uc));
-    }
+    BaseUndoCommand *undoCommand = quickCommand->create(target);
+    if (undoCommand->delayPush())
+        d->currentCommand = undoCommand;
+    else
+        d->push(undoCommand);
 }
 
 void UiQuickUndoStack::undo()

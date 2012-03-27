@@ -39,30 +39,18 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
+#include "uiquickbaseundocommand_p.h"
 
-#include "uiquickundostack_p.h"
-#include "uiquickundocommand_p.h"
-#include "uiquickundopropertycommand_p.h"
-
-class QmlUndoFrameworkPlugin : public QQmlExtensionPlugin
+BaseUndoCommand::BaseUndoCommand()
+    : UiUndoCommand()
 {
-    Q_OBJECT
-
-public:
-    virtual void registerTypes(const char* uri);
-};
-
-void QmlUndoFrameworkPlugin::registerTypes(const char* uri)
-{
-    Q_ASSERT(QLatin1String(uri) == QLatin1String("Playground.UiHelpers.UndoFramework"));
-
-    qmlRegisterType<UiQuickUndoStack>(uri, 1, 0, "UndoStack");
-    qmlRegisterUncreatableType<UiQuickBaseUndoCommand>(uri, 1, 0, "", "");
-    qmlRegisterType<UiQuickUndoCommand>(uri, 1, 0, "UndoCommand");
-    qmlRegisterType<UiQuickUndoPropertyCommand>(uri, 1, 0, "UndoPropertyCommand");
 }
 
-#include "plugin.moc"
+UiQuickBaseUndoCommand::UiQuickBaseUndoCommand(QObject *parent)
+    : QObject(parent)
+{
+}
 
-Q_EXPORT_PLUGIN2(qmlundoframeworkplugin, QT_PREPEND_NAMESPACE(QmlUndoFrameworkPlugin))
+UiQuickBaseUndoCommand::~UiQuickBaseUndoCommand()
+{
+}

@@ -39,13 +39,20 @@
 **
 ****************************************************************************/
 
-#ifndef UIQUICKUNDOCOMMAND_H
-#define UIQUICKUNDOCOMMAND_H
+#ifndef UIQUICKBASEUNDOCOMMAND_H
+#define UIQUICKBASEUNDOCOMMAND_H
 
 #include <UiHelpers/UiUndoStack>
-#include <QVariant>
 
 QT_USE_NAMESPACE_UIHELPERS;
+
+class BaseUndoCommand : public UiUndoCommand
+{
+public:
+    BaseUndoCommand();
+
+    virtual bool delayPush() const = 0;
+};
 
 class UiQuickBaseUndoCommand : public QObject
 {
@@ -54,81 +61,8 @@ class UiQuickBaseUndoCommand : public QObject
 public:
     UiQuickBaseUndoCommand(QObject *parent = 0);
     ~UiQuickBaseUndoCommand();
+
+    virtual BaseUndoCommand *create(QObject *target = 0) = 0;
 };
 
-// ------- //
-
-class UiQuickUndoCommand : public UiQuickBaseUndoCommand
-{
-    Q_OBJECT
-
-public:
-    UiQuickUndoCommand(QObject *parent = 0);
-    ~UiQuickUndoCommand();
-
-signals:
-    void undo(QObject *target);
-    void redo(QObject *target);
-    void commandDestroyed(QObject *target);
-};
-
-class UndoCommand : public UiUndoCommand
-{
-public:
-    UndoCommand(QObject* target, UiQuickUndoCommand *m_qmlObject);
-    ~UndoCommand();
-
-    void undo();
-    void redo();
-
-private:
-    QObject *m_target;
-    UiQuickUndoCommand *m_qmlObject;
-};
-
-// -----------------//
-
-class UiQuickUndoPropertyCommand : public UiQuickBaseUndoCommand
-{
-    Q_OBJECT
-
-    Q_PROPERTY(QVariantList properties READ properties WRITE setProperties NOTIFY propertiesChanged)
-
-public:
-    UiQuickUndoPropertyCommand(QObject *parent = 0);
-    ~UiQuickUndoPropertyCommand();
-
-    QVariantList properties() const;
-    void setProperties(const QVariantList& prop);
-
-signals:
-    void propertiesChanged();
-
-private:
-    QVariantList m_properties;
-};
-
-typedef QPair<QByteArray, QVariant> PropertyState;
-typedef QList<PropertyState> TargetState;
-
-class UndoPropertyCommand : public UiUndoCommand
-{
-
-public:
-    UndoPropertyCommand(QObject*, UiQuickUndoPropertyCommand*);
-    ~UndoPropertyCommand();
-
-    void undo();
-    void redo();
-
-private:
-    void saveState(TargetState& state);
-    void applyState(TargetState& state);
-
-    TargetState m_undoState;
-    TargetState m_redoState;
-    QObject *m_target;
-    UiQuickUndoPropertyCommand *m_qmlObject;
-};
-
-#endif
+#endif // UIQUICKBASEUNDOCOMMAND_H

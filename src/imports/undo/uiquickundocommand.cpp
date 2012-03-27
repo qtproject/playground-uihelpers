@@ -39,29 +39,26 @@
 **
 ****************************************************************************/
 
-#include "uiquickundocommands_p.h"
+#include "uiquickundocommand_p.h"
 
-
-UiQuickBaseUndoCommand::UiQuickBaseUndoCommand(QObject *parent)
-    : QObject(parent)
+class UndoCommand : public BaseUndoCommand
 {
-}
+public:
+    UndoCommand(QObject* target, UiQuickUndoCommand *m_qmlObject);
+    ~UndoCommand();
 
-UiQuickBaseUndoCommand::~UiQuickBaseUndoCommand()
-{
-}
+    void undo();
+    void redo();
 
-UiQuickUndoCommand::UiQuickUndoCommand(QObject *parent)
-    : UiQuickBaseUndoCommand(parent)
-{
-}
+    bool delayPush() const;
 
-UiQuickUndoCommand::~UiQuickUndoCommand()
-{
-}
+private:
+    QObject *m_target;
+    UiQuickUndoCommand *m_qmlObject;
+};
 
 UndoCommand::UndoCommand(QObject* target, UiQuickUndoCommand *qmlObject)
-    : UiUndoCommand()
+    : BaseUndoCommand()
     , m_target(target)
     , m_qmlObject(qmlObject)
 {
@@ -82,66 +79,21 @@ void UndoCommand::redo()
     emit m_qmlObject->redo(m_target);
 }
 
-// --------------------------------- //
+bool UndoCommand::delayPush() const
+{
+    return false;
+}
 
-UiQuickUndoPropertyCommand::UiQuickUndoPropertyCommand(QObject *parent)
+UiQuickUndoCommand::UiQuickUndoCommand(QObject *parent)
     : UiQuickBaseUndoCommand(parent)
-    ,  m_properties(QVariantList())
 {
 }
 
-UiQuickUndoPropertyCommand::~UiQuickUndoPropertyCommand()
+UiQuickUndoCommand::~UiQuickUndoCommand()
 {
 }
 
-QVariantList UiQuickUndoPropertyCommand::properties() const
+BaseUndoCommand *UiQuickUndoCommand::create(QObject *target)
 {
-    return m_properties;
-}
-
-void UiQuickUndoPropertyCommand::setProperties(const QVariantList& prop)
-{
-    m_properties = prop;
-    emit propertiesChanged();
-}
-
-UndoPropertyCommand::UndoPropertyCommand(QObject* t, UiQuickUndoPropertyCommand *q)
-    : UiUndoCommand()
-    , m_undoState(TargetState())
-    , m_redoState(TargetState())
-    , m_target(t)
-    , m_qmlObject(q)
-{
-    saveState(m_undoState);
-}
-
-UndoPropertyCommand::~UndoPropertyCommand()
-{
-}
-
-void UndoPropertyCommand::saveState(TargetState& state)
-{
-    foreach (const QVariant& var, m_qmlObject->properties()) {
-        QByteArray propertyName = var.toByteArray();
-        state.append(qMakePair(propertyName, m_target->property(propertyName.data())));
-    }
-}
-
-void UndoPropertyCommand::applyState(TargetState& state)
-{
-    foreach (PropertyState pair, state)
-        m_target->setProperty(pair.first, pair.second);
-}
-
-void UndoPropertyCommand::undo()
-{
-    applyState(m_undoState);
-}
-
-void UndoPropertyCommand::redo()
-{
-    if (m_redoState.empty())
-        saveState(m_redoState);
-    else
-        applyState(m_redoState);
+    return new UndoCommand(target, this);
 }
