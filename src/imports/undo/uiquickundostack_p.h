@@ -48,9 +48,8 @@
 
 QT_USE_NAMESPACE_UIHELPERS;
 
-class UndoStack;
 class UiQuickBaseUndoCommand;
-
+class UiQuickUndoStackPrivate;
 class UiQuickUndoStack : public QObject
 {
     Q_OBJECT
@@ -65,16 +64,19 @@ public slots:
     void redo();
 
 private:
-    UndoStack *m_stack;
+    Q_DISABLE_COPY(UiQuickUndoStack)
+    Q_DECLARE_PRIVATE(UiQuickUndoStack)
+
+    QScopedPointer<UiQuickUndoStackPrivate> d_ptr;
 };
 
-class UndoStack : public UiUndoStack
+class UiQuickUndoStackPrivate : public UiUndoStack
 {
     Q_OBJECT
 
 public:
-    UndoStack(QObject *parent = 0);
-    ~UndoStack();
+    UiQuickUndoStackPrivate(QObject *parent = 0);
+    ~UiQuickUndoStackPrivate();
 
     void commit();
 

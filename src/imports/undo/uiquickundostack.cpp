@@ -42,9 +42,29 @@
 #include "uiquickundostack_p.h"
 #include "uiquickundocommands_p.h"
 
+UiQuickUndoStackPrivate::UiQuickUndoStackPrivate(QObject *parent)
+    : UiUndoStack(parent)
+    , currentCommand(0)
+{
+}
+
+UiQuickUndoStackPrivate::~UiQuickUndoStackPrivate()
+{
+}
+
+void UiQuickUndoStackPrivate::commit()
+{
+    if (!currentCommand)
+        return;
+
+    push(currentCommand);
+    currentCommand = 0;
+}
+
+
 UiQuickUndoStack::UiQuickUndoStack(QObject *parent)
     : QObject(parent)
-    , m_stack(new UndoStack(this))
+    , d_ptr(new UiQuickUndoStackPrivate(this))
 {
 }
 
@@ -52,49 +72,34 @@ UiQuickUndoStack::~UiQuickUndoStack()
 {
 }
 
-UndoStack::UndoStack(QObject *parent)
-    : UiUndoStack(parent)
-    , currentCommand(0)
-{
-}
-
-UndoStack::~UndoStack()
-{
-}
-
 void UiQuickUndoStack::push(UiQuickBaseUndoCommand *cmd, QObject *target)
 {
+    Q_D(UiQuickUndoStack);
+
     if (!cmd || !target)
         return; // XXX: notify error
 
-    m_stack->commit();
+    d->commit();
 
     UiQuickUndoPropertyCommand *upc = qobject_cast<UiQuickUndoPropertyCommand *>(cmd);
     if (upc) {
-        m_stack->currentCommand = new UndoPropertyCommand(target, upc);
+        d->currentCommand = new UndoPropertyCommand(target, upc);
     } else {
         UiQuickUndoCommand *uc = qobject_cast<UiQuickUndoCommand *>(cmd);
-        m_stack->push(new UndoCommand(target, uc));
+        d->push(new UndoCommand(target, uc));
     }
 }
 
 void UiQuickUndoStack::undo()
 {
-    m_stack->commit();
-    m_stack->undo();
+    Q_D(UiQuickUndoStack);
+    d->commit();
+    d->undo();
 }
 
 void UiQuickUndoStack::redo()
 {
-    m_stack->commit();
-    m_stack->redo();
-}
-
-void UndoStack::commit()
-{
-    if (!currentCommand)
-        return;
-
-    push(currentCommand);
-    currentCommand = 0;
+    Q_D(UiQuickUndoStack);
+    d->commit();
+    d->redo();
 }
