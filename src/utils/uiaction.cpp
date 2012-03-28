@@ -91,7 +91,7 @@ static QString qt_strippedText(QString s)
 
 UiActionPrivate::UiActionPrivate() : group(0), enabled(1), forceDisabled(0),
                                    // visible(1), forceInvisible(0), checkable(0), checked(0), separator(0), fontSet(false),
-                                   checkable(0), checked(0),
+                                   visible(1), forceInvisible(0), checkable(0), checked(0),
                                    forceEnabledInSoftkeys(false), menuActionSoftkeys(false),
                                    // iconVisibleInMenu(-1),
                                    menuRole(UiAction::TextHeuristicRole), softKeyRole(UiAction::NoSoftKey),
@@ -775,10 +775,10 @@ QString UiAction::text() const
 {
     Q_D(const UiAction);
     QString s = d->text;
-    // if (s.isEmpty()) {
-    //     s = d->iconText;
-    //     s.replace(QLatin1Char('&'), QLatin1String("&&"));
-    // }
+    if (s.isEmpty()) {
+        s = d->iconText;
+        s.replace(QLatin1Char('&'), QLatin1String("&&"));
+    }
     return s;
 }
 
@@ -787,7 +787,7 @@ QString UiAction::text() const
 
 
 /*!
-    \property QAction::iconText
+    \property UiAction::iconText
     \brief the action's descriptive icon text
 
     If QToolBar::toolButtonStyle is set to a value that permits text to
@@ -805,26 +805,26 @@ QString UiAction::text() const
 
     \sa setToolTip(), setStatusTip()
 */
-// void QAction::setIconText(const QString &text)
-// {
-//     Q_D(QAction);
-//     if (d->iconText == text)
-//         return;
-//
-//     d->iconText = text;
-//     d->sendDataChanged();
-// }
+void UiAction::setIconText(const QString &text)
+{
+    Q_D(UiAction);
+    if (d->iconText == text)
+        return;
 
-// QString QAction::iconText() const
-// {
-//     Q_D(const QAction);
-//     if (d->iconText.isEmpty())
-//         return qt_strippedText(d->text);
-//     return d->iconText;
-// }
+    d->iconText = text;
+    d->sendDataChanged();
+}
+
+QString UiAction::iconText() const
+{
+    Q_D(const UiAction);
+    if (d->iconText.isEmpty())
+        return qt_strippedText(d->text);
+    return d->iconText;
+}
 
 /*!
-    \property QAction::toolTip
+    \property UiAction::toolTip
     \brief the action's tooltip
 
     This text is used for the tooltip. If no tooltip is specified,
@@ -834,29 +834,29 @@ QString UiAction::text() const
 
     \sa setStatusTip() setShortcut()
 */
-// void QAction::setToolTip(const QString &tooltip)
-// {
-//     Q_D(QAction);
-//     if (d->tooltip == tooltip)
-//         return;
-//
-//     d->tooltip = tooltip;
-//     d->sendDataChanged();
-// }
+void UiAction::setToolTip(const QString &tooltip)
+{
+    Q_D(UiAction);
+    if (d->tooltip == tooltip)
+        return;
 
-// QString QAction::toolTip() const
-// {
-//     Q_D(const QAction);
-//     if (d->tooltip.isEmpty()) {
-//         if (!d->text.isEmpty())
-//             return qt_strippedText(d->text);
-//         return qt_strippedText(d->iconText);
-//     }
-//     return d->tooltip;
-// }
+    d->tooltip = tooltip;
+    d->sendDataChanged();
+}
+
+QString UiAction::toolTip() const
+{
+    Q_D(const UiAction);
+    if (d->tooltip.isEmpty()) {
+        if (!d->text.isEmpty())
+            return qt_strippedText(d->text);
+        return qt_strippedText(d->iconText);
+    }
+    return d->tooltip;
+}
 
 /*!
-    \property QAction::statusTip
+    \property UiAction::statusTip
     \brief the action's status tip
 
     The status tip is displayed on all status bars provided by the
@@ -866,24 +866,24 @@ QString UiAction::text() const
 
     \sa setToolTip() showStatusText()
 */
-// void QAction::setStatusTip(const QString &statustip)
-// {
-//     Q_D(QAction);
-//     if (d->statustip == statustip)
-//         return;
-//
-//     d->statustip = statustip;
-//     d->sendDataChanged();
-// }
+void UiAction::setStatusTip(const QString &statustip)
+{
+    Q_D(UiAction);
+    if (d->statustip == statustip)
+        return;
 
-// QString QAction::statusTip() const
-// {
-//     Q_D(const QAction);
-//     return d->statustip;
-// }
+    d->statustip = statustip;
+    d->sendDataChanged();
+}
+
+QString UiAction::statusTip() const
+{
+    Q_D(const UiAction);
+    return d->statustip;
+}
 
 /*!
-    \property QAction::whatsThis
+    \property UiAction::whatsThis
     \brief the action's "What's This?" help text
 
     The "What's This?" text is used to provide a brief description of
@@ -892,21 +892,21 @@ QString UiAction::text() const
 
     \sa QWhatsThis Q3StyleSheet
 */
-// void QAction::setWhatsThis(const QString &whatsthis)
-// {
-//     Q_D(QAction);
-//     if (d->whatsthis == whatsthis)
-//         return;
-//
-//     d->whatsthis = whatsthis;
-//     d->sendDataChanged();
-// }
+void UiAction::setWhatsThis(const QString &whatsthis)
+{
+    Q_D(UiAction);
+    if (d->whatsthis == whatsthis)
+        return;
 
-// QString QAction::whatsThis() const
-// {
-//     Q_D(const QAction);
-//     return d->whatsthis;
-// }
+    d->whatsthis = whatsthis;
+    d->sendDataChanged();
+}
+
+QString UiAction::whatsThis() const
+{
+    Q_D(const UiAction);
+    return d->whatsthis;
+}
 
 /*!
     \enum QAction::Priority
@@ -1066,8 +1066,7 @@ void UiAction::setEnabled(bool b)
     if (b == d->enabled && b != d->forceDisabled)
         return;
     d->forceDisabled = !b;
-    // if (b && (!d->visible || (d->group && !d->group->isEnabled())))
-    if (b && (d->group && !d->group->isEnabled()))
+    if (b && (!d->visible || (d->group && !d->group->isEnabled())))
         return;
     QAPP_CHECK("setEnabled");
     d->enabled = b;
@@ -1096,27 +1095,27 @@ bool UiAction::isEnabled() const
 
     By default, this property is true (actions are visible).
 */
-// void QAction::setVisible(bool b)
-// {
-//     Q_D(QAction);
-//     if (b == d->visible && b != d->forceInvisible)
-//         return;
-//     QAPP_CHECK("setVisible");
-//     d->forceInvisible = !b;
-//     d->visible = b;
-//     d->enabled = b && !d->forceDisabled && (!d->group || d->group->isEnabled()) ;
-// #ifndef QT_NO_SHORTCUT
-//     d->setShortcutEnabled(d->enabled, qApp->d_func()->shortcutMap);
-// #endif
-//     d->sendDataChanged();
-// }
+void UiAction::setVisible(bool b)
+{
+    Q_D(UiAction);
+    if (b == d->visible && b != d->forceInvisible)
+        return;
+    QAPP_CHECK("setVisible");
+    d->forceInvisible = !b;
+    d->visible = b;
+    d->enabled = b && !d->forceDisabled && (!d->group || d->group->isEnabled()) ;
+#ifndef QT_NO_SHORTCUT
+    d->setShortcutEnabled(d->enabled, qApp->d_func()->shortcutMap);
+#endif
+    d->sendDataChanged();
+}
 
 
-// bool QAction::isVisible() const
-// {
-//     Q_D(const QAction);
-//     return d->visible;
-// }
+bool UiAction::isVisible() const
+{
+    Q_D(const UiAction);
+    return d->visible;
+}
 
 /*!
   \reimp

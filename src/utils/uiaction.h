@@ -87,17 +87,17 @@ class UIHELPERS_EXPORT UiAction : public QObject
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY changed)
     // Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY changed)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY changed)
-    // Q_PROPERTY(QString iconText READ iconText WRITE setIconText NOTIFY changed)
-    // Q_PROPERTY(QString toolTip READ toolTip WRITE setToolTip NOTIFY changed)
-    // Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY changed)
-    // Q_PROPERTY(QString whatsThis READ whatsThis WRITE setWhatsThis NOTIFY changed)
+    Q_PROPERTY(QString iconText READ iconText WRITE setIconText NOTIFY changed)
+    Q_PROPERTY(QString toolTip READ toolTip WRITE setToolTip NOTIFY changed)
+    Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY changed)
+    Q_PROPERTY(QString whatsThis READ whatsThis WRITE setWhatsThis NOTIFY changed)
     // Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY changed)
 #ifndef QT_NO_SHORTCUT
     Q_PROPERTY(QKeySequence shortcut READ shortcut WRITE setShortcut NOTIFY changed)
     Q_PROPERTY(Qt::ShortcutContext shortcutContext READ shortcutContext WRITE setShortcutContext NOTIFY changed)
     Q_PROPERTY(bool autoRepeat READ autoRepeat WRITE setAutoRepeat NOTIFY changed)
 #endif
-    // Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY changed)
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY changed)
     Q_PROPERTY(MenuRole menuRole READ menuRole WRITE setMenuRole NOTIFY changed)
     Q_PROPERTY(SoftKeyRole softKeyRole READ softKeyRole WRITE setSoftKeyRole NOTIFY changed)
     // Q_PROPERTY(bool iconVisibleInMenu READ isIconVisibleInMenu WRITE setIconVisibleInMenu NOTIFY changed)
@@ -125,17 +125,17 @@ public:
     void setText(const QString &text);
     QString text() const;
 
-    // void setIconText(const QString &text);
-    // QString iconText() const;
+    void setIconText(const QString &text);
+    QString iconText() const;
 
-    // void setToolTip(const QString &tip);
-    // QString toolTip() const;
+    void setToolTip(const QString &tip);
+    QString toolTip() const;
 
-    // void setStatusTip(const QString &statusTip);
-    // QString statusTip() const;
+    void setStatusTip(const QString &statusTip);
+    QString statusTip() const;
 
-    // void setWhatsThis(const QString &what);
-    // QString whatsThis() const;
+    void setWhatsThis(const QString &what);
+    QString whatsThis() const;
 
     void setPriority(Priority priority);
     Priority priority() const;
@@ -176,7 +176,7 @@ public:
 
     bool isEnabled() const;
 
-    // bool isVisible() const;
+    bool isVisible() const;
 
     enum ActionEvent { Trigger, Hover };
     void activate(ActionEvent event);
@@ -210,7 +210,7 @@ public Q_SLOTS:
     void toggle();
     void setEnabled(bool);
     inline void setDisabled(bool b) { setEnabled(!b); }
-    // void setVisible(bool);
+    void setVisible(bool);
 
 Q_SIGNALS:
     void changed();

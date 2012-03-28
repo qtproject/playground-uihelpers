@@ -73,13 +73,13 @@ private slots:
     void getSetCheck();
     void setText_data();
     void setText();
-    // void setIconText_data() { setText_data(); }
-    // void setIconText();
+    void setIconText_data() { setText_data(); }
+    void setIconText();
     void actionEvent();
     // void setStandardKeys();
     // void alternateShortcuts();
-    // void enabledVisibleInteraction();
     // void task200823_tooltip();
+    void enabledVisibleInteraction();
     void task229128TriggeredSignalWithoutActiongroup();
     void task229128TriggeredSignalWhenInActiongroup();
 
@@ -223,16 +223,13 @@ void tst_UiAction::cleanupTestCase()
 void tst_UiAction::setText_data()
 {
     QTest::addColumn<QString>("text");
-    // QTest::addColumn<QString>("iconText");
-    // QTest::addColumn<QString>("textFromIconText");
+    QTest::addColumn<QString>("iconText");
+    QTest::addColumn<QString>("textFromIconText");
 
     //next we fill it with data
-    // QTest::newRow("Normal") << "Action" << "Action" << "Action";
-    // QTest::newRow("Ampersand") << "Search && Destroy" << "Search & Destroy" << "Search && Destroy";
-    // QTest::newRow("Mnemonic and ellipsis") << "O&pen File ..." << "Open File" << "Open File";
-    QTest::newRow("Normal") << "Action";
-    QTest::newRow("Ampersand") << "Search && Destroy";
-    QTest::newRow("Mnemonic and ellipsis") << "O&pen File ...";
+    QTest::newRow("Normal") << "Action" << "Action" << "Action";
+    QTest::newRow("Ampersand") << "Search && Destroy" << "Search & Destroy" << "Search && Destroy";
+    QTest::newRow("Mnemonic and ellipsis") << "O&pen File ..." << "Open File" << "Open File";
 }
 
 void tst_UiAction::setText()
@@ -244,21 +241,21 @@ void tst_UiAction::setText()
 
     QCOMPARE(action.text(), text);
 
-    // QFETCH(QString, iconText);
-    // QCOMPARE(action.iconText(), iconText);
+    QFETCH(QString, iconText);
+    QCOMPARE(action.iconText(), iconText);
 }
 
-// void tst_QAction::setIconText()
-// {
-//     QFETCH(QString, iconText);
-//
-//     QAction action(0);
-//     action.setIconText(iconText);
-//     QCOMPARE(action.iconText(), iconText);
-//
-//     QFETCH(QString, textFromIconText);
-//     QCOMPARE(action.text(), textFromIconText);
-// }
+void tst_UiAction::setIconText()
+{
+    QFETCH(QString, iconText);
+
+    UiAction action(0);
+    action.setIconText(iconText);
+    QCOMPARE(action.iconText(), iconText);
+
+    QFETCH(QString, textFromIconText);
+    QCOMPARE(action.text(), textFromIconText);
+}
 
 
 // TODO: Use a QObject instead of a QWidget and reimplement QActionEvent
@@ -363,22 +360,21 @@ void tst_UiAction::actionEvent()
 //     QTest::keyClick(wid, Qt::Key_A, Qt::ControlModifier);
 // }
 
-// TODO: Needs 'enable' property to run the test
-// void tst_QAction::enabledVisibleInteraction()
-// {
-//     QAction act(0);
-//     // check defaults
-//     QVERIFY(act.isEnabled());
-//     QVERIFY(act.isVisible());
-//
-//     // !visible => !enabled
-//     act.setVisible(false);
-//     QVERIFY(!act.isEnabled());
-//     act.setVisible(true);
-//     QVERIFY(act.isEnabled());
-//     act.setEnabled(false);
-//     QVERIFY(act.isVisible());
-//
+void tst_UiAction::enabledVisibleInteraction()
+{
+    UiAction act(0);
+    // check defaults
+    QVERIFY(act.isEnabled());
+    QVERIFY(act.isVisible());
+
+    // !visible => !enabled
+    act.setVisible(false);
+    QVERIFY(!act.isEnabled());
+    act.setVisible(true);
+    QVERIFY(act.isEnabled());
+    act.setEnabled(false);
+    QVERIFY(act.isVisible());
+
 //     // check if shortcut is disabled if not visible
 //     m_tstWidget->addAction(&act);
 //     act.setShortcut(QKeySequence("Ctrl+T"));
@@ -395,7 +391,7 @@ void tst_UiAction::actionEvent()
 //     act.setEnabled(true);
 //     QTest::keyClick(m_tstWidget, Qt::Key_T, Qt::ControlModifier);
 //     QCOMPARE(spy.count(), 1); //act is visible and enabled, so trigger
-// }
+}
 
 // void tst_QAction::task200823_tooltip()
 // {

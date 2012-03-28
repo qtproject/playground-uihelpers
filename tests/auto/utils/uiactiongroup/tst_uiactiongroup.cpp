@@ -55,7 +55,7 @@ class tst_UiActionGroup : public QObject
 
 private slots:
     void enabledPropagation();
-    // void visiblePropagation();
+    void visiblePropagation();
     void exclusive();
     // void separators();
     void testActionInTwoUiActionGroup();
@@ -101,42 +101,42 @@ void tst_UiActionGroup::enabledPropagation()
     delete freeAction;
 }
 
-// void tst_QActionGroup::visiblePropagation()
-// {
-//     QActionGroup testActionGroup( 0 );
-//
-//     QAction* childAction = new QAction( &testActionGroup );
-//     QAction* anotherChildAction = new QAction( &testActionGroup );
-//     QAction* freeAction = new QAction(0);
-//
-//     QVERIFY( testActionGroup.isVisible() );
-//     QVERIFY( childAction->isVisible() );
-//
-//     testActionGroup.setVisible( false );
-//     QVERIFY( !testActionGroup.isVisible() );
-//     QVERIFY( !childAction->isVisible() );
-//     QVERIFY( !anotherChildAction->isVisible() );
-//
-//     anotherChildAction->setVisible(false);
-//
-//     testActionGroup.setVisible( true );
-//     QVERIFY( testActionGroup.isVisible() );
-//     QVERIFY( childAction->isVisible() );
-//
-//     QVERIFY( !anotherChildAction->isVisible() );
-//
-//     testActionGroup.setVisible( false );
-//     QAction *lastChildAction = new QAction(&testActionGroup);
-//
-//     QVERIFY(!lastChildAction->isVisible());
-//     testActionGroup.setVisible( true );
-//     QVERIFY(lastChildAction->isVisible());
-//
-//     freeAction->setVisible(false);
-//     testActionGroup.addAction(freeAction);
-//     QVERIFY(!freeAction->isVisible());
-//     delete freeAction;
-// }
+void tst_UiActionGroup::visiblePropagation()
+{
+    UiActionGroup testActionGroup( 0 );
+
+    UiAction* childAction = new UiAction( &testActionGroup );
+    UiAction* anotherChildAction = new UiAction( &testActionGroup );
+    UiAction* freeAction = new UiAction(0);
+
+    QVERIFY( testActionGroup.isVisible() );
+    QVERIFY( childAction->isVisible() );
+
+    testActionGroup.setVisible( false );
+    QVERIFY( !testActionGroup.isVisible() );
+    QVERIFY( !childAction->isVisible() );
+    QVERIFY( !anotherChildAction->isVisible() );
+
+    anotherChildAction->setVisible(false);
+
+    testActionGroup.setVisible( true );
+    QVERIFY( testActionGroup.isVisible() );
+    QVERIFY( childAction->isVisible() );
+
+    QVERIFY( !anotherChildAction->isVisible() );
+
+    testActionGroup.setVisible( false );
+    UiAction *lastChildAction = new UiAction(&testActionGroup);
+
+    QVERIFY(!lastChildAction->isVisible());
+    testActionGroup.setVisible( true );
+    QVERIFY(lastChildAction->isVisible());
+
+    freeAction->setVisible(false);
+    testActionGroup.addAction(freeAction);
+    QVERIFY(!freeAction->isVisible());
+    delete freeAction;
+}
 
 void tst_UiActionGroup::exclusive()
 {

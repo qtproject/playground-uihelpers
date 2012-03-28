@@ -62,7 +62,7 @@ class UIHELPERS_EXPORT UiActionGroup : public QObject
 
     Q_PROPERTY(bool exclusive READ isExclusive WRITE setExclusive)
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
-    // Q_PROPERTY(bool visible READ isVisible WRITE setVisible)
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible)
 
 public:
     explicit UiActionGroup(QObject* parent);
@@ -77,13 +77,13 @@ public:
     UiAction *checkedAction() const;
     bool isExclusive() const;
     bool isEnabled() const;
-    // bool isVisible() const;
+    bool isVisible() const;
 
 
 public Q_SLOTS:
     void setEnabled(bool);
     inline void setDisabled(bool b) { setEnabled(!b); }
-    // void setVisible(bool);
+    void setVisible(bool);
     void setExclusive(bool);
 
 Q_SIGNALS:

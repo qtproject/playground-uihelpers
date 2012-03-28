@@ -55,12 +55,12 @@ class UiActionGroupPrivate : public QObjectPrivate
     Q_DECLARE_PUBLIC(UiActionGroup)
 public:
     // QActionGroupPrivate() : exclusive(1), enabled(1), visible(1)  { }
-    UiActionGroupPrivate() : exclusive(1), enabled(1)  { }
+    UiActionGroupPrivate() : exclusive(1), enabled(1), visible(1)  { }
     QList<UiAction *> actions;
     QPointer<UiAction> current;
     uint exclusive : 1;
     uint enabled : 1;
-    // uint visible : 1;
+    uint visible : 1;
 
 private:
     void _q_actionTriggered();  //private slot
@@ -188,10 +188,10 @@ UiAction *UiActionGroup::addAction(UiAction* a)
         a->setEnabled(d->enabled);
         a->d_func()->forceDisabled = false;
     }
-    // if (!a->d_func()->forceInvisible) {
-    //     a->setVisible(d->visible);
-    //     a->d_func()->forceInvisible = false;
-    // }
+    if (!a->d_func()->forceInvisible) {
+        a->setVisible(d->visible);
+        a->d_func()->forceInvisible = false;
+    }
     if (a->isChecked())
         d->current = a;
     UiActionGroup *oldGroup = a->d_func()->group;
@@ -336,23 +336,23 @@ UiAction *UiActionGroup::checkedAction() const
 
     \sa QAction::setEnabled()
 */
-// void QActionGroup::setVisible(bool b)
-// {
-//     Q_D(QActionGroup);
-//     d->visible = b;
-//     for (QList<QAction*>::Iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
-//         if (!(*it)->d_func()->forceInvisible) {
-//             (*it)->setVisible(b);
-//             (*it)->d_func()->forceInvisible = false;
-//         }
-//     }
-// }
+void UiActionGroup::setVisible(bool b)
+{
+    Q_D(UiActionGroup);
+    d->visible = b;
+    for (QList<UiAction*>::Iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
+        if (!(*it)->d_func()->forceInvisible) {
+            (*it)->setVisible(b);
+            (*it)->d_func()->forceInvisible = false;
+        }
+    }
+}
 
-// bool QActionGroup::isVisible() const
-// {
-//     Q_D(const QActionGroup);
-//     return d->visible;
-// }
+bool UiActionGroup::isVisible() const
+{
+    Q_D(const UiActionGroup);
+    return d->visible;
+}
 
 /*!
     \fn void QActionGroup::triggered(QAction *action)

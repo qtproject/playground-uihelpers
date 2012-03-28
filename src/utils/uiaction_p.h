@@ -83,11 +83,11 @@ public:
 
     QPointer<UiActionGroup> group;
     QString text;
-    // QString iconText;
+    QString iconText;
     // QIcon icon;
-    // QString tooltip;
-    // QString statustip;
-    // QString whatsthis;
+    QString tooltip;
+    QString statustip;
+    QString whatsthis;
 #ifndef QT_NO_SHORTCUT
     QKeySequence shortcut;
     QList<QKeySequence> alternateShortcuts;
@@ -102,7 +102,7 @@ public:
     // QFont font;
     // QPointer<QMenu> menu;
     uint enabled : 1, forceDisabled : 1;
-    // uint visible : 1, forceInvisible : 1;
+    uint visible : 1, forceInvisible : 1;
     uint checkable : 1;
     uint checked : 1;
     // uint separator : 1;
