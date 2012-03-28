@@ -47,6 +47,8 @@
 
 QT_USE_NAMESPACE_UIHELPERS;
 
+class UiQuickUndoPropertyCommandPrivate;
+
 class UiQuickUndoPropertyCommand : public UiQuickBaseUndoCommand
 {
     Q_OBJECT
@@ -66,7 +68,10 @@ signals:
     void propertiesChanged();
 
 private:
-    QVariantList m_properties;
+    Q_DISABLE_COPY(UiQuickUndoPropertyCommand)
+    Q_DECLARE_PRIVATE(UiQuickUndoPropertyCommand)
+
+    QScopedPointer<UiQuickUndoPropertyCommandPrivate> d_ptr;
 };
 
 #endif // UIQUICKUNDOPROPERTYCOMMAND_H

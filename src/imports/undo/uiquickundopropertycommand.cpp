@@ -44,6 +44,19 @@
 typedef QPair<QByteArray, QVariant> PropertyState;
 typedef QList<PropertyState> TargetState;
 
+class UiQuickUndoPropertyCommandPrivate
+{
+public:
+    UiQuickUndoPropertyCommandPrivate();
+
+    QVariantList properties;
+};
+
+UiQuickUndoPropertyCommandPrivate::UiQuickUndoPropertyCommandPrivate()
+    : properties()
+{
+}
+
 class UndoPropertyCommand : public BaseUndoCommand
 {
 public:
@@ -113,7 +126,7 @@ bool UndoPropertyCommand::delayPush() const
 
 UiQuickUndoPropertyCommand::UiQuickUndoPropertyCommand(QObject *parent)
     : UiQuickBaseUndoCommand(parent)
-    , m_properties(QVariantList())
+    , d_ptr(new UiQuickUndoPropertyCommandPrivate())
 {
 }
 
@@ -123,12 +136,19 @@ UiQuickUndoPropertyCommand::~UiQuickUndoPropertyCommand()
 
 QVariantList UiQuickUndoPropertyCommand::properties() const
 {
-    return m_properties;
+    Q_D(const UiQuickUndoPropertyCommand);
+
+    return d->properties;
 }
 
 void UiQuickUndoPropertyCommand::setProperties(const QVariantList& prop)
 {
-    m_properties = prop;
+    Q_D(UiQuickUndoPropertyCommand);
+
+    if (prop == d->properties)
+        return;
+
+    d->properties = prop;
     emit propertiesChanged();
 }
 
@@ -136,4 +156,3 @@ BaseUndoCommand *UiQuickUndoPropertyCommand::create(QObject *target)
 {
     return new UndoPropertyCommand(target, this);
 }
-
