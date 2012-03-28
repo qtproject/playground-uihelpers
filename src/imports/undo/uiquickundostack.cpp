@@ -43,8 +43,26 @@
 #include "uiquickundocommand_p.h"
 #include "uiquickundopropertycommand_p.h"
 
-UiQuickUndoStackPrivate::UiQuickUndoStackPrivate(QObject *parent)
-    : UiUndoStack(parent)
+#include <QtQml/QQmlInfo>
+
+class UiQuickUndoStackPrivate : public UiUndoStack
+{
+    Q_DECLARE_PUBLIC(UiQuickUndoStack)
+
+public:
+    UiQuickUndoStackPrivate(UiQuickUndoStack *q);
+    ~UiQuickUndoStackPrivate();
+
+    void setCurrentCommand(UiUndoCommand *cmd);
+    void commit();
+
+    UiQuickUndoStack *q_ptr;
+    UiUndoCommand *currentCommand;
+};
+
+UiQuickUndoStackPrivate::UiQuickUndoStackPrivate(UiQuickUndoStack *q)
+    : UiUndoStack(q)
+    , q_ptr(q)
     , currentCommand(0)
 {
 }
@@ -53,13 +71,22 @@ UiQuickUndoStackPrivate::~UiQuickUndoStackPrivate()
 {
 }
 
+void UiQuickUndoStackPrivate::setCurrentCommand(UiUndoCommand *cmd)
+{
+    Q_Q(UiQuickUndoStack);
+    currentCommand = cmd;
+
+    if (!canUndo())
+        emit q->canUndoChanged();
+}
+
 void UiQuickUndoStackPrivate::commit()
 {
     if (!currentCommand)
         return;
 
     push(currentCommand);
-    currentCommand = 0;
+    setCurrentCommand(0);
 }
 
 
@@ -67,10 +94,59 @@ UiQuickUndoStack::UiQuickUndoStack(QObject *parent)
     : QObject(parent)
     , d_ptr(new UiQuickUndoStackPrivate(this))
 {
+    Q_D(const UiQuickUndoStack);
+    connect(d, SIGNAL(canUndoChanged(bool)), SIGNAL(canUndoChanged()));
+    connect(d, SIGNAL(canRedoChanged(bool)), SIGNAL(canRedoChanged()));
 }
 
 UiQuickUndoStack::~UiQuickUndoStack()
 {
+}
+
+int UiQuickUndoStack::undoLimit() const
+{
+    Q_D(const UiQuickUndoStack);
+    return d->undoLimit();
+}
+
+void UiQuickUndoStack::setUndoLimit(int limit)
+{
+    Q_D(UiQuickUndoStack);
+
+    int temp = d->undoLimit();
+    d->setUndoLimit(limit);
+
+    if (temp != limit)
+        emit undoLimitChanged();
+}
+
+bool UiQuickUndoStack::canUndo() const
+{
+    Q_D(const UiQuickUndoStack);
+    return d->canUndo() || (d->currentCommand != 0);
+}
+
+bool UiQuickUndoStack::canRedo() const
+{
+    Q_D(const UiQuickUndoStack);
+    return d->canRedo();
+}
+
+int UiQuickUndoStack::count() const
+{
+    Q_D(const UiQuickUndoStack);
+    if ((d->undoLimit() && (d->count() == d->undoLimit())) || !d->currentCommand)
+        return d->count();
+    else
+        return d->count() + 1;
+}
+
+void UiQuickUndoStack::clear()
+{
+    Q_D(UiQuickUndoStack);
+    d->clear();
+    d->setCurrentCommand(0);
+    emit countChanged();
 }
 
 void UiQuickUndoStack::push(UiQuickBaseUndoCommand *quickCommand, QObject *target)
@@ -82,11 +158,16 @@ void UiQuickUndoStack::push(UiQuickBaseUndoCommand *quickCommand, QObject *targe
 
     d->commit();
 
+    int countTemp = count();
+
     BaseUndoCommand *undoCommand = quickCommand->create(target);
     if (undoCommand->delayPush())
-        d->currentCommand = undoCommand;
+        d->setCurrentCommand(undoCommand);
     else
         d->push(undoCommand);
+
+    if (countTemp != count())
+        emit countChanged();
 }
 
 void UiQuickUndoStack::undo()

@@ -9,6 +9,7 @@ Rectangle {
 
     UndoStack {
         id: stack
+        undoLimit: 5
     }
 
     UndoPropertyCommand {
@@ -18,8 +19,19 @@ Rectangle {
 
     UndoCommand {
         id: colorCommand
-        onUndo: target.color = Qt.rgba(0, 0, 0, 1);
-        onRedo: target.color = Qt.rgba(0.5, 0.2, 0.1, 1);
+
+        property color black: Qt.rgba(0, 0, 0, 1)
+        property color lightRed: Qt.rgba(0.5, 0.2, 0.1, 1)
+
+        function swapColors(target) {
+            if (target.color == lightRed)
+                target.color = black;
+            else
+                target.color = lightRed;
+        }
+
+        onUndo: swapColors(target);
+        onRedo: swapColors(target);
         onCommandDestroyed: console.log("Command destroyed!");
     }
 
@@ -32,18 +44,23 @@ Rectangle {
         spacing: 20
 
         Button {
+            color: stack.count ? "yellow" : "gray"
+            text: "Clear"
+            onClicked: stack.clear();
+        }
+        Button {
             color: "red"
             width: 100
             text: "Change color"
             onClicked: stack.push(colorCommand, rec);
         }
         Button {
-            color: "blue"
+            color: stack.canUndo ? "blue" : "gray"
             text: "Undo"
             onClicked: stack.undo();
         }
         Button {
-            color: "green"
+            color: stack.canRedo ? "green" : "gray"
             text: "Redo"
             onClicked: stack.redo();
         }

@@ -54,33 +54,40 @@ class UiQuickUndoStack : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(int undoLimit READ undoLimit WRITE setUndoLimit NOTIFY undoLimitChanged)
+    Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged)
+    Q_PROPERTY(bool canRedo READ canRedo NOTIFY canRedoChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+
 public:
     UiQuickUndoStack(QObject *parent = 0);
     ~UiQuickUndoStack();
+
+    int undoLimit() const;
+    void setUndoLimit(int limit);
+
+    bool canUndo() const;
+    bool canRedo() const;
+    int count() const;
+
+    Q_INVOKABLE void clear();
 
 public slots:
     void push(UiQuickBaseUndoCommand *cmd, QObject *target);
     void undo();
     void redo();
 
+Q_SIGNALS:
+    void undoLimitChanged();
+    void canUndoChanged();
+    void canRedoChanged();
+    void countChanged();
+
 private:
     Q_DISABLE_COPY(UiQuickUndoStack)
     Q_DECLARE_PRIVATE(UiQuickUndoStack)
 
     QScopedPointer<UiQuickUndoStackPrivate> d_ptr;
-};
-
-class UiQuickUndoStackPrivate : public UiUndoStack
-{
-    Q_OBJECT
-
-public:
-    UiQuickUndoStackPrivate(QObject *parent = 0);
-    ~UiQuickUndoStackPrivate();
-
-    void commit();
-
-    UiUndoCommand *currentCommand;
 };
 
 #endif
