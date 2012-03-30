@@ -153,8 +153,15 @@ void UiQuickUndoStack::push(UiQuickBaseUndoCommand *quickCommand, QObject *targe
 {
     Q_D(UiQuickUndoStack);
 
-    if (!quickCommand || !target)
-        return; // XXX: notify error
+    if (!quickCommand) {
+        qmlInfo(this) << tr("Invalid (null) command passed to push().");
+        return;
+    }
+
+    if (!target) {
+        qmlInfo(this) << tr("Invalid (null) target passed to push().");
+        return;
+    }
 
     d->commit();
 
