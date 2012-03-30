@@ -255,18 +255,6 @@ tst_UiUndoStack::tst_UiUndoStack()
 {
 }
 
-static QString glue(const QString &s1, const QString &s2)
-{
-    QString result;
-
-    result.append(s1);
-    if (!s1.isEmpty() && !s2.isEmpty())
-        result.append(' ');
-    result.append(s2);
-
-    return result;
-}
-
 static void checkState(QSignalSpy &redoTextChangedSpy,
                        QSignalSpy &canRedoChangedSpy,
                        QSignalSpy &undoTextChangedSpy,

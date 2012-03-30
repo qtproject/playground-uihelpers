@@ -1558,9 +1558,8 @@ QStringList UiFileSystemModel::nameFilters() const
 */
 bool UiFileSystemModel::event(QEvent *event)
 {
-    Q_D(UiFileSystemModel);
     if (event->type() == QEvent::LanguageChange) {
-//        d->root.retranslateStrings(QString());
+        qWarning() << "QEvent::LanguageChange not implemented in UiFileSystemModel";
         return true;
     }
     return QAbstractItemModel::event(event);

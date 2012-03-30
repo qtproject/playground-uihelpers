@@ -536,6 +536,9 @@ void UiStandardItemModelPrivate::columnsAboutToBeRemoved(UiStandardItem *parent,
 void UiStandardItemModelPrivate::rowsInserted(UiStandardItem *parent,
                                              int row, int count)
 {
+    Q_UNUSED(parent)
+    Q_UNUSED(row)
+    Q_UNUSED(count)
     Q_Q(UiStandardItemModel);
     q->endInsertRows();
 }
@@ -546,6 +549,9 @@ void UiStandardItemModelPrivate::rowsInserted(UiStandardItem *parent,
 void UiStandardItemModelPrivate::columnsInserted(UiStandardItem *parent,
                                                 int column, int count)
 {
+    Q_UNUSED(parent)
+    Q_UNUSED(column)
+    Q_UNUSED(count)
     Q_Q(UiStandardItemModel);
     q->endInsertColumns();
 }
@@ -556,6 +562,9 @@ void UiStandardItemModelPrivate::columnsInserted(UiStandardItem *parent,
 void UiStandardItemModelPrivate::rowsRemoved(UiStandardItem *parent,
                                             int row, int count)
 {
+    Q_UNUSED(parent)
+    Q_UNUSED(row)
+    Q_UNUSED(count)
     Q_Q(UiStandardItemModel);
     q->endRemoveRows();
 }
@@ -566,6 +575,9 @@ void UiStandardItemModelPrivate::rowsRemoved(UiStandardItem *parent,
 void UiStandardItemModelPrivate::columnsRemoved(UiStandardItem *parent,
                                                int column, int count)
 {
+    Q_UNUSED(parent)
+    Q_UNUSED(column)
+    Q_UNUSED(count)
     Q_Q(UiStandardItemModel);
     q->endRemoveColumns();
 }

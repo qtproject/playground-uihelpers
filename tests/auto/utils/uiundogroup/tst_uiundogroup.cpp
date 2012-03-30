@@ -312,18 +312,6 @@ void tst_UiUndoGroup::deleteStack()
     delete stack3;
 }
 
-static QString glue(const QString &s1, const QString &s2)
-{
-    QString result;
-
-    result.append(s1);
-    if (!s1.isEmpty() && !s2.isEmpty())
-        result.append(' ');
-    result.append(s2);
-
-    return result;
-}
-
 #define CHECK_STATE(_activeStack, _clean, _canUndo, _undoText, _canRedo, _redoText, \
                     _cleanChanged, _indexChanged, _undoChanged, _redoChanged) \
     QCOMPARE(group.activeStack(), (UiUndoStack*)_activeStack); \

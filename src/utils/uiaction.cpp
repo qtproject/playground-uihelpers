@@ -86,7 +86,6 @@ static QString qt_strippedText(QString s)
     return s.trimmed();
 }
 
-
 UiActionPrivate::UiActionPrivate() : group(0), enabled(1), forceDisabled(0),
                                    visible(1), forceInvisible(0), checkable(0), checked(0)
 {
@@ -168,7 +167,6 @@ void UiActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
 }
 #endif // QT_NO_SHORTCUT
 
-
 /*!
     \class QAction
     \brief The QAction class provides an abstract user interface
@@ -244,7 +242,6 @@ UiAction::UiAction(QObject* parent)
     if (d->group)
         d->group->addAction(this);
 }
-
 
 /*!
     Constructs an action with some \a text and \a parent. If \a
@@ -485,7 +482,6 @@ UiActionGroup *UiAction::actionGroup() const
     return d->group;
 }
 
-
 /*!
     \property QAction::text
     \brief the action's descriptive text
@@ -518,10 +514,6 @@ QString UiAction::text() const
     }
     return s;
 }
-
-
-
-
 
 /*!
     \property UiAction::iconText
