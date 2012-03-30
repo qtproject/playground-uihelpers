@@ -45,10 +45,6 @@
 
 QT_USE_NAMESPACE_UIHELPERS
 
-// #include <qmainwindow.h>
-// #include <qmenu.h>
-// #include <qaction.h>
-
 class tst_UiActionGroup : public QObject
 {
     Q_OBJECT
@@ -57,7 +53,6 @@ private slots:
     void enabledPropagation();
     void visiblePropagation();
     void exclusive();
-    // void separators();
     void testActionInTwoUiActionGroup();
     void unCheckCurrentAction();
 };
@@ -166,51 +161,6 @@ void tst_UiActionGroup::exclusive()
     QVERIFY( actTwo->isChecked() );
     QVERIFY( !actThree->isChecked() );
 }
-
-// void tst_QActionGroup::separators()
-// {
-//     QMainWindow mw;
-//     QMenu menu(&mw);
-//     QActionGroup actGroup(&mw);
-//
-//     mw.show();
-//
-// #ifdef QT_SOFTKEYS_ENABLED
-//     // Softkeys add extra "Select" and "Back" actions to menu by default.
-//     // Two first actions will be Select and Back when softkeys are enabled
-//     int numSoftkeyActions = 2;
-// #else
-//     int numSoftkeyActions = 0;
-// #endif
-//
-//     QAction *action = new QAction(&actGroup);
-//     action->setText("test one");
-//
-//     QAction *separator = new QAction(&actGroup);
-//     separator->setSeparator(true);
-//     actGroup.addAction(separator);
-//
-//     QListIterator<QAction*> it(actGroup.actions());
-//     while (it.hasNext())
-//         menu.addAction(it.next());
-//
-//     QCOMPARE((int)menu.actions().size(), 2 + numSoftkeyActions);
-//
-//     it = QListIterator<QAction*>(actGroup.actions());
-//     while (it.hasNext())
-//         menu.removeAction(it.next());
-//
-//     QCOMPARE((int)menu.actions().size(), 0 + numSoftkeyActions);
-//
-//     action = new QAction(&actGroup);
-//     action->setText("test two");
-//
-//     it = QListIterator<QAction*>(actGroup.actions());
-//     while (it.hasNext())
-//         menu.addAction(it.next());
-//
-//     QCOMPARE((int)menu.actions().size(), 3 + numSoftkeyActions);
-// }
 
 void tst_UiActionGroup::testActionInTwoUiActionGroup()
 {

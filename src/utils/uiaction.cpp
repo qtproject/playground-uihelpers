@@ -45,12 +45,10 @@
 #ifndef QT_NO_ACTION
 #include "uiaction_p.h"
 #include "qguiapplication.h"
-//#include "qevent.h"
 #include "qlist.h"
 #include "qdebug.h"
 // #include <private/qshortcutmap_p.h>
 #include <private/qguiapplication_p.h>
-// #include <private/qmenu_p.h>
 
 #define QAPP_CHECK(functionName) \
     if (!qApp) { \
@@ -90,12 +88,7 @@ static QString qt_strippedText(QString s)
 
 
 UiActionPrivate::UiActionPrivate() : group(0), enabled(1), forceDisabled(0),
-                                   // visible(1), forceInvisible(0), checkable(0), checked(0), separator(0), fontSet(false),
-                                   visible(1), forceInvisible(0), checkable(0), checked(0),
-                                   forceEnabledInSoftkeys(false), menuActionSoftkeys(false),
-                                   // iconVisibleInMenu(-1),
-                                   menuRole(UiAction::TextHeuristicRole), softKeyRole(UiAction::NoSoftKey),
-                                   priority(UiAction::NormalPriority)
+                                   visible(1), forceInvisible(0), checkable(0), checked(0)
 {
 #ifndef QT_NO_SHORTCUT
     shortcutId = 0;
@@ -108,35 +101,10 @@ UiActionPrivate::~UiActionPrivate()
 {
 }
 
-// bool QActionPrivate::showStatusText(QWidget *widget, const QString &str)
-// {
-// #ifdef QT_NO_STATUSTIP
-//     Q_UNUSED(widget);
-//     Q_UNUSED(str);
-// #else
-//     if (QObject *object = widget ? widget : parent) {
-//         QStatusTipEvent tip(str);
-//         QApplication::sendEvent(object, &tip);
-//         return true;
-//     }
-// #endif
-//     return false;
-// }
-
 void UiActionPrivate::sendDataChanged()
 {
     Q_Q(UiAction);
     UiActionEvent e(QEvent::ActionChanged, q);
-//     for (int i = 0; i < widgets.size(); ++i) {
-//         QWidget *w = widgets.at(i);
-//         QApplication::sendEvent(w, &e);
-//     }
-// #ifndef QT_NO_GRAPHICSVIEW
-//     for (int i = 0; i < graphicsWidgets.size(); ++i) {
-//         QGraphicsWidget *w = graphicsWidgets.at(i);
-//         QApplication::sendEvent(w, &e);
-//     }
-// #endif
     QGuiApplication::sendEvent(q, &e);
 
     emit q->changed();
@@ -265,54 +233,6 @@ void UiActionPrivate::setShortcutEnabled(bool enable, QShortcutMap &map)
 */
 
 /*!
-    \fn void QAction::hover()
-
-    This is a convenience slot that calls activate(Hover).
-*/
-
-/*!
-    \enum QAction::MenuRole
-
-    This enum describes how an action should be moved into the application menu on Mac OS X.
-
-    \value NoRole This action should not be put into the application menu
-    \value TextHeuristicRole This action should be put in the application menu based on the action's text
-           as described in the QMenuBar documentation.
-    \value ApplicationSpecificRole This action should be put in the application menu with an application specific role
-    \value AboutQtRole This action matches handles the "About Qt" menu item.
-    \value AboutRole This action should be placed where the "About" menu item is in the application menu. The text of
-           the menu item will be set to "About <application name>". The application name is fetched from the
-           \c{Info.plist} file in the application's bundle (See \l{Deploying an Application on Mac OS X}).
-    \value PreferencesRole This action should be placed where the  "Preferences..." menu item is in the application menu.
-    \value QuitRole This action should be placed where the Quit menu item is in the application menu.
-
-    Setting this value only has effect on items that are in the immediate menus
-    of the menubar, not the submenus of those menus. For example, if you have
-    File menu in your menubar and the File menu has a submenu, setting the
-    MenuRole for the actions in that submenu have no effect. They will never be moved.
-*/
-
-/*! \since 4.6
-
-    \enum QAction::SoftKeyRole
-
-    This enum describes how an action should be placed in the softkey bar. Currently this enum only
-    has an effect on the Symbian platform.
-
-    \value NoSoftKey This action should not be used as a softkey
-    \value PositiveSoftKey This action is used to describe a softkey with a positive or non-destructive
-           role such as Ok, Select, or Options.
-    \value NegativeSoftKey This action is used to describe a soft ey with a negative or destructive role
-           role such as Cancel, Discard, or Close.
-    \value SelectSoftKey This action is used to describe a role that selects a particular item or widget
-           in the application.
-
-    Actions with a softkey role defined are only visible in the softkey bar when the widget containing
-    the action has focus. If no widget currently has focus, the softkey framework will traverse up the
-    widget parent hierarchy looking for a widget containing softkey actions.
- */
-
-/*!
     Constructs an action with \a parent. If \a parent is an action
     group the action will be automatically inserted into the group.
 */
@@ -350,29 +270,6 @@ UiAction::UiAction(const QString &text, QObject* parent)
 }
 
 /*!
-    Constructs an action with an \a icon and some \a text and \a
-    parent. If \a parent is an action group the action will be
-    automatically inserted into the group.
-
-    The action uses a stripped version of \a text (e.g. "\&Menu
-    Option..." becomes "Menu Option") as descriptive text for
-    tool buttons. You can override this by setting a specific
-    description with setText(). The same text will be used for
-    tooltips unless you specify a different text using
-    setToolTip().
-*/
-// QAction::QAction(const QIcon &icon, const QString &text, QObject* parent)
-//     : QObject(*(new QActionPrivate), parent)
-// {
-//     Q_D(QAction);
-//     d->icon = icon;
-//     d->text = text;
-//     d->group = qobject_cast<QActionGroup *>(parent);
-//     if (d->group)
-//         d->group->addAction(this);
-// }
-
-/*!
     \internal
 */
 UiAction::UiAction(UiActionPrivate &dd, QObject *parent)
@@ -383,43 +280,6 @@ UiAction::UiAction(UiActionPrivate &dd, QObject *parent)
     if (d->group)
         d->group->addAction(this);
 }
-
-/*!
-    Returns the parent widget.
-*/
-// QWidget *QAction::parentWidget() const
-// {
-//     QObject *ret = parent();
-//     while (ret && !ret->isWidgetType())
-//         ret = ret->parent();
-//     return (QWidget*)ret;
-// }
-
-/*!
-  \since 4.2
-  Returns a list of widgets this action has been added to.
-
-  \sa QWidget::addAction(), associatedGraphicsWidgets()
-*/
-// QList<QWidget *> QAction::associatedWidgets() const
-// {
-//     Q_D(const QAction);
-//     return d->widgets;
-// }
-
-#ifndef QT_NO_GRAPHICSVIEW
-/*!
-  \since 4.5
-  Returns a list of widgets this action has been added to.
-
-  \sa QWidget::addAction(), associatedWidgets()
-*/
-// QList<QGraphicsWidget *> QAction::associatedGraphicsWidgets() const
-// {
-//     Q_D(const QAction);
-//     return d->graphicsWidgets;
-// }
-#endif
 
 #ifndef QT_NO_SHORTCUT
 /*!
@@ -572,35 +432,6 @@ bool UiAction::autoRepeat() const
 }
 #endif // QT_NO_SHORTCUT
 
-/*!
-    \property QAction::font
-    \brief the action's font
-
-    The font property is used to render the text set on the
-    QAction. The font will can be considered a hint as it will not be
-    consulted in all cases based upon application and style.
-
-    By default, this property contains the application's default font.
-
-    \sa QAction::setText() QStyle
-*/
-// void QAction::setFont(const QFont &font)
-// {
-//     Q_D(QAction);
-//     if (d->font == font)
-//         return;
-//
-//     d->fontSet = true;
-//     d->font = font;
-//     d->sendDataChanged();
-// }
-
-// QFont QAction::font() const
-// {
-//     Q_D(const QAction);
-//     return d->font;
-// }
-
 
 /*!
     Destroys the object and frees allocated resources.
@@ -608,16 +439,6 @@ bool UiAction::autoRepeat() const
 UiAction::~UiAction()
 {
     Q_D(UiAction);
-//     for (int i = d->widgets.size()-1; i >= 0; --i) {
-//         QWidget *w = d->widgets.at(i);
-//         w->removeAction(this);
-//     }
-// #ifndef QT_NO_GRAPHICSVIEW
-//     for (int i = d->graphicsWidgets.size()-1; i >= 0; --i) {
-//         QGraphicsWidget *w = d->graphicsWidgets.at(i);
-//         w->removeAction(this);
-//     }
-// #endif
     if (d->group)
         d->group->removeAction(this);
 #ifndef QT_NO_SHORTCUT
@@ -664,90 +485,6 @@ UiActionGroup *UiAction::actionGroup() const
     return d->group;
 }
 
-
-/*!
-    \property QAction::icon
-    \brief the action's icon
-
-    In toolbars, the icon is used as the tool button icon; in menus,
-    it is displayed to the left of the menu text. There is no default
-    icon.
-
-    If a null icon (QIcon::isNull() is passed into this function,
-    the icon of the action is cleared.
-*/
-// void QAction::setIcon(const QIcon &icon)
-// {
-//     Q_D(QAction);
-//     d->icon = icon;
-//     d->sendDataChanged();
-// }
-
-// QIcon QAction::icon() const
-// {
-//     Q_D(const QAction);
-//     return d->icon;
-// }
-
-#ifndef QT_NO_MENU
-/*!
-  Returns the menu contained by this action. Actions that contain
-  menus can be used to create menu items with submenus, or inserted
-  into toolbars to create buttons with popup menus.
-
-  \sa QMenu::addAction()
-*/
-// QMenu *QAction::menu() const
-// {
-//     Q_D(const QAction);
-//     return d->menu;
-// }
-
-/*!
-    Sets the menu contained by this action to the specified \a menu.
-*/
-// void QAction::setMenu(QMenu *menu)
-// {
-//     Q_D(QAction);
-//     if (d->menu)
-//         d->menu->d_func()->setOverrideMenuAction(0); //we reset the default action of any previous menu
-//     d->menu = menu;
-//     if (menu)
-//         menu->d_func()->setOverrideMenuAction(this);
-//     d->sendDataChanged();
-// }
-#endif // QT_NO_MENU
-
-/*!
-  If \a b is true then this action will be considered a separator.
-
-  How a separator is represented depends on the widget it is inserted
-  into. Under most circumstances the text, submenu, and icon will be
-  ignored for separator actions.
-
-  \sa QAction::isSeparator()
-*/
-// void QAction::setSeparator(bool b)
-// {
-//     Q_D(QAction);
-//     if (d->separator == b)
-//         return;
-//
-//     d->separator = b;
-//     d->sendDataChanged();
-// }
-
-/*!
-  Returns true if this action is a separator action; otherwise it
-  returns false.
-
-  \sa QAction::setSeparator()
-*/
-// bool QAction::isSeparator() const
-// {
-//     Q_D(const QAction);
-//     return d->separator;
-// }
 
 /*!
     \property QAction::text
@@ -906,53 +643,6 @@ QString UiAction::whatsThis() const
 {
     Q_D(const UiAction);
     return d->whatsthis;
-}
-
-/*!
-    \enum QAction::Priority
-    \since 4.6
-
-    This enum defines priorities for actions in user interface.
-
-    \value LowPriority The action should not be prioritized in
-    the user interface.
-
-    \value NormalPriority
-
-    \value HighPriority The action should be prioritized in
-    the user interface.
-
-    \sa priority
-*/
-
-
-/*!
-    \property QAction::priority
-    \since 4.6
-
-    \brief the actions's priority in the user interface.
-
-    This property can be set to indicate how the action should be prioritized
-    in the user interface.
-
-    For instance, when toolbars have the Qt::ToolButtonTextBesideIcon
-    mode set, then actions with LowPriority will not show the text
-    labels.
-*/
-void UiAction::setPriority(Priority priority)
-{
-    Q_D(UiAction);
-    if (d->priority == priority)
-        return;
-
-    d->priority = priority;
-    d->sendDataChanged();
-}
-
-UiAction::Priority UiAction::priority() const
-{
-    Q_D(const UiAction);
-    return d->priority;
 }
 
 /*!
@@ -1168,21 +858,6 @@ UiAction::setData(const QVariant &data)
 
 
 /*!
-  Updates the relevant status bar for the \a widget specified by sending a
-  QStatusTipEvent to its parent widget. Returns true if an event was sent;
-  otherwise returns false.
-
-  If a null widget is specified, the event is sent to the action's parent.
-
-  \sa statusTip
-*/
-// bool
-// QAction::showStatusText(QWidget *widget)
-// {
-//     return d_func()->showStatusText(widget, statusTip());
-// }
-
-/*!
   Sends the relevant signals for ActionEvent \a event.
 
   Action based widgets use this API to cause the QAction
@@ -1205,9 +880,7 @@ void UiAction::activate(ActionEvent event)
         }
         if (!guard.isNull())
             emit triggered(d->checked);
-    }/* else if (event == Hover) {
-        emit hovered();
-    }*/
+    }
 }
 
 /*!
@@ -1239,16 +912,6 @@ void UiAction::activate(ActionEvent event)
 */
 
 /*!
-    \fn void QAction::hovered()
-
-    This signal is emitted when an action is highlighted by the user;
-    for example, when the user pauses with the cursor over a menu option,
-    toolbar button, or presses an action's shortcut key combination.
-
-    \sa QAction::activate()
-*/
-
-/*!
     \fn void QAction::changed()
 
     This signal is emitted when an action has changed. If you
@@ -1268,104 +931,6 @@ void UiAction::activate(ActionEvent event)
 
     \value Hover this will cause the QAction::hovered() signal to be emitted.
 */
-
-/*!
-    \property QAction::menuRole
-    \brief the action's menu role
-    \since 4.2
-
-    This indicates what role the action serves in the application menu on Mac
-    OS X. By default all action have the TextHeuristicRole, which means that
-    the action is added based on its text (see QMenuBar for more information).
-
-    The menu role can only be changed before the actions are put into the menu
-    bar in Mac OS X (usually just before the first application window is
-    shown).
-*/
-void UiAction::setMenuRole(MenuRole menuRole)
-{
-    Q_D(UiAction);
-    if (d->menuRole == menuRole)
-        return;
-
-    d->menuRole = menuRole;
-    d->sendDataChanged();
-}
-
-UiAction::MenuRole UiAction::menuRole() const
-{
-    Q_D(const UiAction);
-    return d->menuRole;
-}
-
-/*!
-    \property QAction::softKeyRole
-    \brief the action's softkey role
-    \since 4.6
-
-    This indicates what type of role this action describes in the softkey framework
-    on platforms where such a framework is supported. Currently this is only
-    supported on the Symbian platform.
-
-    The softkey role can be changed any time.
-*/
-void UiAction::setSoftKeyRole(SoftKeyRole softKeyRole)
-{
-    Q_D(UiAction);
-    if (d->softKeyRole == softKeyRole)
-        return;
-
-    d->softKeyRole = softKeyRole;
-    d->sendDataChanged();
-}
-
-UiAction::SoftKeyRole UiAction::softKeyRole() const
-{
-    Q_D(const UiAction);
-    return d->softKeyRole;
-}
-
-/*!
-    \property QAction::iconVisibleInMenu
-    \brief Whether or not an action should show an icon in a menu
-    \since 4.4
-
-    In some applications, it may make sense to have actions with icons in the
-    toolbar, but not in menus. If true, the icon (if valid) is shown in the menu, when it
-    is false, it is not shown.
-
-    The default is to follow whether the Qt::AA_DontShowIconsInMenus attribute
-    is set for the application. Explicitly settings this property overrides
-    the presence (or abscence) of the attribute.
-
-    For example:
-    \snippet doc/src/snippets/code/src_gui_kernel_qaction.cpp 0
-
-    \sa QAction::icon QApplication::setAttribute()
-*/
-// void QAction::setIconVisibleInMenu(bool visible)
-// {
-//     Q_D(QAction);
-//     if (d->iconVisibleInMenu == -1 || visible != bool(d->iconVisibleInMenu)) {
-//         int oldValue = d->iconVisibleInMenu;
-//         d->iconVisibleInMenu = visible;
-//         // Only send data changed if we really need to.
-//         if (oldValue != -1
-//             || (oldValue == -1
-//                 && visible == !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus))) {
-//             d->sendDataChanged();
-//         }
-//     }
-// }
-
-// bool QAction::isIconVisibleInMenu() const
-// {
-//     Q_D(const QAction);
-//     if (d->iconVisibleInMenu == -1) {
-//         return !QApplication::instance()->testAttribute(Qt::AA_DontShowIconsInMenus);
-//     }
-//     return d->iconVisibleInMenu;
-// }
 
 QT_END_NAMESPACE_UIHELPERS
 

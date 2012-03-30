@@ -44,8 +44,6 @@
 #ifndef QT_NO_ACTION
 
 #include "uiaction_p.h"
-// #include "qapplication.h"
-// #include "qevent.h"
 #include "qlist.h"
 
 QT_BEGIN_NAMESPACE_UIHELPERS
@@ -54,7 +52,6 @@ class UiActionGroupPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(UiActionGroup)
 public:
-    // QActionGroupPrivate() : exclusive(1), enabled(1), visible(1)  { }
     UiActionGroupPrivate() : exclusive(1), enabled(1), visible(1)  { }
     QList<UiAction *> actions;
     QPointer<UiAction> current;
@@ -65,7 +62,6 @@ public:
 private:
     void _q_actionTriggered();  //private slot
     void _q_actionChanged();    //private slot
-    // void _q_actionHovered();    //private slot
 };
 
 void UiActionGroupPrivate::_q_actionChanged()
@@ -93,14 +89,6 @@ void UiActionGroupPrivate::_q_actionTriggered()
     Q_ASSERT_X(action != 0, "QWidgetGroup::_q_actionTriggered", "internal error");
     emit q->triggered(action);
 }
-
-// void QActionGroupPrivate::_q_actionHovered()
-// {
-//     Q_Q(QActionGroup);
-//     QAction *action = qobject_cast<QAction*>(q->sender());
-//     Q_ASSERT_X(action != 0, "QWidgetGroup::_q_actionHovered", "internal error");
-//     emit q->hovered(action);
-// }
 
 /*!
     \class QActionGroup
@@ -182,7 +170,6 @@ UiAction *UiActionGroup::addAction(UiAction* a)
         d->actions.append(a);
         QObject::connect(a, SIGNAL(triggered()), this, SLOT(_q_actionTriggered()));
         QObject::connect(a, SIGNAL(changed()), this, SLOT(_q_actionChanged()));
-        // QObject::connect(a, SIGNAL(hovered()), this, SLOT(_q_actionHovered()));
     }
     if (!a->d_func()->forceDisabled) {
         a->setEnabled(d->enabled);
@@ -218,20 +205,6 @@ UiAction *UiActionGroup::addAction(const QString &text)
 }
 
 /*!
-    Creates and returns an action with \a text and an \a icon. The
-    newly created action is a child of this action group.
-
-    Normally an action is added to a group by creating it with the
-    group as its parent, so this function is not usually used.
-
-    \sa QAction::setActionGroup()
-*/
-// QAction *QActionGroup::addAction(const QIcon &icon, const QString &text)
-// {
-//     return new QAction(icon, text, this);
-// }
-
-/*!
   Removes the \a action from this group. The action will have no
   parent as a result.
 
@@ -245,7 +218,6 @@ void UiActionGroup::removeAction(UiAction *action)
             d->current = 0;
         QObject::disconnect(action, SIGNAL(triggered()), this, SLOT(_q_actionTriggered()));
         QObject::disconnect(action, SIGNAL(changed()), this, SLOT(_q_actionChanged()));
-        // QObject::disconnect(action, SIGNAL(hovered()), this, SLOT(_q_actionHovered()));
         action->d_func()->group = 0;
     }
 }
@@ -368,17 +340,6 @@ bool UiActionGroup::isVisible() const
 */
 
 /*!
-    \fn void QActionGroup::hovered(QAction *action)
-
-    This signal is emitted when the given \a action in the action
-    group is highlighted by the user; for example, when the user
-    pauses with the cursor over a menu option, toolbar button, or
-    presses an action's shortcut key combination.
-
-    \sa QAction::activate()
-*/
-
-/*!
     \fn void QActionGroup::add(QAction* a)
 
     Use addAction() instead.
@@ -396,16 +357,6 @@ bool UiActionGroup::isVisible() const
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     actionGroup->addAction(separator);
-    \endcode
-*/
-
-/*!
-    \fn bool QActionGroup::addTo(QWidget *widget)
-
-    \oldcode
-    actionGroup->addTo(widget);
-    \newcode
-    widget->addActions(actionGroup->actions());
     \endcode
 */
 

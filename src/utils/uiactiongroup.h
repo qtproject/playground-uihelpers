@@ -70,7 +70,6 @@ public:
 
     UiAction *addAction(UiAction* a);
     UiAction *addAction(const QString &text);
-    // QAction *addAction(const QIcon &icon, const QString &text);
     void removeAction(UiAction *a);
     QList<UiAction*> actions() const;
 
@@ -88,13 +87,11 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void triggered(UiAction *);
-    // void hovered(QAction *);
 
 private:
     Q_DISABLE_COPY(UiActionGroup)
     Q_PRIVATE_SLOT(d_func(), void _q_actionTriggered())
     Q_PRIVATE_SLOT(d_func(), void _q_actionChanged())
-    // Q_PRIVATE_SLOT(d_func(), void _q_actionHovered())
 };
 
 #endif // QT_NO_ACTION

@@ -46,10 +46,7 @@
 
 #include <QCoreApplication>
 
-// #include <qapplication.h>
 // #include <qevent.h>
-// #include <qaction.h>
-// #include <qmenu.h>
 // #include <qplatformtheme_qpa.h>
 // #include <private/qguiapplication_p.h>
 
@@ -87,7 +84,6 @@ private:
     int m_lastEventType;
     int m_keyboardScheme;
     UiAction *m_lastAction;
-    // QWidget *m_tstWidget;
     QObject *m_tstObject;
 };
 
@@ -95,41 +91,13 @@ private:
 void tst_UiAction::getSetCheck()
 {
     UiAction obj1(0);
-    // QActionGroup * QAction::actionGroup()
-    // void QAction::setActionGroup(QActionGroup *)
     UiActionGroup *var1 = new UiActionGroup(0);
     obj1.setActionGroup(var1);
     QCOMPARE(var1, obj1.actionGroup());
     obj1.setActionGroup((UiActionGroup *)0);
     QCOMPARE((UiActionGroup *)0, obj1.actionGroup());
     delete var1;
-
-    // QMenu * QAction::menu()
-    // void QAction::setMenu(QMenu *)
-    /*QMenu *var2 = new QMenu(0);
-    obj1.setMenu(var2);
-    QCOMPARE(var2, obj1.menu());
-    obj1.setMenu((QMenu *)0);
-    QCOMPARE((QMenu *)0, obj1.menu());
-    delete var2;*/
-
-    QCOMPARE(obj1.priority(), UiAction::NormalPriority);
-    obj1.setPriority(UiAction::LowPriority);
-    QCOMPARE(obj1.priority(), UiAction::LowPriority);
 }
-
-// class MyWidget : public QWidget
-// {
-//     Q_OBJECT
-// public:
-//     MyWidget(tst_QAction *tst, QWidget *parent = 0) : QWidget(parent) { this->tst = tst; }
-//
-// protected:
-//     virtual void actionEvent(QActionEvent *e) { tst->updateState(e); }
-//
-// private:
-//     tst_QAction *tst;
-// };
 
 class MyObject : public QObject
 {
@@ -200,21 +168,12 @@ void tst_UiAction::initTestCase()
     m_lastEventType = 0;
     m_lastAction = 0;
 
-    // MyWidget *mw = new MyWidget(this);
-    // m_tstWidget = mw;
-    // mw->show();
-    // qApp->setActiveWindow(mw);
     MyObject *mo = new MyObject(this);
     m_tstObject = mo;
 }
 
 void tst_UiAction::cleanupTestCase()
 {
-    // QWidget *testWidget = m_tstWidget;
-    // if (testWidget) {
-    //     testWidget->hide();
-    //     delete testWidget;
-    // }
     QObject *testObject = m_tstObject;
     if (testObject)
         delete testObject;
@@ -257,8 +216,6 @@ void tst_UiAction::setIconText()
     QCOMPARE(action.text(), textFromIconText);
 }
 
-
-// TODO: Use a QObject instead of a QWidget and reimplement QActionEvent
 void tst_UiAction::updateState(UiActionEvent *e)
 {
     if (!e) {

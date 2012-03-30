@@ -45,9 +45,7 @@
 #include "uihelpersglobal.h"
 // #include <QtGui/qkeysequence.h> // XXX: Won't be removed
 #include <QtCore/qstring.h>
-// #include <QtWidgets/qwidget.h>
 #include <QtCore/qvariant.h>
-// #include <QtWidgets/qicon.h>
 #include <QtCore/QEvent>
 
 QT_BEGIN_HEADER
@@ -57,11 +55,9 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 #ifndef QT_NO_ACTION
 
-// class QMenu;
 class UiAction;
 class UiActionGroup;
 class UiActionPrivate;
-// class QGraphicsWidget;
 
 class UIHELPERS_EXPORT UiActionEvent : public QEvent
 {
@@ -79,48 +75,29 @@ class UIHELPERS_EXPORT UiAction : public QObject
     Q_OBJECT
     Q_DECLARE_PRIVATE(UiAction)
 
-    Q_ENUMS(MenuRole)
-    Q_ENUMS(SoftKeyRole)
-    Q_ENUMS(Priority)
     Q_PROPERTY(bool checkable READ isCheckable WRITE setCheckable NOTIFY changed)
     Q_PROPERTY(bool checked READ isChecked WRITE setChecked DESIGNABLE isCheckable NOTIFY toggled)
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY changed)
-    // Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY changed)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY changed)
     Q_PROPERTY(QString iconText READ iconText WRITE setIconText NOTIFY changed)
     Q_PROPERTY(QString toolTip READ toolTip WRITE setToolTip NOTIFY changed)
     Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY changed)
     Q_PROPERTY(QString whatsThis READ whatsThis WRITE setWhatsThis NOTIFY changed)
-    // Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY changed)
 #ifndef QT_NO_SHORTCUT
     Q_PROPERTY(QKeySequence shortcut READ shortcut WRITE setShortcut NOTIFY changed)
     Q_PROPERTY(Qt::ShortcutContext shortcutContext READ shortcutContext WRITE setShortcutContext NOTIFY changed)
     Q_PROPERTY(bool autoRepeat READ autoRepeat WRITE setAutoRepeat NOTIFY changed)
 #endif
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY changed)
-    Q_PROPERTY(MenuRole menuRole READ menuRole WRITE setMenuRole NOTIFY changed)
-    Q_PROPERTY(SoftKeyRole softKeyRole READ softKeyRole WRITE setSoftKeyRole NOTIFY changed)
-    // Q_PROPERTY(bool iconVisibleInMenu READ isIconVisibleInMenu WRITE setIconVisibleInMenu NOTIFY changed)
-    Q_PROPERTY(Priority priority READ priority WRITE setPriority)
 
 public:
-    enum MenuRole { NoRole, TextHeuristicRole, ApplicationSpecificRole, AboutQtRole,
-                    AboutRole, PreferencesRole, QuitRole };
-    enum SoftKeyRole {
-                    NoSoftKey, PositiveSoftKey, NegativeSoftKey, SelectSoftKey };
-    enum Priority { LowPriority = 0,
-                    NormalPriority = 128,
-                    HighPriority = 256};
     explicit UiAction(QObject* parent);
     UiAction(const QString &text, QObject* parent);
-    // QAction(const QIcon &icon, const QString &text, QObject* parent);
 
     ~UiAction();
 
     void setActionGroup(UiActionGroup *group);
     UiActionGroup *actionGroup() const;
-    // void setIcon(const QIcon &icon);
-    // QIcon icon() const;
 
     void setText(const QString &text);
     QString text() const;
@@ -137,17 +114,6 @@ public:
     void setWhatsThis(const QString &what);
     QString whatsThis() const;
 
-    void setPriority(Priority priority);
-    Priority priority() const;
-
-// #ifndef QT_NO_MENU
-//     QMenu *menu() const;
-//     void setMenu(QMenu *menu);
-// #endif
-
-    // void setSeparator(bool b);
-    // bool isSeparator() const;
-
 #ifndef QT_NO_SHORTCUT
     void setShortcut(const QKeySequence &shortcut);
     QKeySequence shortcut() const;
@@ -163,9 +129,6 @@ public:
     bool autoRepeat() const;
 #endif
 
-    // void setFont(const QFont &font);
-    // QFont font() const;
-
     void setCheckable(bool);
     bool isCheckable() const;
 
@@ -178,26 +141,8 @@ public:
 
     bool isVisible() const;
 
-    enum ActionEvent { Trigger, Hover };
+    enum ActionEvent { Trigger };
     void activate(ActionEvent event);
-    // bool showStatusText(QWidget *widget=0);
-
-    void setMenuRole(MenuRole menuRole);
-    MenuRole menuRole() const;
-
-    void setSoftKeyRole(SoftKeyRole softKeyRole);
-    SoftKeyRole softKeyRole() const;
-
-    // void setIconVisibleInMenu(bool visible);
-    // bool isIconVisibleInMenu() const;
-
-
-    // QWidget *parentWidget() const;
-
-    // QList<QWidget *> associatedWidgets() const;
-// #ifndef QT_NO_GRAPHICSVIEW
-//     QList<QGraphicsWidget *> associatedGraphicsWidgets() const; // ### suboptimal
-// #endif
 
 protected:
     bool event(QEvent *);
@@ -205,7 +150,6 @@ protected:
 
 public Q_SLOTS:
     void trigger() { activate(Trigger); }
-    // void hover() { activate(Hover); }
     void setChecked(bool);
     void toggle();
     void setEnabled(bool);
@@ -215,27 +159,20 @@ public Q_SLOTS:
 Q_SIGNALS:
     void changed();
     void triggered(bool checked = false);
-    // void hovered();
     void toggled(bool);
 
 private:
     Q_DISABLE_COPY(UiAction)
 
-    // friend class QGraphicsWidget;
-    // friend class QWidget;
     friend class UiActionGroup;
-    // friend class QMenu;
-    // friend class QMenuPrivate;
-    // friend class QMenuBar;
-    // friend class QToolButton;
 #ifdef Q_OS_MAC
     friend void qt_mac_clear_status_text(UiAction *action);
 #endif
 };
 
-//QT_BEGIN_INCLUDE_NAMESPACE_UIHELPERS
-//#include <UiHelpers/uiactiongroup.h>
-//QT_END_INCLUDE_NAMESPACE_UIHELPERS
+QT_BEGIN_INCLUDE_NAMESPACE_UIHELPERS
+#include <UiHelpers/uiactiongroup.h>
+QT_END_INCLUDE_NAMESPACE_UIHELPERS
 
 #endif // QT_NO_ACTION
 

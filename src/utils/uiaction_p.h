@@ -54,9 +54,6 @@
 //
 
 #include "UiHelpers/uiaction.h"
-// #include "QtWidgets/qaction.h"
-// #include "QtWidgets/qmenu.h"
-// #include "private/qgraphicswidget_p.h"
 #include "private/qobject_p.h"
 #include "uihelpersglobal.h"
 
@@ -79,12 +76,9 @@ public:
         return q->d_func();
     }
 
-    // bool showStatusText(QWidget *w, const QString &str);
-
     QPointer<UiActionGroup> group;
     QString text;
     QString iconText;
-    // QIcon icon;
     QString tooltip;
     QString statustip;
     QString whatsthis;
@@ -99,28 +93,11 @@ public:
     Qt::ShortcutContext shortcutContext;
     uint autorepeat : 1;
 #endif
-    // QFont font;
-    // QPointer<QMenu> menu;
     uint enabled : 1, forceDisabled : 1;
     uint visible : 1, forceInvisible : 1;
     uint checkable : 1;
     uint checked : 1;
-    // uint separator : 1;
-    // uint fontSet : 1;
 
-    //for soft keys management
-    uint forceEnabledInSoftkeys : 1;
-    uint menuActionSoftkeys : 1;
-    // int iconVisibleInMenu : 3;  // Only has values -1, 0, and 1
-
-    UiAction::MenuRole menuRole;
-    UiAction::SoftKeyRole softKeyRole;
-    UiAction::Priority priority;
-
-    // QList<QWidget *> widgets;
-// #ifndef QT_NO_GRAPHICSVIEW
-//     QList<QGraphicsWidget *> graphicsWidgets;
-// #endif
 #ifndef QT_NO_SHORTCUT
     void redoGrab(QShortcutMap &map);
     void redoGrabAlternate(QShortcutMap &map);
