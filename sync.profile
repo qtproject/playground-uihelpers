@@ -9,7 +9,7 @@
     "uiundogroup.h" => "UiUndoGroup",
     "uicompletionmodel.h" => "UiCompletionModel",
     "uifilesystemmodel.h" => "UiFileSystemModel",
-    "uistandarditemmodel.h" => "UiStandardModel",
+    "uistandarditemmodel.h" => "UiStandardItemModel",
     "uiaction.h" => "UiAction",
     "uiactiongroup.h" => "UiActionGroup",
 );

@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS += undo
+SUBDIRS += undo models
