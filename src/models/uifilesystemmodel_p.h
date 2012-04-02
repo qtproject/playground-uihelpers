@@ -117,7 +117,6 @@ public:
         inline bool isHidden() const { if (info) return info->isHidden(); return false; }
         inline bool isSymLink() const { if (info) return info->isSymLink(); return false; }
         inline bool caseSensitive() const { if (info) return info->isCaseSensitive(); return false; }
-//        inline QIcon icon() const { if (info) return info->icon; return QIcon(); }
 
         inline bool operator <(const QFileSystemNode &node) const {
             if (caseSensitive() || node.caseSensitive())
@@ -158,23 +157,6 @@ public:
         inline int visibleLocation(QString childName) {
             return visibleChildren.indexOf(childName);
         }
-//        void updateIcon(QFileIconProvider *iconProvider, const QString &path) {
-//            if (info)
-//                info->icon = iconProvider->icon(QFileInfo(path));
-//            QHash<QString, QFileSystemNode *>::const_iterator iterator;
-//            for (iterator = children.constBegin() ; iterator != children.constEnd() ; ++iterator) {
-//                //On windows the root (My computer) has no path so we don't want to add a / for nothing (e.g. /C:/)
-//                if (!path.isEmpty()) {
-//                    if (path.endsWith(QLatin1Char('/')))
-//                        iterator.value()->updateIcon(iconProvider, path + iterator.value()->fileName);
-//                    else
-//                        iterator.value()->updateIcon(iconProvider, path + QLatin1Char('/') + iterator.value()->fileName);
-//                } else
-//                    iterator.value()->updateIcon(iconProvider, iterator.value()->fileName);
-//            }
-//        }
-
-
 
 //        void retranslateStrings(const QString &path) {
 //            //if (info)
@@ -278,7 +260,6 @@ public:
        return QString::compare(s1.fileName, s2.fileName, Qt::CaseInsensitive) < 0;
     }
 
-//    QIcon icon(const QModelIndex &index) const;
     QString name(const QModelIndex &index) const;
     QString displayName(const QModelIndex &index) const;
     QString filePath(const QModelIndex &index) const;

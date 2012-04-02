@@ -118,17 +118,6 @@ bool UiFileInfoGatherer::resolveSymlinks() const
     return m_resolveSymlinks;
 }
 
-//void UiFileInfoGatherer::setIconProvider(QFileIconProvider *provider)
-//{
-//    QMutexLocker locker(&mutex);
-//    m_iconProvider = provider;
-//}
-
-//QFileIconProvider *UiFileInfoGatherer::iconProvider() const
-//{
-//    return m_iconProvider;
-//}
-
 /*!
     Fetch extended information for all \a files in \a path
 
@@ -230,7 +219,6 @@ void UiFileInfoGatherer::run()
 UiExtendedInformation UiFileInfoGatherer::getInfo(const QFileInfo &fileInfo) const
 {
     UiExtendedInformation info(fileInfo);
-//    info.icon = m_iconProvider->icon(fileInfo);
     info.displayType = _type(fileInfo);
 #ifndef QT_NO_FILESYSTEMWATCHER
     // ### Not ready to listen all modifications

@@ -57,7 +57,6 @@
 #include <qmutex.h>
 #include <qwaitcondition.h>
 #include <qfilesystemwatcher.h>
-//#include <qfileiconprovider.h>
 #include <qpair.h>
 #include <qstack.h>
 #include <qdatetime.h>
@@ -137,13 +136,10 @@ public:
     }
 
     QString displayType;
-//    QIcon icon;
 
 private :
     QFileInfo mFileInfo;
 };
-
-//class QFileIconProvider;
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
@@ -171,8 +167,6 @@ public Q_SLOTS:
     void updateFile(const QString &path);
     void setResolveSymlinks(bool enable);
     bool resolveSymlinks() const;
-//    void setIconProvider(QFileIconProvider *provider);
-//    QFileIconProvider *iconProvider() const;
 
 protected:
     void run();
@@ -228,8 +222,6 @@ private:
     QFileSystemWatcher *watcher;
 #endif
     bool m_resolveSymlinks;
-//    QFileIconProvider *m_iconProvider;
-//    QFileIconProvider defaultProvider;
 #ifndef Q_OS_WIN
     uint userId;
     uint groupId;

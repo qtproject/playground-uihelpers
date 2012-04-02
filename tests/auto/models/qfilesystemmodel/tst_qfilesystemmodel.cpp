@@ -969,9 +969,7 @@ void tst_UiFileSystemModel::roleNames_data()
 {
     QTest::addColumn<int>("role");
     QTest::addColumn<QByteArray>("roleName");
-    QTest::newRow("decoration") << int(Qt::DecorationRole) << QByteArray("decoration");
     QTest::newRow("display") << int(Qt::DisplayRole) << QByteArray("display");
-    //QTest::newRow("fileIcon") << int(UiFileSystemModel::FileIconRole) << QByteArray("fileIcon");
     QTest::newRow("filePath") << int(UiFileSystemModel::FilePathRole) << QByteArray("filePath");
     QTest::newRow("fileName") << int(UiFileSystemModel::FileNameRole) << QByteArray("fileName");
     QTest::newRow("filePermissions") << int(UiFileSystemModel::FilePermissions) << QByteArray("filePermissions");

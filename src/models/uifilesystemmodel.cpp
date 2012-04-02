@@ -45,8 +45,6 @@
 #include <qmimedata.h>
 #include <qurl.h>
 #include <qdebug.h>
-#include <qimage.h>
-#include <qguiapplication.h>
 
 #ifdef Q_OS_WIN
 #  include <QtCore/QVarLengthArray>
@@ -59,7 +57,6 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 /*!
     \enum UiFileSystemModel::Roles
-    \value FileIconRole
     \value FilePathRole
     \value FileNameRole
     \value FilePermissions
@@ -141,16 +138,9 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 */
 
 /*!
-    \fn QIcon UiFileSystemModel::fileName(const QModelIndex &index) const
+    \fn QString UiFileSystemModel::fileName(const QModelIndex &index) const
 
     Returns the file name for the item stored in the model under the given
-    \a index.
-*/
-
-/*!
-    \fn QIcon UiFileSystemModel::fileIcon(const QModelIndex &index) const
-
-    Returns the icon for the item stored in the model under the given
     \a index.
 */
 
@@ -670,9 +660,6 @@ QVariant UiFileSystemModel::myComputer(int role) const
     switch (role) {
     case Qt::DisplayRole:
         return d->myComputer();
-//    case Qt::DecorationRole:
-//        QImage pixmap(16, 1, QImage::Format_Mono);
-//        return pixmap; //d->fileInfoGatherer.iconProvider()->icon(QFileIconProvider::Computer);
     }
     return QVariant();
 }
@@ -703,20 +690,6 @@ QVariant UiFileSystemModel::data(const QModelIndex &index, int role) const
         return filePath(index);
     case FileNameRole:
         return d->name(index);
-    case Qt::DecorationRole:
-        if (index.column() == 0) {
-            QImage icon(16, 1, QImage::Format_Mono);
-            return icon;
-//            QIcon icon = d->icon(index);
-//            if (icon.isNull()) {
-//                if (d->node(index)->isDir())
-//                    icon = d->fileInfoGatherer.iconProvider()->icon(QFileIconProvider::Folder);
-//                else
-//                    icon = d->fileInfoGatherer.iconProvider()->icon(QFileIconProvider::File);
-//            }
-//            return icon;
-        }
-        break;
     case Qt::TextAlignmentRole:
         if (index.column() == 1)
             return Qt::AlignRight;
@@ -825,16 +798,6 @@ QString UiFileSystemModelPrivate::displayName(const QModelIndex &index) const
 }
 
 /*!
-    \internal
-*/
-//QIcon UiFileSystemModelPrivate::icon(const QModelIndex &index) const
-//{
-//    if (!index.isValid())
-//        return QIcon();
-//    return node(index)->icon();
-//}
-
-/*!
     \reimp
 */
 bool UiFileSystemModel::setData(const QModelIndex &idx, const QVariant &value, int role)
@@ -900,16 +863,6 @@ bool UiFileSystemModel::setData(const QModelIndex &idx, const QVariant &value, i
 QVariant UiFileSystemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     switch (role) {
-    case Qt::DecorationRole:
-        if (section == 0) {
-            // ### TODO oh man this is ugly and doesn't even work all the way!
-            // it is still 2 pixels off
-            QImage pixmap(16, 1, QImage::Format_Mono);
-            pixmap.fill(0);
-            pixmap.setAlphaChannel(pixmap.createAlphaMask());
-            return pixmap;
-        }
-        break;
     case Qt::TextAlignmentRole:
         return Qt::AlignLeft;
     }
@@ -1450,25 +1403,6 @@ QDir UiFileSystemModel::rootDirectory() const
 }
 
 /*!
-    Sets the \a provider of file icons for the directory model.
-*/
-//void UiFileSystemModel::setIconProvider(QFileIconProvider *provider)
-//{
-//    Q_D(UiFileSystemModel);
-//    d->fileInfoGatherer.setIconProvider(provider);
-//    d->root.updateIcon(provider, QString());
-//}
-
-///*!
-//    Returns the file icon provider for this directory model.
-//*/
-//QFileIconProvider *UiFileSystemModel::iconProvider() const
-//{
-//    Q_D(const UiFileSystemModel);
-//    return d->fileInfoGatherer.iconProvider();
-//}
-
-/*!
     Sets the directory model's filter to that specified by \a filters.
 
     Note that the filter you set should always include the QDir::AllDirs enum value,
@@ -1929,7 +1863,6 @@ void UiFileSystemModelPrivate::init()
     q->connect(&delayedSortTimer, SIGNAL(timeout()), q, SLOT(_q_performDelayedSort()), Qt::QueuedConnection);
 
     QHash<int, QByteArray> roles = q->roleNames();
-//    roles.insertMulti(UiFileSystemModel::FileIconRole, "fileIcon"); // == Qt::decoration
     roles.insert(UiFileSystemModel::FilePathRole, "filePath");
     roles.insert(UiFileSystemModel::FileNameRole, "fileName");
     roles.insert(UiFileSystemModel::FilePermissions, "filePermissions");

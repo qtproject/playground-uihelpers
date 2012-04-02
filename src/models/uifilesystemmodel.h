@@ -46,7 +46,6 @@
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/qpair.h>
 #include <QtCore/qdir.h>
-//#include <QtWidgets/qicon.h>
 #include <QtCore/qdiriterator.h>
 
 QT_BEGIN_HEADER
@@ -58,7 +57,6 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 //class ExtendedInformation;
 class UiFileSystemModelPrivate;
-//class QFileIconProvider;
 
 class UIHELPERS_EXPORT UiFileSystemModel : public QAbstractItemModel
 {
@@ -74,7 +72,6 @@ Q_SIGNALS:
 
 public:
     enum Roles {
-//        FileIconRole = Qt::DecorationRole,
         FilePathRole = Qt::UserRole + 1,
         FileNameRole = Qt::UserRole + 2,
         FilePermissions = Qt::UserRole + 3
@@ -114,9 +111,6 @@ public:
     QString rootPath() const;
     QDir rootDirectory() const;
 
-//    void setIconProvider(QFileIconProvider *provider);
-//    QFileIconProvider *iconProvider() const;
-
     void setFilter(QDir::Filters filters);
     QDir::Filters filter() const;
 
@@ -141,7 +135,6 @@ public:
     QModelIndex mkdir(const QModelIndex &parent, const QString &name);
     bool rmdir(const QModelIndex &index) const; // ### Qt5: should not be const
     inline QString fileName(const QModelIndex &index) const;
-//    inline QIcon fileIcon(const QModelIndex &index) const;
     QFile::Permissions permissions(const QModelIndex &index) const;
     inline QFileInfo fileInfo(const QModelIndex &index) const;
     bool remove(const QModelIndex &index) const;
@@ -165,8 +158,6 @@ private:
 
 inline QString UiFileSystemModel::fileName(const QModelIndex &aindex) const
 { return aindex.data(Qt::DisplayRole).toString(); }
-//inline QIcon UiFileSystemModel::fileIcon(const QModelIndex &aindex) const
-//{ return qvariant_cast<QIcon>(aindex.data(Qt::DecorationRole)); }
 inline QFileInfo UiFileSystemModel::fileInfo(const QModelIndex &aindex) const
 { return QFileInfo(filePath(aindex)); }
 
