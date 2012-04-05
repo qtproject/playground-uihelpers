@@ -43,8 +43,6 @@
 #include <QtTest/QtTest>
 
 #include <UiHelpers/uistandarditemmodel.h>
-//#include <QTreeView>
-//#include <private/qtreeview_p.h>
 
 QT_USE_NAMESPACE_UIHELPERS;
 
@@ -106,7 +104,6 @@ private slots:
     void insertColumns();
     void removeRows();
     void removeColumns();
-//    void setHeaderData();
     void persistentIndexes();
     void removingPersistentIndexes();
     void updatingPersistentIndexes();
@@ -119,21 +116,16 @@ private slots:
     void sortRole_data();
     void sortRole();
     void findItems();
-//    void getSetHeaderItem();
     void indexFromItem();
     void itemFromIndex();
     void getSetItemPrototype();
     void getSetItemData();
-//    void setHeaderLabels_data();
-//    void setHeaderLabels();
     void itemDataChanged();
-//    void takeHeaderItem();
     void useCase1();
     void useCase2();
     void useCase3();
 
-//    void rootItemFlags();
-    void treeDragAndDrop();
+    void rootItemFlags();
     void removeRowsAndColumns();
 
     void itemRoleNames();
@@ -456,50 +448,6 @@ void tst_UiStandardItemModel::removeColumns()
     m_model->removeColumns(0, 2);
     QCOMPARE(m_model->columnCount(), columnCount - 2);
 }
-
-
-//void tst_UiStandardItemModel::setHeaderData()
-//{
-//    for (int x = 0; x < 2; ++x) {
-//        bool vertical = (x == 0);
-//        int count = vertical ? m_model->rowCount() : m_model->columnCount();
-//        QCOMPARE(count, defaultSize);
-//        Qt::Orientation orient = vertical ? Qt::Vertical : Qt::Horizontal;
-//
-//        // check default values are ok
-//        for (int i = 0; i < count; ++i)
-//            QCOMPARE(m_model->headerData(i, orient).toString(), QString::number(i + 1));
-//
-//        QSignalSpy headerDataChangedSpy(
-//            m_model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)));
-//        QSignalSpy dataChangedSpy(
-//            m_model, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
-//        // insert custom values and check
-//        for (int i = 0; i < count; ++i) {
-//            QString customString = QString("custom") + QString::number(i);
-//            QCOMPARE(m_model->setHeaderData(i, orient, customString), true);
-//            QCOMPARE(headerDataChangedSpy.count(), 1);
-//            QCOMPARE(dataChangedSpy.count(), 0);
-//            QVariantList args = headerDataChangedSpy.takeFirst();
-//            QCOMPARE(qvariant_cast<Qt::Orientation>(args.at(0)), orient);
-//            QCOMPARE(args.at(1).toInt(), i);
-//            QCOMPARE(args.at(2).toInt(), i);
-//            QCOMPARE(m_model->headerData(i, orient).toString(), customString);
-//            QCOMPARE(m_model->setHeaderData(i, orient, customString), true);
-//            QCOMPARE(headerDataChangedSpy.count(), 0);
-//            QCOMPARE(dataChangedSpy.count(), 0);
-//        }
-//
-//        //check read from invalid sections
-//        QVERIFY(!m_model->headerData(count, orient).isValid());
-//        QVERIFY(!m_model->headerData(-1, orient).isValid());
-//        //check write to invalid section
-//        QCOMPARE(m_model->setHeaderData(count, orient, "foo"), false);
-//        QCOMPARE(m_model->setHeaderData(-1, orient, "foo"), false);
-//        QVERIFY(!m_model->headerData(count, orient).isValid());
-//        QVERIFY(!m_model->headerData(-1, orient).isValid());
-//    }
-//}
 
 void tst_UiStandardItemModel::persistentIndexes()
 {
@@ -990,29 +938,6 @@ void tst_UiStandardItemModel::findItems()
     QCOMPARE(matches.count(), 0);
 }
 
-//void tst_UiStandardItemModel::getSetHeaderItem()
-//{
-//    UiStandardItemModel model;
-//
-//    QCOMPARE(model.horizontalHeaderItem(0), static_cast<UiStandardItem*>(0));
-//    UiStandardItem *hheader = new UiStandardItem();
-//    model.setHorizontalHeaderItem(0, hheader);
-//    QCOMPARE(model.columnCount(), 1);
-//    QCOMPARE(model.horizontalHeaderItem(0), hheader);
-//    QCOMPARE(hheader->model(), &model);
-//    model.setHorizontalHeaderItem(0, 0);
-//    QCOMPARE(model.horizontalHeaderItem(0), static_cast<UiStandardItem*>(0));
-//
-//    QCOMPARE(model.verticalHeaderItem(0), static_cast<UiStandardItem*>(0));
-//    UiStandardItem *vheader = new UiStandardItem();
-//    model.setVerticalHeaderItem(0, vheader);
-//    QCOMPARE(model.rowCount(), 1);
-//    QCOMPARE(model.verticalHeaderItem(0), vheader);
-//    QCOMPARE(vheader->model(), &model);
-//    model.setVerticalHeaderItem(0, 0);
-//    QCOMPARE(model.verticalHeaderItem(0), static_cast<UiStandardItem*>(0));
-//}
-
 void tst_UiStandardItemModel::indexFromItem()
 {
     UiStandardItemModel model;
@@ -1145,76 +1070,6 @@ void tst_UiStandardItemModel::getSetItemData()
     QCOMPARE(model.itemData(idx), roles);
 }
 
-//void tst_UiStandardItemModel::setHeaderLabels_data()
-//{
-//    QTest::addColumn<int>("rows");
-//    QTest::addColumn<int>("columns");
-//    QTest::addColumn<int>("orientation");
-//    QTest::addColumn<QStringList>("labels");
-//    QTest::addColumn<QStringList>("expectedLabels");
-//
-//    QTest::newRow("horizontal labels")
-//        << 1
-//        << 4
-//        << int(Qt::Horizontal)
-//        << (QStringList() << "a" << "b" << "c" << "d")
-//        << (QStringList() << "a" << "b" << "c" << "d");
-//    QTest::newRow("vertical labels")
-//        << 4
-//        << 1
-//        << int(Qt::Vertical)
-//        << (QStringList() << "a" << "b" << "c" << "d")
-//        << (QStringList() << "a" << "b" << "c" << "d");
-//    QTest::newRow("too few (horizontal)")
-//        << 1
-//        << 4
-//        << int(Qt::Horizontal)
-//        << (QStringList() << "a" << "b")
-//        << (QStringList() << "a" << "b" << "3" << "4");
-//    QTest::newRow("too few (vertical)")
-//        << 4
-//        << 1
-//        << int(Qt::Vertical)
-//        << (QStringList() << "a" << "b")
-//        << (QStringList() << "a" << "b" << "3" << "4");
-//    QTest::newRow("too many (horizontal)")
-//        << 1
-//        << 2
-//        << int(Qt::Horizontal)
-//        << (QStringList() << "a" << "b" << "c" << "d")
-//        << (QStringList() << "a" << "b" << "c" << "d");
-//    QTest::newRow("too many (vertical)")
-//        << 2
-//        << 1
-//        << int(Qt::Vertical)
-//        << (QStringList() << "a" << "b" << "c" << "d")
-//        << (QStringList() << "a" << "b" << "c" << "d");
-//}
-
-//void tst_UiStandardItemModel::setHeaderLabels()
-//{
-//    QFETCH(int, rows);
-//    QFETCH(int, columns);
-//    QFETCH(int, orientation);
-//    QFETCH(QStringList, labels);
-//    QFETCH(QStringList, expectedLabels);
-//    UiStandardItemModel model(rows, columns);
-//    QSignalSpy columnsInsertedSpy(
-//        &model, SIGNAL(columnsInserted(QModelIndex,int,int)));
-//    QSignalSpy rowsInsertedSpy(
-//        &model, SIGNAL(rowsInserted(QModelIndex,int,int)));
-//    if (orientation == Qt::Horizontal)
-//        model.setHorizontalHeaderLabels(labels);
-//    else
-//        model.setVerticalHeaderLabels(labels);
-//    for (int i = 0; i < expectedLabels.count(); ++i)
-//        QCOMPARE(model.headerData(i, Qt::Orientation(orientation)).toString(), expectedLabels.at(i));
-//    QCOMPARE(columnsInsertedSpy.count(),
-//             (orientation == Qt::Vertical) ? 0 : labels.count() > columns);
-//    QCOMPARE(rowsInsertedSpy.count(),
-//             (orientation == Qt::Horizontal) ? 0 : labels.count() > rows);
-//}
-
 void tst_UiStandardItemModel::itemDataChanged()
 {
     UiStandardItemModel model(6, 4);
@@ -1261,25 +1116,6 @@ void tst_UiStandardItemModel::itemDataChanged()
     QCOMPARE(dataChangedSpy.count(), 0);
     QCOMPARE(itemChangedSpy.count(), 0);
 }
-
-//void tst_UiStandardItemModel::takeHeaderItem()
-//{
-//    UiStandardItemModel model;
-//    // set header items
-//    UiStandardItem *hheader = new UiStandardItem();
-//    model.setHorizontalHeaderItem(0, hheader);
-//    UiStandardItem *vheader = new UiStandardItem();
-//    model.setVerticalHeaderItem(0, vheader);
-//    // take header items
-//    QCOMPARE(model.takeHorizontalHeaderItem(0), hheader);
-//    QCOMPARE(model.takeVerticalHeaderItem(0), vheader);
-//    QCOMPARE(hheader->model(), static_cast<UiStandardItemModel*>(0));
-//    QCOMPARE(vheader->model(), static_cast<UiStandardItemModel*>(0));
-//    QCOMPARE(model.takeHorizontalHeaderItem(0), static_cast<UiStandardItem*>(0));
-//    QCOMPARE(model.takeVerticalHeaderItem(0), static_cast<UiStandardItem*>(0));
-//    delete hheader;
-//    delete vheader;
-//}
 
 void tst_UiStandardItemModel::useCase1()
 {
@@ -1380,23 +1216,20 @@ void tst_UiStandardItemModel::useCase3()
     delete childItem;
 }
 
-//void tst_UiStandardItemModel::rootItemFlags()
-//{
-//    UiStandardItemModel model(6, 4);
-//    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
-//    QCOMPARE(model.invisibleRootItem()->flags() , Qt::ItemIsDropEnabled);
-//
-//    Qt::ItemFlags f = Qt::ItemIsDropEnabled | Qt::ItemIsEnabled;
-//    model.invisibleRootItem()->setFlags(f);
-//    QCOMPARE(model.invisibleRootItem()->flags() , f);
-//    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
-//
-//#ifndef QT_NO_DRAGANDDROP
-//    model.invisibleRootItem()->setDropEnabled(false);
-//#endif
-//    QCOMPARE(model.invisibleRootItem()->flags() , Qt::ItemIsEnabled);
-//    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
-//}
+void tst_UiStandardItemModel::rootItemFlags()
+{
+    UiStandardItemModel model(6, 4);
+    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
+
+    Qt::ItemFlags f = Qt::ItemIsEditable | Qt::ItemIsEnabled;
+    model.invisibleRootItem()->setFlags(f);
+    QCOMPARE(model.invisibleRootItem()->flags() , f);
+    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
+
+    model.invisibleRootItem()->setEditable(false);
+    QCOMPARE(model.invisibleRootItem()->flags() , Qt::ItemIsEnabled);
+    QCOMPARE(model.invisibleRootItem()->flags() , model.flags(QModelIndex()));
+}
 
 bool tst_UiStandardItemModel::compareModels(UiStandardItemModel *model1, UiStandardItemModel *model2)
 {
@@ -1457,165 +1290,6 @@ static UiStandardItem *itemFromText(UiStandardItem *parent, const QString &text)
         }
     }
     return item;
-}
-
-//#ifdef QT_BUILD_INTERNAL
-//static QModelIndex indexFromText(UiStandardItemModel *model, const QString &text)
-//{
-//    UiStandardItem *item = itemFromText(model->invisibleRootItem(), text);
-//    /*QVERIFY(item);*/
-//    return model->indexFromItem(item);
-//}
-
-
-//struct FriendlyTreeView : public QTreeView
-//{
-//    friend class tst_UiStandardItemModel;
-//    Q_DECLARE_PRIVATE(QTreeView)
-//};
-//#endif
-
-void tst_UiStandardItemModel::treeDragAndDrop()
-{
-//#ifdef QT_BUILD_INTERNAL
-//    const int nRow = 5;
-//    const int nCol = 3;
-
-//    UiStandardItemModel model;
-//    UiStandardItemModel checkModel;
-
-//    for (int i = 0; i < nRow; ++i) {
-//        QList<UiStandardItem *> colItems1;
-//        for (int c = 0 ; c < nCol; c ++)
-//            colItems1 << new UiStandardItem(QString("item %1 - %0").arg(c).arg(i));
-//        model.appendRow(colItems1);
-
-//        for (int j = 0; j < nRow; ++j) {
-//            QList<UiStandardItem *> colItems2;
-//            for (int c = 0 ; c < nCol; c ++)
-//                colItems2 << new UiStandardItem(QString("item %1/%2 - %0").arg(c).arg(i).arg(j));
-//            colItems1.at(0)->appendRow(colItems2);
-
-//            for (int k = 0; k < nRow; ++k) {
-//                QList<UiStandardItem *> colItems3;
-//                for (int c = 0 ; c < nCol; c ++)
-//                    colItems3 << new UiStandardItem(QString("item %1/%2/%3 - %0").arg(c).arg(i).arg(j).arg(k));
-//                colItems2.at(0)->appendRow(colItems3);
-//            }
-//        }
-//    }
-
-//    for (int i = 0; i < nRow; ++i) {
-//        QList<UiStandardItem *> colItems1;
-//        for (int c = 0 ; c < nCol; c ++)
-//            colItems1 << new UiStandardItem(QString("item %1 - %0").arg(c).arg(i));
-//        checkModel.appendRow(colItems1);
-
-//        for (int j = 0; j < nRow; ++j) {
-//            QList<UiStandardItem *> colItems2;
-//            for (int c = 0 ; c < nCol; c ++)
-//                colItems2 << new UiStandardItem(QString("item %1/%2 - %0").arg(c).arg(i).arg(j));
-//            colItems1.at(0)->appendRow(colItems2);
-
-//            for (int k = 0; k < nRow; ++k) {
-//                QList<UiStandardItem *> colItems3;
-//                for (int c = 0 ; c < nCol; c ++)
-//                    colItems3 << new UiStandardItem(QString("item %1/%2/%3 - %0").arg(c).arg(i).arg(j).arg(k));
-//                colItems2.at(0)->appendRow(colItems3);
-//            }
-//        }
-//    }
-
-//    QVERIFY(compareModels(&model, &checkModel));
-
-//    FriendlyTreeView  view;
-//    view.setModel(&model);
-//    view.expandAll();
-//    view.show();
-//#ifndef QT_NO_DRAGANDDROP
-//    view.setDragDropMode(QAbstractItemView::InternalMove);
-//#endif
-//    view.setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-//    QItemSelectionModel *selection = view.selectionModel();
-
-//    //
-//    // step1  drag  "item 1" and "item 2"   into "item 4"
-//    //
-//    {
-//        selection->clear();
-//        selection->select(QItemSelection(indexFromText(&model, QString("item 1 - 0")),
-//                                        indexFromText(&model, QString("item 1 - %0").arg(nCol-1))), QItemSelectionModel::Select);
-
-//        selection->select(QItemSelection(indexFromText(&model, QString("item 2 - 0")),
-//                                        indexFromText(&model, QString("item 2 - %0").arg(nCol-1))), QItemSelectionModel::Select);
-
-//        //code based from QAbstractItemView::startDrag and QAbstractItemView::dropEvent
-//        QModelIndexList indexes = view.selectedIndexes();
-//        QMimeData *data = model.mimeData(indexes);
-//        if (model.dropMimeData(data, Qt::MoveAction, 0, 0, indexFromText(&model, "item 4 - 0")))
-//            view.d_func()->clearOrRemove();
-//        delete data;
-
-//        QVERIFY(!compareModels(&model, &checkModel)); //the model must be different at this point
-//        UiStandardItem *item4 = itemFromText(checkModel.invisibleRootItem(), "item 4 - 0");
-//        item4->insertRow(0, checkModel.takeRow(1));
-//        item4->insertRow(1, checkModel.takeRow(1));
-//        QVERIFY(compareModels(&model, &checkModel));
-//    }
-
-//    //
-//    // step2  drag  "item 3" and "item 3/0"   into "item 4"
-//    //
-//    {
-//        selection->clear();
-//        selection->select(QItemSelection(indexFromText(&model, QString("item 3 - 0")),
-//                                          indexFromText(&model, QString("item 3 - %0").arg(nCol-1))), QItemSelectionModel::Select);
-
-//        selection->select(QItemSelection(indexFromText(&model, QString("item 3/0 - 0")),
-//                                        indexFromText(&model, QString("item 3/0 - %0").arg(nCol-1))), QItemSelectionModel::Select);
-
-//        //code based from QAbstractItemView::startDrag and QAbstractItemView::dropEvent
-//        QModelIndexList indexes = view.selectedIndexes();
-//        QMimeData *data = model.mimeData(indexes);
-//        if (model.dropMimeData(data, Qt::MoveAction, 0, 0, indexFromText(&model, "item 4 - 0")))
-//        view.d_func()->clearOrRemove();
-//        delete data;
-
-//        QVERIFY(!compareModels(&model, &checkModel)); //the model must be different at this point
-//        UiStandardItem *item4 = itemFromText(checkModel.invisibleRootItem(), "item 4 - 0");
-//        item4->insertRow(0, checkModel.takeRow(1));
-
-//        QVERIFY(compareModels(&model, &checkModel));
-//    }
-
-//    //
-//    // step2  drag  "item 3" and "item 3/0/2"   into "item 0/2"
-//    // ( remember "item 3" is now the first child of "item 4")
-//    //
-//    {
-//        selection->clear();
-//        selection->select(QItemSelection(indexFromText(&model, QString("item 3 - 0")),
-//                                         indexFromText(&model, QString("item 3 - %0").arg(nCol-1))), QItemSelectionModel::Select);
-
-//        selection->select(QItemSelection(indexFromText(&model, QString("item 3/0/2 - 0")),
-//                                        indexFromText(&model, QString("item 3/0/2 - %0").arg(nCol-1))), QItemSelectionModel::Select);
-
-//        //code based from QAbstractItemView::startDrag and QAbstractItemView::dropEvent
-//        QModelIndexList indexes = view.selectedIndexes();
-//        QMimeData *data = model.mimeData(indexes);
-//        if (model.dropMimeData(data, Qt::MoveAction, 0, 0, indexFromText(&model, "item 0/2 - 0")))
-//        view.d_func()->clearOrRemove();
-//        delete data;
-
-//        QVERIFY(!compareModels(&model, &checkModel)); //the model must be different at this point
-//        UiStandardItem *item02 = itemFromText(checkModel.invisibleRootItem(), "item 0/2 - 0");
-//        UiStandardItem *item4 = itemFromText(checkModel.invisibleRootItem(), "item 4 - 0");
-//        item02->insertRow(0, item4->takeRow(0));
-
-//        QVERIFY(compareModels(&model, &checkModel));
-//    }
-//#endif
 }
 
 void tst_UiStandardItemModel::removeRowsAndColumns()

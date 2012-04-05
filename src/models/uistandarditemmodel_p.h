@@ -208,11 +208,6 @@ public:
     void _q_emitItemChanged(const QModelIndex &topLeft,
                             const QModelIndex &bottomRight);
 
-    // Used only by UiStandardItemModel::dropMimeData
-    // void decodeDataRecursive(QDataStream &stream, UiStandardItem *item);
-
-    // QVector<UiStandardItem*> columnHeaderItems;
-    // QVector<UiStandardItem*> rowHeaderItems;
     QScopedPointer<UiStandardItem> root;
     const UiStandardItem *itemPrototype;
     int sortRole;

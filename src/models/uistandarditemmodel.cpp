@@ -321,7 +321,6 @@ UiStandardItemModelPrivate::UiStandardItemModelPrivate()
       itemPrototype(0),
       sortRole(Qt::DisplayRole)
 {
-    // root->setFlags(Qt::ItemIsDropEnabled);
 }
 
 /*!
@@ -330,8 +329,6 @@ UiStandardItemModelPrivate::UiStandardItemModelPrivate()
 UiStandardItemModelPrivate::~UiStandardItemModelPrivate()
 {
     delete itemPrototype;
-    // qDeleteAll(columnHeaderItems);
-    // qDeleteAll(rowHeaderItems);
 }
 
 /*!
@@ -485,21 +482,6 @@ bool UiStandardItemPrivate::insertColumns(int column, int count, const QList<UiS
 void UiStandardItemModelPrivate::itemChanged(UiStandardItem *item)
 {
     Q_Q(UiStandardItemModel);
-    // if (item->d_func()->parent == 0) {
-    //     // Header item
-    //     int idx = columnHeaderItems.indexOf(item);
-    //     if (idx != -1) {
-    //         emit q->headerDataChanged(Qt::Horizontal, idx, idx);
-    //     } else {
-    //         idx = rowHeaderItems.indexOf(item);
-    //         if (idx != -1)
-    //             emit q->headerDataChanged(Qt::Vertical, idx, idx);
-    //     }
-    // } else {
-    //     // Normal item
-    //     QModelIndex index = q->indexFromItem(item);
-    //     emit q->dataChanged(index, index);
-    // }
     QModelIndex index = q->indexFromItem(item);
     emit q->dataChanged(index, index);
 }
@@ -555,8 +537,6 @@ void UiStandardItemModelPrivate::rowsInserted(UiStandardItem *parent,
                                              int row, int count)
 {
     Q_Q(UiStandardItemModel);
-    // if (parent == root.data())
-    //     rowHeaderItems.insert(row, count, 0);
     q->endInsertRows();
 }
 
@@ -567,8 +547,6 @@ void UiStandardItemModelPrivate::columnsInserted(UiStandardItem *parent,
                                                 int column, int count)
 {
     Q_Q(UiStandardItemModel);
-    // if (parent == root.data())
-    //     columnHeaderItems.insert(column, count, 0);
     q->endInsertColumns();
 }
 
@@ -579,16 +557,6 @@ void UiStandardItemModelPrivate::rowsRemoved(UiStandardItem *parent,
                                             int row, int count)
 {
     Q_Q(UiStandardItemModel);
-    // XXX
-    // if (parent == root.data()) {
-    //     for (int i = row; i < row + count; ++i) {
-    //         UiStandardItem *oldItem = rowHeaderItems.at(i);
-    //         if (oldItem)
-    //             oldItem->d_func()->setModel(0);
-    //         delete oldItem;
-    //     }
-    //     rowHeaderItems.remove(row, count);
-    // }
     q->endRemoveRows();
 }
 
@@ -599,16 +567,6 @@ void UiStandardItemModelPrivate::columnsRemoved(UiStandardItem *parent,
                                                int column, int count)
 {
     Q_Q(UiStandardItemModel);
-    // XXX
-    // if (parent == root.data()) {
-    //     for (int i = column; i < column + count; ++i) {
-    //         UiStandardItem *oldItem = columnHeaderItems.at(i);
-    //         if (oldItem)
-    //             oldItem->d_func()->setModel(0);
-    //         delete oldItem;
-    //     }
-    //     columnHeaderItems.remove(column, count);
-    // }
     q->endRemoveColumns();
 }
 
@@ -714,18 +672,6 @@ UiStandardItem::UiStandardItem(const QString &text)
     d->q_ptr = this;
     setText(text);
 }
-
-/*!
-    Constructs an item with the given \a icon and \a text.
-*/
-//UiStandardItem::UiStandardItem(const QIcon &icon, const QString &text)
-//    : d_ptr(new UiStandardItemPrivate)
-//{
-//    Q_D(UiStandardItem);
-//    d->q_ptr = this;
-//    setIcon(icon);
-//    setText(text);
-//}
 
 /*!
    Constructs an item with \a rows rows and \a columns columns of child items.
@@ -898,9 +844,8 @@ void UiStandardItem::setFlags(Qt::ItemFlags flags)
 Qt::ItemFlags UiStandardItem::flags() const
 {
     QVariant v = data(Qt::UserRole - 1);
-//    if (!v.isValid())
-//        return (Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsEditable
-//                |Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled);
+    if (!v.isValid())
+        return (Qt::ItemIsEnabled|Qt::ItemIsEditable);
     return Qt::ItemFlags(v.toInt());
 }
 
@@ -1141,11 +1086,11 @@ Qt::ItemFlags UiStandardItem::flags() const
 
   \sa isEnabled(), Qt::ItemIsEnabled, setFlags()
 */
-//void UiStandardItem::setEnabled(bool enabled)
-//{
-//    Q_D(UiStandardItem);
-//    d->changeFlags(enabled, Qt::ItemIsEnabled);
-//}
+void UiStandardItem::setEnabled(bool enabled)
+{
+   Q_D(UiStandardItem);
+   d->changeFlags(enabled, Qt::ItemIsEnabled);
+}
 
 /*!
   \fn bool UiStandardItem::isEnabled() const
@@ -1170,11 +1115,11 @@ Qt::ItemFlags UiStandardItem::flags() const
 
   \sa isEditable(), setFlags()
 */
-//void UiStandardItem::setEditable(bool editable)
-//{
-//    Q_D(UiStandardItem);
-//    d->changeFlags(editable, Qt::ItemIsEditable);
-//}
+void UiStandardItem::setEditable(bool editable)
+{
+    Q_D(UiStandardItem);
+    d->changeFlags(editable, Qt::ItemIsEditable);
+}
 
 /*!
   \fn bool UiStandardItem::isEditable() const
@@ -1189,148 +1134,6 @@ Qt::ItemFlags UiStandardItem::flags() const
 
   \sa setEditable(), flags()
 */
-
-/*!
-  Sets whether the item is selectable. If \a selectable is true, the item
-  can be selected by the user; otherwise, the user cannot select the item.
-
-  You can control the selection behavior and mode by manipulating their
-  view properties; see QAbstractItemView::selectionMode and
-  QAbstractItemView::selectionBehavior.
-
-  \sa isSelectable(), setFlags()
-*/
-//void UiStandardItem::setSelectable(bool selectable)
-//{
-//    Q_D(UiStandardItem);
-//    d->changeFlags(selectable, Qt::ItemIsSelectable);
-//}
-
-/*!
-  \fn bool UiStandardItem::isSelectable() const
-
-  Returns whether the item is selectable by the user.
-
-  The default value is true.
-
-  \sa setSelectable(), flags()
-*/
-
-/*!
-  Sets whether the item is user-checkable. If \a checkable is true, the
-  item can be checked by the user; otherwise, the user cannot check
-  the item.
-
-  The item delegate will render a checkable item with a check box next to the
-  item's text.
-
-  \sa isCheckable(), setCheckState(), setTristate()
-*/
-//void UiStandardItem::setCheckable(bool checkable)
-//{
-//    Q_D(UiStandardItem);
-//    if (checkable && !isCheckable()) {
-//        // make sure there's data for the checkstate role
-//        if (!data(Qt::CheckStateRole).isValid())
-//            setData(Qt::Unchecked, Qt::CheckStateRole);
-//    }
-//    d->changeFlags(checkable, Qt::ItemIsUserCheckable);
-//}
-
-/*!
-  \fn bool UiStandardItem::isCheckable() const
-
-  Returns whether the item is user-checkable.
-
-  The default value is false.
-
-  \sa setCheckable(), checkState(), isTristate()
-*/
-
-/*!
-  Sets whether the item is tristate. If \a tristate is true, the
-  item is checkable with three separate states; otherwise, the item
-  is checkable with two states. (Note that this also requires that
-  the item is checkable; see isCheckable().)
-
-  \sa isTristate(), setCheckable(), setCheckState()
-*/
-//void UiStandardItem::setTristate(bool tristate)
-//{
-//    Q_D(UiStandardItem);
-//    d->changeFlags(tristate, Qt::ItemIsTristate);
-//}
-
-/*!
-  \fn bool UiStandardItem::isTristate() const
-
-  Returns whether the item is tristate; that is, if it's checkable with three
-  separate states.
-
-  The default value is false.
-
-  \sa setTristate(), isCheckable(), checkState()
-*/
-
-#ifndef QT_NO_DRAGANDDROP
-
-/*!
-  Sets whether the item is drag enabled. If \a dragEnabled is true, the item
-  can be dragged by the user; otherwise, the user cannot drag the item.
-
-  Note that you also need to ensure that item dragging is enabled in the view;
-  see QAbstractItemView::dragEnabled.
-
-  \sa isDragEnabled(), setDropEnabled(), setFlags()
-*/
-//void UiStandardItem::setDragEnabled(bool dragEnabled)
-//{
-//    Q_D(UiStandardItem);
-//    d->changeFlags(dragEnabled, Qt::ItemIsDragEnabled);
-//}
-
-/*!
-  \fn bool UiStandardItem::isDragEnabled() const
-
-  Returns whether the item is drag enabled. An item that is drag enabled can
-  be dragged by the user.
-
-  The default value is true.
-
-  Note that item dragging must be enabled in the view for dragging to work;
-  see QAbstractItemView::dragEnabled.
-
-  \sa setDragEnabled(), isDropEnabled(), flags()
-*/
-
-/*!
-  Sets whether the item is drop enabled. If \a dropEnabled is true, the item
-  can be used as a drop target; otherwise, it cannot.
-
-  Note that you also need to ensure that drops are enabled in the view; see
-  QWidget::acceptDrops(); and that the model supports the desired drop actions;
-  see QAbstractItemModel::supportedDropActions().
-
-  \sa isDropEnabled(), setDragEnabled(), setFlags()
-*/
-//void UiStandardItem::setDropEnabled(bool dropEnabled)
-//{
-//    Q_D(UiStandardItem);
-//    d->changeFlags(dropEnabled, Qt::ItemIsDropEnabled);
-//}
-
-/*!
-  \fn bool UiStandardItem::isDropEnabled() const
-
-  Returns whether the item is drop enabled. When an item is drop enabled, it
-  can be used as a drop target.
-
-  The default value is true.
-
-  \sa setDropEnabled(), isDragEnabled(), flags()
-*/
-
-#endif // QT_NO_DRAGANDDROP
 
 /*!
   Returns the row where the item is located in its parent's child table, or
@@ -2060,9 +1863,7 @@ UiStandardItemModel::UiStandardItemModel(int rows, int columns, QObject *parent)
     Q_D(UiStandardItemModel);
     d->init();
     d->root->insertColumns(0, columns);
-    // d->columnHeaderItems.insert(0, columns, 0);
     d->root->insertRows(0, rows);
-    // d->rowHeaderItems.insert(0, rows, 0);
     d->root->d_func()->setModel(this);
 }
 
@@ -2104,10 +1905,6 @@ void UiStandardItemModel::clear()
     beginResetModel();
     d->root.reset(new UiStandardItem);
     d->root->d_func()->setModel(this);
-    // qDeleteAll(d->columnHeaderItems);
-    // d->columnHeaderItems.clear();
-    // qDeleteAll(d->rowHeaderItems);
-    // d->rowHeaderItems.clear();
     endResetModel();
 }
 
@@ -2251,164 +2048,6 @@ UiStandardItem *UiStandardItemModel::invisibleRootItem() const
     Q_D(const UiStandardItemModel);
     return d->root.data();
 }
-
-/*!
-    \since 4.2
-
-    Sets the horizontal header item for \a column to \a item.  The model takes
-    ownership of the item. If necessary, the column count is increased to fit
-    the item. The previous header item (if there was one) is deleted.
-
-    \sa horizontalHeaderItem(), setHorizontalHeaderLabels(),
-    setVerticalHeaderItem()
-*/
-//void UiStandardItemModel::setHorizontalHeaderItem(int column, UiStandardItem *item)
-//{
-//    Q_D(UiStandardItemModel);
-//    if (column < 0)
-//        return;
-//    if (columnCount() <= column)
-//        setColumnCount(column + 1);
-//
-//    UiStandardItem *oldItem = d->columnHeaderItems.at(column);
-//    if (item == oldItem)
-//        return;
-//
-//    if (item) {
-//        if (item->model() == 0) {
-//            item->d_func()->setModel(this);
-//        } else {
-//            qWarning("UiStandardItem::setHorizontalHeaderItem: Ignoring duplicate insertion of item %p",
-//                     item);
-//            return;
-//        }
-//    }
-//
-//    if (oldItem)
-//        oldItem->d_func()->setModel(0);
-//    delete oldItem;
-//
-//    d->columnHeaderItems.replace(column, item);
-//    emit headerDataChanged(Qt::Horizontal, column, column);
-//}
-
-/*!
-    \since 4.2
-
-    Returns the horizontal header item for \a column if one has been set;
-    otherwise returns 0.
-
-    \sa setHorizontalHeaderItem(), verticalHeaderItem()
-*/
-//UiStandardItem *UiStandardItemModel::horizontalHeaderItem(int column) const
-//{
-//    Q_D(const UiStandardItemModel);
-//    if ((column < 0) || (column >= columnCount()))
-//        return 0;
-//    return d->columnHeaderItems.at(column);
-//}
-
-/*!
-    \since 4.2
-
-    Sets the vertical header item for \a row to \a item.  The model takes
-    ownership of the item. If necessary, the row count is increased to fit the
-    item. The previous header item (if there was one) is deleted.
-
-    \sa verticalHeaderItem(), setVerticalHeaderLabels(),
-    setHorizontalHeaderItem()
-*/
-//void UiStandardItemModel::setVerticalHeaderItem(int row, UiStandardItem *item)
-//{
-//    Q_D(UiStandardItemModel);
-//    if (row < 0)
-//        return;
-//    if (rowCount() <= row)
-//        setRowCount(row + 1);
-//
-//    UiStandardItem *oldItem = d->rowHeaderItems.at(row);
-//    if (item == oldItem)
-//        return;
-//
-//    if (item) {
-//        if (item->model() == 0) {
-//            item->d_func()->setModel(this);
-//        } else {
-//            qWarning("UiStandardItem::setVerticalHeaderItem: Ignoring duplicate insertion of item %p",
-//                     item);
-//            return;
-//        }
-//    }
-//
-//    if (oldItem)
-//        oldItem->d_func()->setModel(0);
-//    delete oldItem;
-//
-//    d->rowHeaderItems.replace(row, item);
-//    emit headerDataChanged(Qt::Vertical, row, row);
-//}
-
-/*!
-    \since 4.2
-
-    Returns the vertical header item for row \a row if one has been set;
-    otherwise returns 0.
-
-    \sa setVerticalHeaderItem(), horizontalHeaderItem()
-*/
-//UiStandardItem *UiStandardItemModel::verticalHeaderItem(int row) const
-//{
-//    Q_D(const UiStandardItemModel);
-//    if ((row < 0) || (row >= rowCount()))
-//        return 0;
-//    return d->rowHeaderItems.at(row);
-//}
-
-/*!
-    \since 4.2
-
-    Sets the horizontal header labels using \a labels. If necessary, the
-    column count is increased to the size of \a labels.
-
-    \sa setHorizontalHeaderItem()
-*/
-//void UiStandardItemModel::setHorizontalHeaderLabels(const QStringList &labels)
-//{
-//    Q_D(UiStandardItemModel);
-//    if (columnCount() < labels.count())
-//        setColumnCount(labels.count());
-//    for (int i = 0; i < labels.count(); ++i) {
-//        UiStandardItem *item = horizontalHeaderItem(i);
-//        if (!item) {
-//            item = d->createItem();
-//            setHorizontalHeaderItem(i, item);
-//        }
-//        item->setText(labels.at(i));
-//    }
-//}
-
-/*!
-    \since 4.2
-
-    Sets the vertical header labels using \a labels. If necessary, the row
-    count is increased to the size of \a labels.
-
-    \sa setVerticalHeaderItem()
-*/
-//void UiStandardItemModel::setVerticalHeaderLabels(const QStringList &labels)
-//{
-//    Q_D(UiStandardItemModel);
-//    if (rowCount() < labels.count())
-//        setRowCount(labels.count());
-//    for (int i = 0; i < labels.count(); ++i) {
-//        UiStandardItem *item = verticalHeaderItem(i);
-//        if (!item) {
-//            item = d->createItem();
-//            setVerticalHeaderItem(i, item);
-//        }
-//        item->setText(labels.at(i));
-//    }
-//}
 
 /*!
     \since 4.2
@@ -2587,50 +2226,6 @@ QList<UiStandardItem*> UiStandardItemModel::takeColumn(int column)
 
 /*!
     \since 4.2
-
-    Removes the horizontal header item at \a column from the header without
-    deleting it, and returns a pointer to the item. The model releases
-    ownership of the item.
-
-    \sa horizontalHeaderItem(), takeVerticalHeaderItem()
-*/
-//UiStandardItem *UiStandardItemModel::takeHorizontalHeaderItem(int column)
-//{
-//    Q_D(UiStandardItemModel);
-//    if ((column < 0) || (column >= columnCount()))
-//        return 0;
-//    UiStandardItem *headerItem = d->columnHeaderItems.at(column);
-//    if (headerItem) {
-//        headerItem->d_func()->setParentAndModel(0, 0);
-//        d->columnHeaderItems.replace(column, 0);
-//    }
-//    return headerItem;
-//}
-
-/*!
-    \since 4.2
-
-    Removes the vertical header item at \a row from the header without
-    deleting it, and returns a pointer to the item. The model releases
-    ownership of the item.
-
-    \sa verticalHeaderItem(), takeHorizontalHeaderItem()
-*/
-//UiStandardItem *UiStandardItemModel::takeVerticalHeaderItem(int row)
-//{
-//    Q_D(UiStandardItemModel);
-//    if ((row < 0) || (row >= rowCount()))
-//        return 0;
-//    UiStandardItem *headerItem = d->rowHeaderItems.at(row);
-//    if (headerItem) {
-//        headerItem->d_func()->setParentAndModel(0, 0);
-//        d->rowHeaderItems.replace(row, 0);
-//    }
-//    return headerItem;
-//}
-
-/*!
-    \since 4.2
     \property UiStandardItemModel::sortRole
     \brief the item role that is used to query the model's data when sorting items
 
@@ -2681,12 +2276,7 @@ Qt::ItemFlags UiStandardItemModel::flags(const QModelIndex &index) const
     UiStandardItem *item = d->itemFromIndex(index);
     if (item)
         return item->flags();
-    // return Qt::ItemIsSelectable
-    //     |Qt::ItemIsEnabled
-    //     |Qt::ItemIsEditable
-    //     |Qt::ItemIsDragEnabled
-    //     |Qt::ItemIsDropEnabled;
-    return Qt::NoItemFlags;
+    return Qt::ItemIsEnabled|Qt::ItemIsEditable;
 }
 
 /*!
@@ -2698,36 +2288,6 @@ bool UiStandardItemModel::hasChildren(const QModelIndex &parent) const
     UiStandardItem *item = d->itemFromIndex(parent);
     return item ? item->hasChildren() : false;
 }
-
-/*!
-  \reimp
-*/
-//QVariant UiStandardItemModel::headerData(int section, Qt::Orientation orientation, int role) const
-//{
-//    Q_D(const UiStandardItemModel);
-//    if ((section < 0)
-//        || ((orientation == Qt::Horizontal) && (section >= columnCount()))
-//        || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
-//        return QVariant();
-//    }
-//    UiStandardItem *headerItem = 0;
-//    if (orientation == Qt::Horizontal)
-//        headerItem = d->columnHeaderItems.at(section);
-//    else if (orientation == Qt::Vertical)
-//        headerItem = d->rowHeaderItems.at(section);
-//    return headerItem ? headerItem->data(role)
-//        : QAbstractItemModel::headerData(section, orientation, role);
-//}
-
-/*!
-    \reimp
-
-    UiStandardItemModel supports both copy and move.
-*/
-// Qt::DropActions UiStandardItemModel::supportedDropActions () const
-// {
-//     return Qt::CopyAction | Qt::MoveAction;
-// }
 
 /*!
   \reimp
@@ -2845,40 +2405,6 @@ bool UiStandardItemModel::setData(const QModelIndex &index, const QVariant &valu
 /*!
   \reimp
 */
-//bool UiStandardItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
-//{
-//    Q_D(UiStandardItemModel);
-//    if ((section < 0)
-//        || ((orientation == Qt::Horizontal) && (section >= columnCount()))
-//        || ((orientation == Qt::Vertical) && (section >= rowCount()))) {
-//        return false;
-//    }
-//    UiStandardItem *headerItem = 0;
-//    if (orientation == Qt::Horizontal) {
-//        headerItem = d->columnHeaderItems.at(section);
-//        if (headerItem == 0) {
-//            headerItem = d->createItem();
-//            headerItem->d_func()->setModel(this);
-//            d->columnHeaderItems.replace(section, headerItem);
-//        }
-//    } else if (orientation == Qt::Vertical) {
-//        headerItem = d->rowHeaderItems.at(section);
-//        if (headerItem == 0) {
-//            headerItem = d->createItem();
-//            headerItem->d_func()->setModel(this);
-//            d->rowHeaderItems.replace(section, headerItem);
-//        }
-//    }
-//    if (headerItem) {
-//        headerItem->setData(value, role);
-//        return true;
-//    }
-//    return false;
-//}
-
-/*!
-  \reimp
-*/
 bool UiStandardItemModel::setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles)
 {
     UiStandardItem *item = itemFromIndex(index);
@@ -2982,148 +2508,6 @@ QMimeData *UiStandardItemModel::mimeData(const QModelIndexList &indexes) const
     data->setData(format, encoded);
     return data;
 }
-
-
-/* \internal
-    Used by UiStandardItemModel::dropMimeData
-    stream out an item and his children
- */
-// void UiStandardItemModelPrivate::decodeDataRecursive(QDataStream &stream, UiStandardItem *item)
-// {
-//     int colCount, childCount;
-//     stream >> *item;
-//     stream >> colCount >> childCount;
-//     item->setColumnCount(colCount);
-//
-//     int childPos = childCount;
-//
-//     while (childPos > 0) {
-//         childPos--;
-//         UiStandardItem *child = createItem();
-//         decodeDataRecursive(stream, child);
-//         item->setChild( childPos / colCount, childPos % colCount, child);
-//     }
-// }
-
-
-/*!
-  \reimp
-*/
-// bool UiStandardItemModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-//                                       int row, int column, const QModelIndex &parent)
-// {
-//     Q_D(UiStandardItemModel);
-//     // check if the action is supported
-//     if (!data || !(action == Qt::CopyAction || action == Qt::MoveAction))
-//         return false;
-//     // check if the format is supported
-//     QString format = QLatin1String("application/x-UiStandardItemModeldatalist");
-//     if (!data->hasFormat(format))
-//         return QAbstractItemModel::dropMimeData(data, action, row, column, parent);
-//
-//     if (row > rowCount(parent))
-//         row = rowCount(parent);
-//     if (row == -1)
-//         row = rowCount(parent);
-//     if (column == -1)
-//         column = 0;
-//
-//     // decode and insert
-//     QByteArray encoded = data->data(format);
-//     QDataStream stream(&encoded, QIODevice::ReadOnly);
-//
-//
-//     //code based on QAbstractItemModel::decodeData
-//     // adapted to work with UiStandardItem
-//     int top = INT_MAX;
-//     int left = INT_MAX;
-//     int bottom = 0;
-//     int right = 0;
-//     QVector<int> rows, columns;
-//     QVector<UiStandardItem *> items;
-//
-//     while (!stream.atEnd()) {
-//         int r, c;
-//         UiStandardItem *item = d->createItem();
-//         stream >> r >> c;
-//         d->decodeDataRecursive(stream, item);
-//
-//         rows.append(r);
-//         columns.append(c);
-//         items.append(item);
-//         top = qMin(r, top);
-//         left = qMin(c, left);
-//         bottom = qMax(r, bottom);
-//         right = qMax(c, right);
-//     }
-//
-//     // insert the dragged items into the table, use a bit array to avoid overwriting items,
-//     // since items from different tables can have the same row and column
-//     int dragRowCount = 0;
-//     int dragColumnCount = right - left + 1;
-//
-//     // Compute the number of continuous rows upon insertion and modify the rows to match
-//     QVector<int> rowsToInsert(bottom + 1);
-//     for (int i = 0; i < rows.count(); ++i)
-//         rowsToInsert[rows.at(i)] = 1;
-//     for (int i = 0; i < rowsToInsert.count(); ++i) {
-//         if (rowsToInsert[i] == 1){
-//             rowsToInsert[i] = dragRowCount;
-//             ++dragRowCount;
-//         }
-//     }
-//     for (int i = 0; i < rows.count(); ++i)
-//         rows[i] = top + rowsToInsert[rows[i]];
-//
-//     QBitArray isWrittenTo(dragRowCount * dragColumnCount);
-//
-//     // make space in the table for the dropped data
-//     int colCount = columnCount(parent);
-//     if (colCount < dragColumnCount + column) {
-//         insertColumns(colCount, dragColumnCount + column - colCount, parent);
-//         colCount = columnCount(parent);
-//     }
-//     insertRows(row, dragRowCount, parent);
-//
-//     row = qMax(0, row);
-//     column = qMax(0, column);
-//
-//     UiStandardItem *parentItem = itemFromIndex (parent);
-//     if (!parentItem)
-//         parentItem = invisibleRootItem();
-//
-//     QVector<QPersistentModelIndex> newIndexes(items.size());
-//     // set the data in the table
-//     for (int j = 0; j < items.size(); ++j) {
-//         int relativeRow = rows.at(j) - top;
-//         int relativeColumn = columns.at(j) - left;
-//         int destinationRow = relativeRow + row;
-//         int destinationColumn = relativeColumn + column;
-//         int flat = (relativeRow * dragColumnCount) + relativeColumn;
-//         // if the item was already written to, or we just can't fit it in the table, create a new row
-//         if (destinationColumn >= colCount || isWrittenTo.testBit(flat)) {
-//             destinationColumn = qBound(column, destinationColumn, colCount - 1);
-//             destinationRow = row + dragRowCount;
-//             insertRows(row + dragRowCount, 1, parent);
-//             flat = (dragRowCount * dragColumnCount) + relativeColumn;
-//             isWrittenTo.resize(++dragRowCount * dragColumnCount);
-//         }
-//         if (!isWrittenTo.testBit(flat)) {
-//             newIndexes[j] = index(destinationRow, destinationColumn, parentItem->index());
-//             isWrittenTo.setBit(flat);
-//         }
-//     }
-//
-//     for (int k = 0; k < newIndexes.size(); k++) {
-//         if (newIndexes.at(k).isValid()) {
-//             parentItem->setChild(newIndexes.at(k).row(), newIndexes.at(k).column(), items.at(k));
-//         } else {
-//             delete items.at(k);
-//         }
-//     }
-//
-//     return true;
-// }
 
 QT_END_NAMESPACE_UIHELPERS
 
