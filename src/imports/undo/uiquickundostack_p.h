@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2012 Instituto Nokia de Tecnologia (INdT)
 ** Contact: http://www.qt-project.org/
 **
 ** This file is part of the UiHelpers playground module of the Qt Toolkit.
