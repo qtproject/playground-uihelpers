@@ -7,4 +7,9 @@ Ui Helpers
 using Qt5/QtQuick 2 but do not want to depend on QtWidgets - mainly desktop applications. Examples of classes are QUndoCommand,
 QAction, QFileSystemModel, etc."
 
-Suggestions and contributions are welcome - contact us on the development@qt-project.org
+Check our wiki: http://qt-project.org/wiki/Qt-5-Ui-Helpers
+
+Suggestions and contributions are welcome - contact us:
+
+- development@qt-project.org mailing list
+- #qt-labs @ freenode
