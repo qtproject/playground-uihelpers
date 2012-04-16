@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Instituto Nokia de Tecnologia (INdT).
+** Copyright (C) 2012 Instituto Nokia de Tecnologia (INdT)
 ** Contact: http://www.qt-project.org/
 **
 ** This file is part of the UiHelpers playground module of the Qt Toolkit.
@@ -39,27 +39,31 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
-#include <QtQml/qqml.h>
-#include "uiquickcompletionmodel_p.h"
-#include "uitextfilemodel.h"
+#include <QtGui/QGuiApplication>
+#include <QtQuick/QQuickView>
+#include <UiHelpers/UiCompletionModel>
+#include <UiHelpers/UiTextFileModel>
+#include <QtQml/QQmlContext>
+#include <QObject>
 
-class QmlModelsPlugin : public QQmlExtensionPlugin
+int main(int argc, char **argv)
 {
-    Q_OBJECT
+    Q_INIT_RESOURCE(resources);
+    QGuiApplication app(argc, argv);
 
-public:
-    virtual void registerTypes(const char* uri);
-};
+    UiHelpers::UiTextFileModel *fileModel = new UiHelpers::UiTextFileModel();
+    fileModel->setSource(":/countries.txt");
 
-void QmlModelsPlugin::registerTypes(const char* uri)
-{
-    Q_ASSERT(QLatin1String(uri) == QLatin1String("Playground.UiHelpers.Models"));
+    UiHelpers::UiCompletionModel model;
+    model.setCaseSensitivity(Qt::CaseInsensitive);
+    model.setSourceModel(fileModel);
 
-    qmlRegisterType<UiQuickCompletionModel>(uri, 1, 0, "CompletionModel");
-    qmlRegisterType<UiTextFileModel>(uri, 1, 0, "TextFileModel");
+    QQuickView v;
+    v.rootContext()->setContextProperty("completionModel", &model);
+    v.setWindowTitle(QObject::tr("Completion Model with TextFileModel"));
+    v.setSource(QString("qrc:/main.qml"));
+
+    v.show();
+
+    return app.exec();
 }
-
-#include "plugin.moc"
-
-Q_EXPORT_PLUGIN2(qmlmodelsplugin, QT_PREPEND_NAMESPACE(QmlModelsPlugin))

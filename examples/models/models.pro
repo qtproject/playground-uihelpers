@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 SUBDIRS = \
     fsviewer \
-    completionmodel
+    completionmodel \
+    textfilemodel

@@ -39,27 +39,26 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
-#include <QtQml/qqml.h>
-#include "uiquickcompletionmodel_p.h"
-#include "uitextfilemodel.h"
+import QtQuick 2.0
+import Playground.UiHelpers.Models 1.0
 
-class QmlModelsPlugin : public QQmlExtensionPlugin
-{
-    Q_OBJECT
+Rectangle {
+    id: root
 
-public:
-    virtual void registerTypes(const char* uri);
-};
+    width: 200
+    height: 400
 
-void QmlModelsPlugin::registerTypes(const char* uri)
-{
-    Q_ASSERT(QLatin1String(uri) == QLatin1String("Playground.UiHelpers.Models"));
+    TextFileModel {
+        id: fileModel
+        source: "../../shared/countries.txt"
+    }
 
-    qmlRegisterType<UiQuickCompletionModel>(uri, 1, 0, "CompletionModel");
-    qmlRegisterType<UiTextFileModel>(uri, 1, 0, "TextFileModel");
+    ListView {
+        anchors.fill: parent
+        model: fileModel
+        delegate: Text {
+            text: display
+            height: 20
+        }
+    }
 }
-
-#include "plugin.moc"
-
-Q_EXPORT_PLUGIN2(qmlmodelsplugin, QT_PREPEND_NAMESPACE(QmlModelsPlugin))

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Instituto Nokia de Tecnologia (INdT).
+** Copyright (C) 2012 Instituto Nokia de Tecnologia (INdT)
 ** Contact: http://www.qt-project.org/
 **
 ** This file is part of the UiHelpers playground module of the Qt Toolkit.
@@ -39,27 +39,54 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
-#include <QtQml/qqml.h>
-#include "uiquickcompletionmodel_p.h"
-#include "uitextfilemodel.h"
+#ifndef UITEXTFILEMODEL_H
+#define UITEXTFILEMODEL_H
 
-class QmlModelsPlugin : public QQmlExtensionPlugin
+#include "uihelpersglobal.h"
+#include "UiHelpers/uistandarditemmodel.h"
+#include "QtCore/qscopedpointer.h"
+#include "QtCore/qurl.h"
+#include "QtCore/qstring.h"
+
+QT_BEGIN_HEADER
+
+QT_BEGIN_NAMESPACE_UIHELPERS
+
+#ifndef QT_NO_TEXTFILEMODEL
+
+class UiTextFileModelPrivate;
+
+class UIHELPERS_EXPORT UiTextFileModel : public UiStandardItemModel
 {
     Q_OBJECT
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QString separator READ separator WRITE setSeparator NOTIFY separatorChanged)
 
 public:
-    virtual void registerTypes(const char* uri);
+    explicit UiTextFileModel(QObject *parent = 0);
+    ~UiTextFileModel();
+
+    QString source() const;
+    void setSource(const QString &source);
+    QString separator() const;
+    void setSeparator(const QString &separator);
+
+Q_SIGNALS:
+    void sourceChanged();
+    void separatorChanged();
+
+private:
+    Q_DISABLE_COPY(UiTextFileModel)
+    Q_DECLARE_PRIVATE(UiTextFileModel)
+
+    QScopedPointer<UiTextFileModelPrivate> d_ptr;
 };
 
-void QmlModelsPlugin::registerTypes(const char* uri)
-{
-    Q_ASSERT(QLatin1String(uri) == QLatin1String("Playground.UiHelpers.Models"));
+#endif // QT_NO_TEXTFILEMODEL
 
-    qmlRegisterType<UiQuickCompletionModel>(uri, 1, 0, "CompletionModel");
-    qmlRegisterType<UiTextFileModel>(uri, 1, 0, "TextFileModel");
-}
+QT_END_NAMESPACE_UIHELPERS
 
-#include "plugin.moc"
+QT_END_HEADER
 
-Q_EXPORT_PLUGIN2(qmlmodelsplugin, QT_PREPEND_NAMESPACE(QmlModelsPlugin))
+#endif // UITEXTFILEMODEL_H
+

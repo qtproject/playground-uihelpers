@@ -7,10 +7,13 @@ HEADERS += \
     $$PWD/uicompletionmodel.h \
     $$PWD/uicompletionmodel_p.h \
     $$PWD/uistandarditemmodel.h \
-    $$PWD/uistandarditemmodel_p.h
+    $$PWD/uistandarditemmodel_p.h \
+    $$PWD/uitextfilemodel.h \
+    $$PWD/uitextfilemodel_p.h
 
 SOURCES += \
     $$PWD/uifilesystemmodel.cpp \
     $$PWD/uifileinfogatherer.cpp \
     $$PWD/uicompletionmodel.cpp \
-    $$PWD/uistandarditemmodel.cpp
+    $$PWD/uistandarditemmodel.cpp \
+    $$PWD/uitextfilemodel.cpp

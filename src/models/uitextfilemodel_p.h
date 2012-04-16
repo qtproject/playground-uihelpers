@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Instituto Nokia de Tecnologia (INdT).
+** Copyright (C) 2012 Instituto Nokia de Tecnologia (INdT)
 ** Contact: http://www.qt-project.org/
 **
 ** This file is part of the UiHelpers playground module of the Qt Toolkit.
@@ -39,27 +39,42 @@
 **
 ****************************************************************************/
 
-#include <QtQml/qqmlextensionplugin.h>
-#include <QtQml/qqml.h>
-#include "uiquickcompletionmodel_p.h"
+#ifndef UITEXTFILEMODEL_P_H
+#define UITEXTFILEMODEL_P_H
+
+//
+////  W A R N I N G
+////  -------------
+////
+//// This file is not part of the Ui Helpers API.  It exists purely as an
+//// implementation detail.  This header file may change from version to
+//// version without notice, or even be removed.
+////
+//// We mean it.
+////
+//
+
+#include <QScopedPointer>
 #include "uitextfilemodel.h"
 
-class QmlModelsPlugin : public QQmlExtensionPlugin
+QT_BEGIN_NAMESPACE_UIHELPERS
+
+class UiTextFileModelPrivate
 {
-    Q_OBJECT
+    Q_DECLARE_PUBLIC(UiTextFileModel)
 
 public:
-    virtual void registerTypes(const char* uri);
+    UiTextFileModelPrivate(UiTextFileModel *qq);
+    virtual ~UiTextFileModelPrivate();
+
+    void reload();
+
+    QString source;
+    QString separator;
+    UiTextFileModel *q_ptr;
 };
 
-void QmlModelsPlugin::registerTypes(const char* uri)
-{
-    Q_ASSERT(QLatin1String(uri) == QLatin1String("Playground.UiHelpers.Models"));
+QT_END_NAMESPACE_UIHELPERS
 
-    qmlRegisterType<UiQuickCompletionModel>(uri, 1, 0, "CompletionModel");
-    qmlRegisterType<UiTextFileModel>(uri, 1, 0, "TextFileModel");
-}
+#endif // UITEXTFILEMODEL_P_H
 
-#include "plugin.moc"
-
-Q_EXPORT_PLUGIN2(qmlmodelsplugin, QT_PREPEND_NAMESPACE(QmlModelsPlugin))
