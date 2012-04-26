@@ -50,12 +50,19 @@ Rectangle {
 
     TextFileModel {
         id: fileModel
-        source: "../../shared/countries.txt"
+        separator: "[\n, ]"
+        source: "qtmodules.txt"
     }
 
     ListView {
         anchors.fill: parent
         model: fileModel
+        header: Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Qt5 Modules"
+            font.pixelSize: 25
+        }
+
         delegate: Text {
             text: display
             height: 20

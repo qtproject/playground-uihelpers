@@ -54,8 +54,9 @@
 ////
 //
 
-#include <QScopedPointer>
 #include "uitextfilemodel.h"
+#include "QtCore/qregexp.h"
+#include "QtCore/qscopedpointer.h"
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
@@ -70,7 +71,7 @@ public:
     void reload();
 
     QString source;
-    QString separator;
+    QRegExp separator;
     UiTextFileModel *q_ptr;
 };
 

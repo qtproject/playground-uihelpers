@@ -1,0 +1,9 @@
+QtBluetooth, QtContacts, QtCore, QtGui,
+QtLocation, QtMultimedia, QtNetwork, QtOpenGL,
+QtOpenVG, QtOrganizer, QtPrintSupport, QtPublishSubscribe,
+QtQml, QtQuick, QtScript, QtScriptTools,
+QtSensors, QtServiceFramework, QtSql, QtSvg,
+QtSystemInfo, QtVersit, QtWebKit, QtWidgets,
+QtXml, QtXmlPatterns, Qt3D, Phonon,
+QtDesigner, QtHelp, QtTest, QtUiTools,
+QAxContainer, QAxServer, QtDBus

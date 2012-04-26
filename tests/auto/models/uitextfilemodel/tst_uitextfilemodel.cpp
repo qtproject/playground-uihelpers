@@ -63,6 +63,8 @@ private slots:
     void carriageReturnLineFeedSeparatorCount();
     void specialCharacterSeparatorCount();
     void withoutSeparatorCount();
+    void regexpSimpleCount();
+    void regexpLineBeginnigCount();
 };
 
 void tst_UiTextFileModel::init()
@@ -126,6 +128,22 @@ void tst_UiTextFileModel::specialCharacterSeparatorCount()
 void tst_UiTextFileModel::withoutSeparatorCount()
 {
     UiHelpers::UiTextFileModel model;
+    model.setSource(file.fileName());
+    QCOMPARE(model.rowCount(), rowsCount + 1);
+}
+
+void tst_UiTextFileModel::regexpSimpleCount()
+{
+    UiHelpers::UiTextFileModel model;
+    model.setSeparator("[\n\r]");
+    model.setSource(file.fileName());
+    QCOMPARE(model.rowCount(), rowsCount + 1);
+}
+
+void tst_UiTextFileModel::regexpLineBeginnigCount()
+{
+    UiHelpers::UiTextFileModel model;
+    model.setSeparator("(Come)");
     model.setSource(file.fileName());
     QCOMPARE(model.rowCount(), rowsCount + 1);
 }

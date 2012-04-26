@@ -48,6 +48,7 @@
 #include "QtCore/qscopedpointer.h"
 #include "QtCore/qstring.h"
 #include "QtCore/qstringlist.h"
+#include "QtCore/qregexp.h"
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
@@ -77,7 +78,12 @@ void UiTextFileModelPrivate::reload()
     if (text.isEmpty())
         return;
 
-    QStringList list = text.split(separator);
+    if (!separator.isValid()) {
+        qWarning("UiTextFileModel: separator is not valid");
+        return;
+    }
+
+    QStringList list = text.split(separator, QString::SkipEmptyParts);
     foreach (const QString & textItem, list) {
         UiStandardItem *item = new UiStandardItem(textItem);
         q->appendRow(item);
@@ -115,22 +121,43 @@ void UiTextFileModel::setSource(const QString &source)
 QString UiTextFileModel::separator() const
 {
     Q_D(const UiTextFileModel);
-    return d->separator;
+    return d->separator.pattern();
 }
 
 void UiTextFileModel::setSeparator(const QString &separator)
 {
     Q_D(UiTextFileModel);
 
-    if (d->separator == separator)
+    if (d->separator.pattern() == separator)
         return;
 
-    d->separator = separator;
+    d->separator.setPattern(separator);
 
     if (!d->source.isEmpty())
         d->reload();
 
     emit separatorChanged();
+}
+
+Qt::CaseSensitivity UiTextFileModel::caseSensitivity() const
+{
+    Q_D(const UiTextFileModel);
+    return d->separator.caseSensitivity();
+}
+
+void UiTextFileModel::setCaseSensitivity(const Qt::CaseSensitivity caseSensitivity)
+{
+    Q_D(UiTextFileModel);
+
+    if (d->separator.caseSensitivity() != caseSensitivity)
+        return;
+
+    d->separator.setCaseSensitivity(caseSensitivity);
+
+    if (!d->source.isEmpty())
+        d->reload();
+
+    emit caseSensitivityChanged();
 }
 
 QT_END_NAMESPACE_UIHELPERS

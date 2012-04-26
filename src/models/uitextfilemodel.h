@@ -47,6 +47,7 @@
 #include "QtCore/qscopedpointer.h"
 #include "QtCore/qurl.h"
 #include "QtCore/qstring.h"
+#include "QtCore/qregexp.h"
 
 QT_BEGIN_HEADER
 
@@ -61,6 +62,8 @@ class UIHELPERS_EXPORT UiTextFileModel : public UiStandardItemModel
     Q_OBJECT
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString separator READ separator WRITE setSeparator NOTIFY separatorChanged)
+    Q_PROPERTY(Qt::CaseSensitivity caseSensitivity READ caseSensitivity
+               WRITE setCaseSensitivity NOTIFY caseSensitivityChanged)
 
 public:
     explicit UiTextFileModel(QObject *parent = 0);
@@ -70,10 +73,13 @@ public:
     void setSource(const QString &source);
     QString separator() const;
     void setSeparator(const QString &separator);
+    Qt::CaseSensitivity caseSensitivity() const;
+    void setCaseSensitivity(const Qt::CaseSensitivity caseSensitivity);
 
 Q_SIGNALS:
     void sourceChanged();
     void separatorChanged();
+    void caseSensitivityChanged();
 
 private:
     Q_DISABLE_COPY(UiTextFileModel)
