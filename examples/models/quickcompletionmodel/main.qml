@@ -54,7 +54,19 @@ Rectangle {
                       "Ascension Island", "Andorra", "United Arab Emirates", "Afghanistan",
                       "Antigua and Barbuda", "Anguilla", "Albania", "Armenia",
                       "Netherlands Antilles", "Angola", "Antarctica", true]
-        modelSorting: CompletionModel.CaseSensitivelySortedModel
+        completionPrefix: input.text
+        caseSensitivity: Qt.CaseInsensitive
+    }
+
+    CompletionModel {
+        id: completionModel2
+        sourceModel: ListModel {
+            ListElement { name: "NEW ORLEANS" }
+            ListElement { name: "Hawaii" }
+            ListElement { name: "Andorra" }
+            ListElement { name: "Afghanistan" }
+            ListElement { name: "Recife" }
+        }
         completionPrefix: input.text
         caseSensitivity: Qt.CaseInsensitive
     }
@@ -64,7 +76,7 @@ Rectangle {
         anchors {
             top: parent.top
             left: parent.left
-            right: parent.right
+            right: button1.left
         }
         color: "lightblue"
         height: 30
@@ -76,7 +88,36 @@ Rectangle {
         }
     }
 
+    Rectangle {
+        id: button1
+
+        width: 30
+        height: 30
+        anchors.right: button2.left
+        color: "blue"
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: list.model = completionModel
+        }
+    }
+
+    Rectangle {
+        id: button2
+
+        width: 30
+        height: 30
+        anchors.right: parent.right
+        color: "black"
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: list.model = completionModel2
+        }
+    }
+
     ListView {
+        id: list
         anchors {
             top: rec.bottom
             bottom: parent.bottom
