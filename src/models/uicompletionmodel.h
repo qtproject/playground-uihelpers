@@ -63,11 +63,11 @@ class UIHELPERS_EXPORT UiCompletionModel : public QAbstractProxyModel
 {
     Q_OBJECT
     Q_ENUMS(ModelSorting)
-    Q_PROPERTY(Qt::CaseSensitivity caseSensitivity READ caseSensitivity WRITE setCaseSensitivity)
-    Q_PROPERTY(ModelSorting modelSorting READ modelSorting WRITE setModelSorting)
-    Q_PROPERTY(int completionColumn READ completionColumn WRITE setCompletionColumn)
-    Q_PROPERTY(int completionRole READ completionRole WRITE setCompletionRole)
-    Q_PROPERTY(QString completionPrefix READ completionPrefix WRITE setCompletionPrefix)
+    Q_PROPERTY(Qt::CaseSensitivity caseSensitivity READ caseSensitivity WRITE setCaseSensitivity NOTIFY caseSensitivityChanged)
+    Q_PROPERTY(ModelSorting modelSorting READ modelSorting WRITE setModelSorting NOTIFY modelSortingChanged)
+    Q_PROPERTY(int completionColumn READ completionColumn WRITE setCompletionColumn NOTIFY completionColumnChanged)
+    Q_PROPERTY(int completionRole READ completionRole WRITE setCompletionRole NOTIFY completionRoleChanged)
+    Q_PROPERTY(QString completionPrefix READ completionPrefix WRITE setCompletionPrefix NOTIFY completionPrefixChanged)
 
 public:
     enum ModelSorting {
@@ -114,6 +114,11 @@ protected:
 
 signals:
     void rowsAdded();
+    void caseSensitivityChanged();
+    void modelSortingChanged();
+    void completionColumnChanged();
+    void completionRoleChanged();
+    void completionPrefixChanged();
 
 public Q_SLOTS:
     void invalidate();

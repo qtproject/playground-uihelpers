@@ -367,6 +367,7 @@ void UiCompletionModel::setCaseSensitivity(Qt::CaseSensitivity cs)
     d->cs = cs;
     createEngine();
     invalidate();
+    emit caseSensitivityChanged();
 }
 
 Qt::CaseSensitivity UiCompletionModel::caseSensitivity() const
@@ -405,6 +406,7 @@ void UiCompletionModel::setModelSorting(ModelSorting sorting)
     d->sorting = sorting;
     createEngine();
     invalidate();
+    emit modelSortingChanged();
 }
 
 UiCompletionModel::ModelSorting UiCompletionModel::modelSorting() const
@@ -428,6 +430,7 @@ void UiCompletionModel::setCompletionColumn(int column)
         return;
     d->column = column;
     invalidate();
+    emit completionColumnChanged();
 }
 
 int UiCompletionModel::completionColumn() const
@@ -451,6 +454,7 @@ void UiCompletionModel::setCompletionRole(int role)
         return;
     d->role = role;
     invalidate();
+    emit completionRoleChanged();
 }
 
 int UiCompletionModel::completionRole() const
@@ -471,6 +475,7 @@ void UiCompletionModel::setCompletionPrefix(const QString &prefix)
     Q_D(UiCompletionModel);
     d->prefix = prefix;
     filter(QStringList(prefix));
+    emit completionPrefixChanged();
 }
 
 QString UiCompletionModel::completionPrefix() const
