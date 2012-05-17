@@ -9,11 +9,13 @@ HEADERS += \
     $$PWD/uistandarditemmodel.h \
     $$PWD/uistandarditemmodel_p.h \
     $$PWD/uitextfilemodel.h \
-    $$PWD/uitextfilemodel_p.h
+    $$PWD/uitextfilemodel_p.h \
+    $$PWD/uiproxyqmlmodel.h
 
 SOURCES += \
     $$PWD/uifilesystemmodel.cpp \
     $$PWD/uifileinfogatherer.cpp \
     $$PWD/uicompletionmodel.cpp \
     $$PWD/uistandarditemmodel.cpp \
-    $$PWD/uitextfilemodel.cpp
+    $$PWD/uitextfilemodel.cpp \
+    $$PWD/uiproxyqmlmodel.cpp

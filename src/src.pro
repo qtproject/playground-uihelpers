@@ -2,7 +2,7 @@ load(qt_module)
 
 TARGET = UiHelpers
 QPRO_PWD   = $$PWD
-QT = core core-private gui gui-private
+QT = core core-private gui gui-private qml-private v8-private
 CONFIG += module
 MODULE_PRI = ../modules/qt_uihelpers.pri
 

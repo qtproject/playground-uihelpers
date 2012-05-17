@@ -8,6 +8,7 @@
     "uiundostack.h" => "UiUndoStack",
     "uiundogroup.h" => "UiUndoGroup",
     "uicompletionmodel.h" => "UiCompletionModel",
+    "uiproxyqmlmodel.h" => "UiProxyQmlModel",
     "uifilesystemmodel.h" => "UiFileSystemModel",
     "uitextfilemodel.h" => "UiTextFileModel",
     "uistandarditemmodel.h" => "UiStandardItemModel",
