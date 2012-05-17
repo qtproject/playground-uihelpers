@@ -43,8 +43,8 @@
 #ifndef QT_NO_COMPLETIONMODEL
 
 #include "uicompletionmodel_p.h"
-#include "QtCore/qstringlistmodel.h"
-#include "QtCore/qdir.h"
+#include <QtCore/QStringListModel>
+#include <QtCore/QDir>
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
