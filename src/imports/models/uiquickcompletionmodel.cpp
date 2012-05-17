@@ -40,42 +40,17 @@
 ****************************************************************************/
 
 #include "uiquickcompletionmodel_p.h"
-
-#include <UiHelpers/UiStandardItemModel>
-
-class WrapperModel : public UiStandardItemModel
-{
-public:
-    enum WrapperRoles { ModelDataRole };
-
-    WrapperModel() {
-        QHash<int, QByteArray> roleNames;
-        roleNames[WrapperModel::ModelDataRole] = "modelData";
-        setRoleNames(roleNames);
-    }
-};
-
+#include <UiHelpers/UiProxyQmlModel>
 
 class UiQuickCompletionModelPrivate
 {
-    Q_DECLARE_PUBLIC(UiQuickCompletionModel)
-
 public:
-    UiQuickCompletionModelPrivate(UiQuickCompletionModel *q);
-    ~UiQuickCompletionModelPrivate();
+    UiQuickCompletionModelPrivate(UiQuickCompletionModel *parent)
+        : proxy(new UiProxyQmlModel(parent)) {}
 
-    UiQuickCompletionModel *q_ptr;
     QVariant source;
+    UiProxyQmlModel *proxy;
 };
-
-UiQuickCompletionModelPrivate::UiQuickCompletionModelPrivate(UiQuickCompletionModel *q)
-    : q_ptr(q)
-{
-}
-
-UiQuickCompletionModelPrivate::~UiQuickCompletionModelPrivate()
-{
-}
 
 
 UiQuickCompletionModel::UiQuickCompletionModel(QObject *parent)
@@ -91,27 +66,21 @@ UiQuickCompletionModel::~UiQuickCompletionModel()
 QVariant UiQuickCompletionModel::source() const
 {
     Q_D(const UiQuickCompletionModel);
+
     return d->source;
 }
 
 void UiQuickCompletionModel::setSource(const QVariant& source)
 {
     Q_D(UiQuickCompletionModel);
+
     if (source == d->source)
         return;
 
-    if (source.type() == QVariant::List) {
-        WrapperModel *wrapper = new WrapperModel();
-        foreach (const QVariant& var, source.toList()) {
-            UiStandardItem *item = new UiStandardItem();
-            item->setData(var.toString(), WrapperModel::ModelDataRole);
-            item->setFlags(Qt::ItemIsSelectable);
-            wrapper->appendRow(item);
-        }
-
-        setSourceModel(wrapper);
-        setCompletionRole(WrapperModel::ModelDataRole);
-    }
+    setSourceModel(0); // Disconnect all signals from old model
+    if (d->proxy->setSource(source) == UiProxyQmlModel::ArrayList)
+        setCompletionRole(Qt::DisplayRole);
+    setSourceModel(d->proxy);
 
     d->source = source;
     emit sourceModelChanged();
