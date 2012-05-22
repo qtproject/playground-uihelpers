@@ -52,6 +52,7 @@ class UiQuickCompletionModel : public UiCompletionModel
     Q_OBJECT
 
     Q_PROPERTY(QVariant sourceModel READ source WRITE setSource NOTIFY sourceModelChanged)
+    Q_PROPERTY(QString completionRoleName READ completionRoleName WRITE setCompletionRoleName NOTIFY completionRoleNameChanged)
 
 public:
     UiQuickCompletionModel(QObject *parent = 0);
@@ -59,9 +60,12 @@ public:
 
     QVariant source() const;
     void setSource(const QVariant &source);
+    QString completionRoleName() const;
+    void setCompletionRoleName(const QString &roleName);
 
 Q_SIGNALS:
     void sourceModelChanged();
+    void completionRoleNameChanged();
 
 private:
     Q_DISABLE_COPY(UiQuickCompletionModel)

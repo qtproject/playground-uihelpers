@@ -49,6 +49,7 @@ public:
         : proxy(new UiProxyQmlModel(parent)) {}
 
     QVariant source;
+    QString roleName;
     UiProxyQmlModel *proxy;
 };
 
@@ -78,10 +79,39 @@ void UiQuickCompletionModel::setSource(const QVariant& source)
         return;
 
     setSourceModel(0); // Disconnect all signals from old model
-    if (d->proxy->setSource(source) == UiProxyQmlModel::ArrayList)
+    UiProxyQmlModel::ListType type = d->proxy->updateSource(source);
+    if (type == UiProxyQmlModel::ArrayList)
         setCompletionRole(Qt::DisplayRole);
+    else if (type == UiProxyQmlModel::QuickList) {
+        int role = d->proxy->roleNames().key(d->roleName.toAscii(), -1);
+        if (role != -1)
+            setCompletionRole(role);
+    }
     setSourceModel(d->proxy);
 
     d->source = source;
     emit sourceModelChanged();
+}
+
+
+QString UiQuickCompletionModel::completionRoleName() const
+{
+    Q_D(const UiQuickCompletionModel);
+
+    return d->roleName;
+}
+
+void UiQuickCompletionModel::setCompletionRoleName(const QString &roleName)
+{
+    Q_D(UiQuickCompletionModel);
+
+    if (roleName == d->roleName)
+        return;
+
+    int role = d->proxy->roleNames().key(roleName.toAscii(), -1);
+    if (role != -1)
+        setCompletionRole(role);
+
+    d->roleName = roleName;
+    emit completionRoleNameChanged();
 }

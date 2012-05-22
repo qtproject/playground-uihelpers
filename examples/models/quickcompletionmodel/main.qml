@@ -45,7 +45,7 @@ import Playground.UiHelpers.Models 1.0
 Rectangle {
     id: root
 
-    width: 200
+    width: 420
     height: 400
 
     CompletionModel {
@@ -61,14 +61,23 @@ Rectangle {
     CompletionModel {
         id: completionModel2
         sourceModel: ListModel {
-            ListElement { name: "NEW ORLEANS" }
-            ListElement { name: "Hawaii" }
-            ListElement { name: "Andorra" }
-            ListElement { name: "Afghanistan" }
-            ListElement { name: "Recife" }
+            ListElement { name: "NEW ORLEANS"; zip: "00000" }
+            ListElement { name: "Hawaii"; zip: "12345" }
+            ListElement { name: "Andorra"; zip: "11258" }
+            ListElement { name: "Afghanistan"; zip: "99988" }
+            ListElement { name: "Recife"; zip: "25479" }
         }
-        completionPrefix: input.text
+        completionRoleName: "name"
+        completionPrefix: input2.text
         caseSensitivity: Qt.CaseInsensitive
+    }
+
+    Rectangle {
+        id: center
+        width: 20
+        height: parent.height
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: "black"
     }
 
     Rectangle {
@@ -76,7 +85,7 @@ Rectangle {
         anchors {
             top: parent.top
             left: parent.left
-            right: button1.left
+            right: center.left
         }
         color: "lightblue"
         height: 30
@@ -89,45 +98,46 @@ Rectangle {
     }
 
     Rectangle {
-        id: button1
-
-        width: 30
-        height: 30
-        anchors.right: button2.left
-        color: "blue"
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: list.model = completionModel
+        id: rec2
+        anchors {
+            top: parent.top
+            left: center.right
+            right: parent.right
         }
-    }
-
-    Rectangle {
-        id: button2
-
-        width: 30
+        color: "lightblue"
         height: 30
-        anchors.right: parent.right
-        color: "black"
 
-        MouseArea {
+        TextInput {
+            id: input2
             anchors.fill: parent
-            onClicked: list.model = completionModel2
         }
     }
 
     ListView {
-        id: list
         anchors {
             top: rec.bottom
             bottom: parent.bottom
             left: parent.left
-            right: parent.right
+            right: center.right
             topMargin: 10
         }
         model: completionModel
         delegate: Text {
             text: modelData
+        }
+    }
+
+    ListView {
+        anchors {
+            top: rec2.bottom
+            bottom: parent.bottom
+            left: center.right
+            right: parent.right
+            topMargin: 10
+        }
+        model: completionModel2
+        delegate: Text {
+            text: name
         }
     }
 }

@@ -65,7 +65,7 @@ public:
 
     UiProxyQmlModel(QObject *parent = 0);
 
-    ListType setSource(const QVariant &sourceModel);
+    ListType updateSource(const QVariant &sourceModel);
 
 protected:
     void createFromList(const QVariantList &list);
