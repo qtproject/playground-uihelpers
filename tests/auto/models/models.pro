@@ -2,4 +2,5 @@ TEMPLATE=subdirs
 SUBDIRS=\
    qfilesystemmodel \
    qstandarditemmodel \
-   uitextfilemodel
+   uitextfilemodel \
+   uiproxyqmlmodel
