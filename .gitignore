@@ -21,3 +21,5 @@ qrc_*
 examples/undo/editor/editor
 examples/models/fsviewer/fsviewer
 examples/models/completionmodel/completionmodel
+*.app
+*.dylib
