@@ -47,6 +47,7 @@
 class QmlModelsPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionPlugin" FILE "uiqmlmodelsplugin.json")
 
 public:
     virtual void registerTypes(const char* uri);
@@ -61,5 +62,3 @@ void QmlModelsPlugin::registerTypes(const char* uri)
 }
 
 #include "plugin.moc"
-
-Q_EXPORT_PLUGIN2(qmlmodelsplugin, QT_PREPEND_NAMESPACE(QmlModelsPlugin))

@@ -48,6 +48,7 @@
 class QmlUndoFrameworkPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionPlugin" FILE "uiqmlundoframeworkplugin.json")
 
 public:
     virtual void registerTypes(const char* uri);
@@ -65,4 +66,4 @@ void QmlUndoFrameworkPlugin::registerTypes(const char* uri)
 
 #include "plugin.moc"
 
-Q_EXPORT_PLUGIN2(qmlundoframeworkplugin, QT_PREPEND_NAMESPACE(QmlUndoFrameworkPlugin))
+//Q_EXPORT_PLUGIN2(qmlundoframeworkplugin, QT_PREPEND_NAMESPACE(QmlUndoFrameworkPlugin))
