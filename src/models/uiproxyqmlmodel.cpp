@@ -83,16 +83,12 @@ void UiProxyQmlModel::createFromList(const QVariantList &list)
 
 void UiProxyQmlModel::createFromQuickList(QQuickListModel *list)
 {
-    QHash<int, QByteArray> roleNames;
-
-    foreach (int role, list->roles())
-        roleNames[Qt::UserRole + role] = list->toString(role).toAscii();
-    setRoleNames(roleNames);
+    setRoleNames(list->roleNames());
 
     for (int i = 0; i < list->count(); i++) {
         QStandardItem *item = new QStandardItem();
 
-        foreach (int role, list->roles())
+        foreach (int role, list->roleNames().keys())
             item->setData(list->data(i, role), Qt::UserRole + role);
         item->setFlags(Qt::ItemIsSelectable);
         appendRow(item);
