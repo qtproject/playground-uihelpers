@@ -47,7 +47,7 @@
 QT_BEGIN_NAMESPACE_UIHELPERS
 
 UiProxyQmlModel::UiProxyQmlModel(QObject *parent)
-    : UiStandardItemModel(parent)
+    : QStandardItemModel(parent)
 {
 }
 
@@ -74,7 +74,7 @@ void UiProxyQmlModel::createFromList(const QVariantList &list)
     setRoleNames(roleNames);
 
     foreach (const QVariant& var, list) {
-        UiStandardItem *item = new UiStandardItem();
+        QStandardItem *item = new QStandardItem();
         item->setData(var, Qt::DisplayRole);
         item->setFlags(Qt::ItemIsSelectable);
         appendRow(item);
@@ -90,7 +90,7 @@ void UiProxyQmlModel::createFromQuickList(QQuickListModel *list)
     setRoleNames(roleNames);
 
     for (int i = 0; i < list->count(); i++) {
-        UiStandardItem *item = new UiStandardItem();
+        QStandardItem *item = new QStandardItem();
 
         foreach (int role, list->roles())
             item->setData(list->data(i, role), Qt::UserRole + role);

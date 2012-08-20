@@ -43,7 +43,7 @@
 #define UITEXTFILEMODEL_H
 
 #include "uihelpersglobal.h"
-#include "UiHelpers/uistandarditemmodel.h"
+#include "qstandarditemmodel.h"
 #include "QtCore/qscopedpointer.h"
 #include "QtCore/qurl.h"
 #include "QtCore/qstring.h"
@@ -57,7 +57,7 @@ QT_BEGIN_NAMESPACE_UIHELPERS
 
 class UiTextFileModelPrivate;
 
-class UIHELPERS_EXPORT UiTextFileModel : public UiStandardItemModel
+class UIHELPERS_EXPORT UiTextFileModel : public QStandardItemModel
 {
     Q_OBJECT
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)

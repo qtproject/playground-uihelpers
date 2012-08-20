@@ -46,7 +46,7 @@
 #ifndef QT_NO_PROXYQMLMODEL
 
 #include "uihelpersglobal.h"
-#include <UiStandardItemModel>
+#include <QStandardItemModel>
 
 QT_BEGIN_HEADER
 
@@ -54,7 +54,7 @@ class QQuickListModel;
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
-class UIHELPERS_EXPORT UiProxyQmlModel : public UiStandardItemModel
+class UIHELPERS_EXPORT UiProxyQmlModel : public QStandardItemModel
 {
 public:
     enum ListType {

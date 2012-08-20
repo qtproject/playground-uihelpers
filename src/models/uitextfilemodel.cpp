@@ -43,7 +43,6 @@
 
 #include "uitextfilemodel.h"
 #include "uitextfilemodel_p.h"
-#include "uistandarditemmodel.h"
 #include "QtCore/qfile.h"
 #include "QtCore/qscopedpointer.h"
 #include "QtCore/qstring.h"
@@ -85,13 +84,13 @@ void UiTextFileModelPrivate::reload()
 
     QStringList list = text.split(separator, QString::SkipEmptyParts);
     foreach (const QString & textItem, list) {
-        UiStandardItem *item = new UiStandardItem(textItem);
+        QStandardItem *item = new QStandardItem(textItem);
         q->appendRow(item);
     }
 }
 
 UiTextFileModel::UiTextFileModel(QObject *parent)
-    : UiStandardItemModel(parent), d_ptr(new UiTextFileModelPrivate(this))
+    : QStandardItemModel(parent), d_ptr(new UiTextFileModelPrivate(this))
 {
 }
 
