@@ -19,7 +19,6 @@ HEADERS += uiquickbaseundocommand_p.h \
            uiquickundostack_p.h
 
 
-DESTDIR = $$QT.qml.imports/$$TARGETPATH
 target.path = $$[QT_INSTALL_IMPORTS]/$$TARGETPATH
 
 qmldir.files += $$PWD/qmldir
