@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
     QQuickView v;
     v.rootContext()->setContextProperty("completionModel", &model);
-    v.setWindowTitle(QObject::tr("Completion Model"));
+    v.setTitle(QObject::tr("Completion Model"));
     v.setSource(QUrl("qrc:/main.qml"));
 
     v.show();

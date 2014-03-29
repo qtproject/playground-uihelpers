@@ -50,7 +50,7 @@
 
 QT_BEGIN_HEADER
 
-class QQuickListModel;
+class QQmlListModel;
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
@@ -66,10 +66,10 @@ public:
     UiProxyQmlModel(QObject *parent = 0);
 
     ListType updateSource(const QVariant &sourceModel);
-
+    QHash<int, QByteArray> roleNames();
 protected:
     void createFromList(const QVariantList &list);
-    void createFromQuickList(QQuickListModel *list);
+    void createFromQuickList(QQmlListModel *list);
 };
 
 QT_END_NAMESPACE_UIHELPERS

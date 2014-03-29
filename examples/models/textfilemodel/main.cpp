@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
     QQuickView v;
     v.rootContext()->setContextProperty("completionModel", &model);
-    v.setWindowTitle(QObject::tr("Completion Model with TextFileModel"));
+    v.setTitle(QObject::tr("Completion Model with TextFileModel"));
     v.setSource(QString("qrc:/main.qml"));
 
     v.show();

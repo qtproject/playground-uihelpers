@@ -80,7 +80,7 @@ void tst_UiTextFileModel::init()
             text.append(", ");
         }
     }
-    file.write(text.toAscii());
+    file.write(text.toLatin1());
     file.flush();
     file.close();
 }

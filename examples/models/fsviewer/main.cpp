@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     QQuickView v;
     v.rootContext()->setContextProperty("fsmodel", &model);
 
-    v.setWindowTitle(QObject::tr("Dir View"));
+    v.setTitle(QObject::tr("Dir View"));
     v.setResizeMode(QQuickView::SizeRootObjectToView);
     v.resize(640, 480);
     v.setSource(QUrl::fromLocalFile("main.qml"));

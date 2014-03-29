@@ -83,7 +83,7 @@ void UiQuickCompletionModel::setSource(const QVariant& source)
     if (type == UiProxyQmlModel::ArrayList)
         setCompletionRole(Qt::DisplayRole);
     else if (type == UiProxyQmlModel::QuickList) {
-        int role = d->proxy->roleNames().key(d->roleName.toAscii(), -1);
+        int role = d->proxy->roleNames().key(d->roleName.toLatin1(), -1);
         if (role != -1)
             setCompletionRole(role);
     }
@@ -108,7 +108,7 @@ void UiQuickCompletionModel::setCompletionRoleName(const QString &roleName)
     if (roleName == d->roleName)
         return;
 
-    int role = d->proxy->roleNames().key(roleName.toAscii(), -1);
+    int role = d->proxy->roleNames().key(roleName.toLatin1(), -1);
     if (role != -1)
         setCompletionRole(role);
 

@@ -42,7 +42,8 @@
 #ifndef QT_NO_PROXYQMLMODEL
 
 #include "uiproxyqmlmodel.h"
-#include <QtQml/private/qquicklistmodel_p.h>
+#include <QtQml/qqmlprivate.h>
+#include <QtQml/private/qqmllistmodel_p.h>
 
 QT_BEGIN_NAMESPACE_UIHELPERS
 
@@ -58,7 +59,7 @@ UiProxyQmlModel::ListType UiProxyQmlModel::updateSource(const QVariant &sourceMo
     if (sourceModel.type() == QVariant::List) {
         createFromList(sourceModel.toList());
         return ArrayList;
-    } else if (QQuickListModel *list = qvariant_cast<QQuickListModel*>(sourceModel)) {
+    } else if (QQmlListModel *list = qvariant_cast<QQmlListModel*>(sourceModel)) {
         createFromQuickList(list);
         return QuickList;
     }
@@ -66,13 +67,16 @@ UiProxyQmlModel::ListType UiProxyQmlModel::updateSource(const QVariant &sourceMo
     return InvalidList;
 }
 
+
+QHash<int, QByteArray> UiProxyQmlModel::roleNames()
+{
+    QHash<int, QByteArray> roles;
+    roles.insert(Qt::DisplayRole, "display");
+    return roles;
+}
+
 void UiProxyQmlModel::createFromList(const QVariantList &list)
 {
-    QHash<int, QByteArray> roleNames;
-
-    roleNames[Qt::DisplayRole] = "display";
-    setRoleNames(roleNames);
-
     foreach (const QVariant& var, list) {
         QStandardItem *item = new QStandardItem();
         item->setData(var, Qt::DisplayRole);
@@ -81,10 +85,8 @@ void UiProxyQmlModel::createFromList(const QVariantList &list)
     }
 }
 
-void UiProxyQmlModel::createFromQuickList(QQuickListModel *list)
+void UiProxyQmlModel::createFromQuickList(QQmlListModel *list)
 {
-    setRoleNames(list->roleNames());
-
     for (int i = 0; i < list->count(); i++) {
         QStandardItem *item = new QStandardItem();
 

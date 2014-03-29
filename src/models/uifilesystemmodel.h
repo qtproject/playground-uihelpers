@@ -138,7 +138,7 @@ public:
     QFile::Permissions permissions(const QModelIndex &index) const;
     inline QFileInfo fileInfo(const QModelIndex &index) const;
     bool remove(const QModelIndex &index) const;
-
+    QHash<int, QByteArray> roleNames() const;
 protected:
     UiFileSystemModel(UiFileSystemModelPrivate &, QObject *parent = 0);
     void timerEvent(QTimerEvent *event);

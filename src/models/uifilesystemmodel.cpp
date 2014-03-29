@@ -1860,12 +1860,15 @@ void UiFileSystemModelPrivate::init()
     q->connect(&fileInfoGatherer, SIGNAL(directoryLoaded(QString)),
                q, SIGNAL(directoryLoaded(QString)));
     q->connect(&delayedSortTimer, SIGNAL(timeout()), q, SLOT(_q_performDelayedSort()), Qt::QueuedConnection);
+}
 
-    QHash<int, QByteArray> roles = q->roleNames();
+QHash<int, QByteArray> UiFileSystemModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
     roles.insert(UiFileSystemModel::FilePathRole, "filePath");
     roles.insert(UiFileSystemModel::FileNameRole, "fileName");
     roles.insert(UiFileSystemModel::FilePermissions, "filePermissions");
-    q->setRoleNames(roles);
+    return roles;
 }
 
 /*!

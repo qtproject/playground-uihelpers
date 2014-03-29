@@ -141,7 +141,7 @@ tst_UiFileSystemModel::~tst_UiFileSystemModel()
     QString tmp = flatDirTestPath;
     QDir dir(tmp);
     if (dir.exists() && !dir.rmdir(tmp))
-        qWarning("failed to remove tmp dir %s", dir.dirName().toAscii().data());
+        qWarning("failed to remove tmp dir %s", dir.dirName().toLatin1().data());
 }
 
 void tst_UiFileSystemModel::init()
